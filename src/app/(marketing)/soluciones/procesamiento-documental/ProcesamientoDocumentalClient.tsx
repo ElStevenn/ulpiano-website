@@ -18,6 +18,7 @@ import {
   Clock,
   ShieldCheck,
   Zap,
+  RefreshCw,
 } from "lucide-react";
 
 /* =============================================
