@@ -12,32 +12,16 @@ type CrossLinkProps = {
  */
 export function CrossLink({ href, label, description }: CrossLinkProps) {
   return (
-    <div
-      style={{
-        borderTop: "1px solid var(--mist)",
-        background: "var(--surface)",
-        padding: "var(--space-4) 0",
-      }}
-    >
-      <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "var(--space-6)", flexWrap: "wrap" }}>
-        <p style={{ fontSize: 14, color: "var(--slate)", margin: 0 }}>
+    <div className="bg-night border-t border-white/5 py-4">
+      <div className="container flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p className="text-sm text-white/50 m-0 text-center sm:text-left">
           {description}
         </p>
         <Link
           href={href}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            fontSize: 14,
-            fontWeight: 600,
-            color: "var(--ulpiano-green)",
-            textDecoration: "none",
-            whiteSpace: "nowrap",
-            flexShrink: 0,
-          }}
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors whitespace-nowrap shrink-0"
         >
-          {label} →
+          {label} <span className="text-lg leading-none">→</span>
         </Link>
       </div>
     </div>

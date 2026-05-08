@@ -59,40 +59,40 @@ function useReveal() {
 const documentTypes = [
   {
     icon: <FileText size={24} />,
-    title: "Certificados de defunción",
-    desc: "Identificación del causante, fecha y lugar de defunción. Extracción de nombres completos, DNI/NIE y fecha de nacimiento.",
+    title: "Certificats de defunció",
+    desc: "Identificació del causant, data i lloc de defunció. Extracció de noms complets, DNI/NIE i data de naixement.",
   },
   {
     icon: <FileSignature size={24} />,
-    title: "Testamentos",
-    desc: "Ológrafos, notariales o apócrifos. Extracción del árbol familiar, disposiciones testamentarias y legados específicos.",
+    title: "Testaments",
+    desc: "Ològrafs, notarials o apòcrifs. Extracció de l'arbre familiar, disposicions testamentàries i llegats específics.",
   },
   {
     icon: <FileBadge2 size={24} />,
-    title: "Escrituras públicas",
-    desc: "Escrituras de compraventa, donaciones mortis causa, constituciones de derechos reales. Identificación de inmuebles.",
+    title: "Escriptures públiques",
+    desc: "Escriptures de compravenda, donacions mortis causa, constitucions de drets reals. Identificació d'immobles.",
   },
   {
     icon: <FileSearch size={24} />,
-    title: "Últimas voluntades",
-    desc: "Declaraciones de voluntad inscritas en el Registro General de Actos de Última Voluntad. Identificación del notario y fecha.",
+    title: "Últimes voluntats",
+    desc: "Declaracions de voluntat inscrites en el Registre General d'Actes d'Última Voluntat. Identificació del notari i data.",
   },
   {
     icon: <Building2 size={24} />,
-    title: "Notas simples del Registro",
-    desc: "Titularidades de bienes inmuebles inscritos. Extracción de descripción de fincas, cargas, usufructos y cuotas de propiedad.",
+    title: "Notes simples del Registre",
+    desc: "Titularitats de béns immobles inscrits. Extracció de descripció de finques, càrregues, usdefruits i quotes de propietat.",
   },
   {
     icon: <Landmark size={24} />,
-    title: "Certificados bancarios",
-    desc: "Extractos de cuentas corrientes, depósitos, fondos de inversión y cajas de seguridad. Saldos a fecha de devengo y titulares.",
+    title: "Certificats bancaris",
+    desc: "Extractes de comptes corrents, dipòsits, fons d'inversió i caixes de seguretat. Saldos a data de meritació i titulars.",
   },
 ];
 
 /* =============================================
    MAIN COMPONENT
    ============================================= */
-export function ProcesamientoDocumentalClient() {
+export function ProcessamentDocumentalClientCa() {
   const revealRef = useReveal();
 
   return (
@@ -111,21 +111,21 @@ export function ProcesamientoDocumentalClient() {
               <div className="flex items-center gap-3 mb-6 reveal">
                 <div className="h-[1px] w-8 bg-emerald-500/50" />
                 <span className="text-emerald-400/90 text-xs font-bold tracking-[0.2em] uppercase">
-                  Procesamiento Documental
+                  Processament Documental
                 </span>
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-bold text-white leading-[1.1] mb-6 reveal tracking-tight" style={{ animationDelay: '100ms' }}>
-                OCR e Inteligencia Artificial aplicados al <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">derecho sucesorio</span>.
+                OCR i Intel·ligència Artificial aplicats al <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">dret successori</span>.
               </h1>
               <p className="text-lg leading-relaxed text-white/60 max-w-[500px] reveal" style={{ animationDelay: '200ms' }}>
-                Digitaliza, clasifica y extrae información de certificados de defunción, testamentos, escrituras, notas simples y certificados bancarios. Sin picar datos a mano.
+                Digitalitza, classifica i extreu informació de certificats de defunció, testaments, escriptures, notes simples i certificats bancaris. Sense picar dades a mà.
               </p>
               
               <div className="flex flex-wrap gap-4 mt-10 reveal" style={{ animationDelay: '300ms' }}>
-                <Link href="/registro" className="btn-primary shadow-[0_0_20px_rgba(45,106,79,0.4)] hover:shadow-[0_0_30px_rgba(45,106,79,0.6)] px-8 py-3.5 text-base">
-                  Crear Cuenta Gratis
+                <Link href="/ca/registre" className="btn-primary shadow-[0_0_20px_rgba(45,106,79,0.4)] hover:shadow-[0_0_30px_rgba(45,106,79,0.6)] px-8 py-3.5 text-base">
+                  Crear Compte Gratuït
                 </Link>
-                <Link href="/demo" className="btn-ghost group text-white/80 hover:text-white px-6">
+                <Link href="/ca/demo" className="btn-ghost group text-white/80 hover:text-white px-6">
                   Reserva una Demo
                   <ArrowRight size={18} className="transition-transform group-hover:translate-x-1 ml-2" />
                 </Link>
@@ -140,7 +140,7 @@ export function ProcesamientoDocumentalClient() {
                     <div className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
                     <div className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
                     <div className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
-                    <span className="text-[12px] font-medium text-white/50 ml-3">Procesamiento Documental</span>
+                    <span className="text-[12px] font-medium text-white/50 ml-3">Processament Documental</span>
                   </div>
                 </div>
                 
@@ -150,18 +150,18 @@ export function ProcesamientoDocumentalClient() {
                     <div className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-200 flex items-center justify-center text-slate-400 group-hover:text-emerald-500 transition-colors mb-3">
                       <UploadCloud size={24} />
                     </div>
-                    <div className="text-sm font-semibold text-ink mb-1">Arrastra documentos aquí</div>
-                    <div className="text-xs text-slate-500">PDF, escaneados, imágenes (JPG, PNG)</div>
+                    <div className="text-sm font-semibold text-ink mb-1">Arrossega documents aquí</div>
+                    <div className="text-xs text-slate-500">PDF, escanejats, imatges (JPG, PNG)</div>
                   </div>
 
                   {/* Document list */}
                   <div className="space-y-1">
                     {[
-                      { name: "Certificado_Defuncion.pdf", status: "Procesado", statusColor: "emerald", progress: 100 },
-                      { name: "Testamento_Notarial.pdf", status: "Procesado", statusColor: "emerald", progress: 100 },
-                      { name: "DNI_Causante.jpg", status: "Procesado", statusColor: "emerald", progress: 100 },
-                      { name: "Escritura_Propiedad.pdf", status: "Analizando...", statusColor: "amber", progress: 65 },
-                      { name: "Nota_Simple_Registro.pdf", status: "En cola", statusColor: "slate", progress: 0 },
+                      { name: "Certificat_Defuncio.pdf", status: "Processat", statusColor: "emerald", progress: 100 },
+                      { name: "Testament_Notarial.pdf", status: "Processat", statusColor: "emerald", progress: 100 },
+                      { name: "DNI_Causant.jpg", status: "Processat", statusColor: "emerald", progress: 100 },
+                      { name: "Escriptura_Propietat.pdf", status: "Analitzant...", statusColor: "amber", progress: 65 },
+                      { name: "Nota_Simple_Registre.pdf", status: "En cua", statusColor: "slate", progress: 0 },
                     ].map((doc, i) => (
                       <div key={i} className="group flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 transition-colors">
                         <div className="flex items-center gap-3 min-w-0">
@@ -197,13 +197,13 @@ export function ProcesamientoDocumentalClient() {
         <div className="container">
           <div className="reveal text-center max-w-[700px] mx-auto mb-16">
             <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
-              Tipología documental
+              Tipologia documental
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight mb-4">
-              Documentos que Ulpiano procesa automáticamente
+              Documents que Ulpiano processa automàticament
             </h2>
             <p className="text-[17px] text-slate-500">
-              Nuestro motor de IA está entrenado específicamente para reconocer los formatos, estructuras y terminología propios del derecho notarial y registral español.
+              El nostre motor d'IA està entrenat específicament per a reconèixer els formats, estructures i terminologia propis del dret notarial i registral.
             </p>
           </div>
 
@@ -230,13 +230,13 @@ export function ProcesamientoDocumentalClient() {
         <div className="container">
           <div className="reveal text-center max-w-[700px] mx-auto mb-20">
             <span className="text-emerald-400 font-bold tracking-wider text-xs uppercase mb-3 block">
-              Tecnología
+              Tecnologia
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-6">
-              De documento plano a dato estructurado
+              De document pla a dada estructurada
             </h2>
             <p className="text-[17px] text-slate-400">
-              Ulpiano utiliza OCR de alta precisión (incluso para documentos manuscritos o escaneados de baja calidad) y modelos de IA para estructurar automáticamente los datos extraídos.
+              Ulpiano utilitza OCR d'alta precisió (fins i tot per a documents manuscrits o escanejats de baixa qualitat) i models d'IA per a estructurar automàticament les dades extretes.
             </p>
           </div>
 
@@ -247,26 +247,26 @@ export function ProcesamientoDocumentalClient() {
             {[
               {
                 num: "01",
-                title: "Captura de documentos",
-                desc: "Carga de imágenes, PDFs o documentos digitalizados. Los archivos se procesan de forma segura en infraestructura cifrada.",
+                title: "Captura de documents",
+                desc: "Càrrega d'imatges, PDFs o documents digitalitzats. Els fitxers es processen de forma segura en infraestructura xifrada.",
                 icon: <UploadCloud size={24} />
               },
               {
                 num: "02",
-                title: "Reconocimiento OCR",
-                desc: "Conversión de la imagen a texto digital procesable. Soporta documentos dañados, manuscritos y sellos notariales borrosos.",
+                title: "Reconeixement OCR",
+                desc: "Conversió de la imatge a text digital processable. Suporta documents danyats, manuscrits i segells notarials borrosos.",
                 icon: <ScanLine size={24} />
               },
               {
                 num: "03",
-                title: "Clasificación IA",
-                desc: "El modelo identifica el tipo de documento (testamento, nota simple, certificado), y aísla los campos relevantes según su contexto jurídico.",
+                title: "Classificació IA",
+                desc: "El model identifica el tipus de document (testament, nota simple, certificat), i aïlla els camps rellevants segons el seu context jurídic.",
                 icon: <BrainCircuit size={24} />
               },
               {
                 num: "04",
-                title: "Validación e indexación",
-                desc: "El usuario verifica las previsiones de la IA, corrige si es necesario con un clic, e importa los datos estructurados al expediente Ulpiano.",
+                title: "Validació i indexació",
+                desc: "L'usuari verifica les previsions de la IA, corregeix si és necessari amb un clic, i importa les dades estructurades a l'expedient Ulpiano.",
                 icon: <Tags size={24} />
               },
             ].map((step, i) => (
@@ -292,10 +292,10 @@ export function ProcesamientoDocumentalClient() {
         <div className="container max-w-[900px]">
           <div className="reveal text-center mb-16">
             <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
-              Beneficios
+              Beneficis
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight">
-              Gana tiempo en la recepción de documentos
+              Guanya temps en la recepció de documents
             </h2>
           </div>
 
@@ -303,18 +303,18 @@ export function ProcesamientoDocumentalClient() {
             {[
               {
                 icon: <Zap className="text-amber-500" size={24} />,
-                title: "Velocidad de procesamiento",
-                desc: "En lugar de invertir 30 minutos leyendo una escritura y copiando linderos a mano, la IA extrae toda la información registral y notarial en apenas 10 segundos.",
+                title: "Velocitat de processament",
+                desc: "En lloc d'invertir 30 minuts llegint una escriptura i copiant límits a mà, la IA extreu tota la informació registral i notarial en tot just 10 segons.",
               },
               {
                 icon: <ShieldCheck className="text-emerald-500" size={24} />,
-                title: "Precisión y mitigación de errores",
-                desc: "El OCR combinado con modelos de procesamiento de lenguaje natural (NLP) minimiza errores de lectura. La validación se realiza siempre sobre una propuesta ya estructurada, evitando el error de 'dedo'.",
+                title: "Precisió i mitigació d'errors",
+                desc: "L'OCR combinat amb models de processament de llenguatge natural (NLP) minimitza errors de lectura. La validació es realitza sempre sobre una proposta ja estructurada, evitant l'error de 'dit'.",
               },
               {
                 icon: <RefreshCw className="text-blue-500" size={24} />,
-                title: "Reutilización total en el expediente",
-                desc: "Los datos extraídos de un documento se reutilizan automáticamente en todo el ecosistema Ulpiano. Si la nota registral extrae un inmueble, éste se añade directamente al inventario y al Modelo 660.",
+                title: "Reutilització total a l'expedient",
+                desc: "Les dades extretes d'un document es reutilitzen automàticament en tot l'ecosistema Ulpiano. Si la nota registral extreu un immoble, aquest s'afegeix directament a l'inventari i al Model 660.",
               },
             ].map((item, i) => (
               <div key={i} className="reveal bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm flex flex-col md:flex-row gap-6 items-start" style={{ animationDelay: `${i * 100}ms` }}>
@@ -336,17 +336,17 @@ export function ProcesamientoDocumentalClient() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(45,106,79,0.15)_0%,transparent_70%)] pointer-events-none" />
         <div className="container relative z-10 text-center max-w-[700px]">
           <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-6">
-            Digitaliza la entrada de documentos sin picar datos a mano
+            Digitalitza l'entrada de documents sense picar dades a mà
           </h2>
           <p className="text-lg text-white/60 mb-10">
-            Descubre cómo el procesamiento inteligente reduce drásticamente el tiempo de tramitación inicial de cada expediente sucesorio.
+            Descobreix com el processament intel·ligent redueix dràsticament el temps de tramitació inicial de cada expedient successori.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/demo" className="btn-primary px-8 py-3.5 shadow-[0_0_20px_rgba(45,106,79,0.4)]">
-              Solicita tu demo gratis
+            <Link href="/ca/demo" className="btn-primary px-8 py-3.5 shadow-[0_0_20px_rgba(45,106,79,0.4)]">
+              Sol·licita la teva demo gratis
             </Link>
-            <Link href="/registro" className="btn-ghost text-white/80 hover:text-white px-6 border border-white/20">
-              Crear cuenta ahora <ArrowRight size={18} className="ml-2 inline" />
+            <Link href="/ca/registre" className="btn-ghost text-white/80 hover:text-white px-6 border border-white/20">
+              Crear compte ara <ArrowRight size={18} className="ml-2 inline" />
             </Link>
           </div>
         </div>

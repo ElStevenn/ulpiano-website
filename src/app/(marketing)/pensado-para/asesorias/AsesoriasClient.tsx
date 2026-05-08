@@ -2,11 +2,21 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import {
+  CheckCircle2,
+  ArrowRight,
+  Calculator,
+  BellRing,
+  FileSearch,
+  ShieldCheck,
+  RefreshCw,
+  Landmark,
+  Scale
+} from "lucide-react";
 
 /* =============================================
    SCROLL REVEAL HOOK
    ============================================= */
-
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -18,15 +28,20 @@ function useReveal() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
+            entry.target.classList.add("animate-fade-in-up");
+            entry.target.classList.remove("opacity-0");
+            observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
     );
 
     const children = node.querySelectorAll(".reveal");
-    children.forEach((child) => observer.observe(child));
+    children.forEach((child) => {
+      child.classList.add("opacity-0");
+      observer.observe(child);
+    });
 
     return () => observer.disconnect();
   }, []);
@@ -35,897 +50,308 @@ function useReveal() {
 }
 
 /* =============================================
-   SVG ICONS
-   ============================================= */
-
-function CheckIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--ulpiano-green)"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
-}
-
-function CalculatorIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="4" y="2" width="16" height="20" rx="2" />
-      <line x1="8" y1="6" x2="16" y2="6" />
-      <line x1="8" y1="10" x2="10" y2="10" />
-      <line x1="14" y1="10" x2="16" y2="10" />
-      <line x1="8" y1="14" x2="10" y2="14" />
-      <line x1="14" y1="14" x2="16" y2="14" />
-      <line x1="8" y1="18" x2="16" y2="18" />
-    </svg>
-  );
-}
-
-function BellAlertIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-      <line x1="1" y1="1" x2="4" y2="4" />
-      <line x1="23" y1="1" x2="20" y2="4" />
-    </svg>
-  );
-}
-
-function AuditTrailIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-      <polyline points="14 2 14 8 20 8" />
-      <line x1="16" y1="13" x2="8" y2="13" />
-      <line x1="16" y1="17" x2="8" y2="17" />
-      <polyline points="10 9 9 9 8 9" />
-    </svg>
-  );
-}
-
-function ShieldAlertIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-      <line x1="12" y1="8" x2="12" y2="12" />
-      <line x1="12" y1="16" x2="12.01" y2="16" />
-    </svg>
-  );
-}
-
-function SearchCheckIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-      <polyline points="8 11 10 13 14 9" />
-    </svg>
-  );
-}
-
-function RefreshIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <polyline points="23 4 23 10 17 10" />
-      <polyline points="1 20 1 14 7 14" />
-      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10" />
-      <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14" />
-    </svg>
-  );
-}
-
-function TrendingUpIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-      <polyline points="17 6 23 6 23 12" />
-    </svg>
-  );
-}
-
-function ArrowIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <line x1="5" y1="12" x2="19" y2="12" />
-      <polyline points="12 5 19 12 12 19" />
-    </svg>
-  );
-}
-
-function CheckCircleSmall() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--ulpiano-green)"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="9 12 11 14 15 10" />
-    </svg>
-  );
-}
-
-/* =============================================
    DATA
    ============================================= */
-
 const featureBlocks = [
   {
-    icon: <CalculatorIcon />,
-    title: "Motor Fiscal ISD Automatizado",
-    subtitle:
-      "La cuota del ISD de cada heredero. Calculada. Con la norma citada.",
+    icon: <RefreshCw size={28} strokeWidth={1.5} />,
+    title: "Recálculo Automático por Normativa",
+    subtitle: "¿Cambios en la ley autonómica? Ulpiano recalcula todos los casos afectados.",
     features: [
       {
-        title: "C\u00e1lculo Completo por Heredero",
-        desc: "Base imponible \u2192 reducciones auton\u00f3micas \u2192 bonificaciones \u2192 coeficiente multiplicador \u2192 cuota a ingresar. La Llei 19/2010 integrada en cada paso. Sin hojas de c\u00e1lculo, sin revisi\u00f3n manual de tablas.",
+        title: "Actualización Normativa en Tiempo Real",
+        desc: "Las bases de datos fiscales de Ulpiano se actualizan con cada cambio legislativo autonómico o estatal.",
       },
       {
-        title: "Rec\u00e1lculo ante Cambios Normativos",
-        desc: "Cuando la normativa cambia, los expedientes activos se recalculan autom\u00e1ticamente. Sin repasar uno a uno. Sin riesgo de aplicar una tabla derogada.",
+        title: "Impacto Inmediato Visible",
+        desc: "Visualiza al instante cómo afectan las nuevas reducciones o bonificaciones a la cuota de cada heredero.",
       },
     ],
   },
   {
-    icon: <BellAlertIcon />,
-    title: "Alertas de Plazo y Modelos Fiscales",
-    subtitle:
-      "La alerta antes del vencimiento. El Modelo 650, listo para presentar.",
+    icon: <BellRing size={28} strokeWidth={1.5} />,
+    title: "Control de Plazos y Vencimientos",
+    subtitle: "Nunca más un recargo por presentación fuera de plazo.",
     features: [
       {
-        title: "Alertas de Vencimiento Proactivas",
-        desc: "El per\u00edodo voluntario de 6 meses, monitorizado. El recargo seg\u00fan Art. 27 LGT, calculado antes de que ocurra. La alerta llega a ti, no al cliente.",
+        title: "Alertas Proactivas",
+        desc: "Avisos automáticos a los 90, 30 y 15 días antes del vencimiento del plazo de seis meses.",
       },
       {
-        title: "Modelo 650 Autocompleto",
-        desc: "Autoliquidaci\u00f3n individual por heredero. Los campos rellenados desde los datos del expediente. Sin transcribir manualmente. Listo para presentar ante la ATC.",
+        title: "Gestión de Prórrogas",
+        desc: "Tramitación y seguimiento integrado de las solicitudes de prórroga del Impuesto de Sucesiones.",
       },
     ],
   },
   {
-    icon: <AuditTrailIcon />,
-    title: "Trazabilidad y Auditor\u00eda ante la ATC",
-    subtitle:
-      "Cada paso del c\u00e1lculo, documentado. Con la referencia normativa citada.",
+    icon: <FileSearch size={28} strokeWidth={1.5} />,
+    title: "Trazabilidad Auditable",
+    subtitle: "Prepárate para cualquier revisión de la Agencia Tributaria con datos exactos.",
     features: [
       {
-        title: "Cada Paso Documentado con Norma Citada",
-        desc: "Desde la base imponible hasta la cuota final, cada c\u00e1lculo tiene su referencia legal. Ante una inspecci\u00f3n de la ATC, el expediente se defiende solo.",
+        title: "Justificación Normativa",
+        desc: "Cada cálculo generado incluye la cita exacta del artículo y ley aplicados para justificar la reducción.",
       },
       {
-        title: "Modelo 660 Estructurado",
-        desc: "Declaraci\u00f3n de sucesiones con inventario completo, generado desde datos estructurados. Sin ensamblar documentos a mano.",
+        title: "Memoria de Cálculo",
+        desc: "Exportación de un documento detallado paso a paso con el origen de cada valor del Modelo 650.",
       },
     ],
   },
 ];
 
 const claims = [
-  "El ISD de cada heredero, calculado con la norma citada",
-  "El Modelo 650, autocompleto desde el expediente",
-  "La alerta de extemporaneidad, antes de que ocurra",
-  "El rec\u00e1lculo normativo, autom\u00e1tico en expedientes activos",
+  "Cálculos fiscales adaptados a cada CCAA",
+  "Generación de Modelo 650 y anexos",
+  "Avisos automáticos de vencimientos",
+  "Justificación legal de cada bonificación",
 ];
 
-const benefits = [
+const steps = [
   {
-    icon: <ShieldAlertIcon />,
-    title: "Cero Contingencias por Plazo",
-    desc: "La alerta llega antes que el vencimiento. El recargo seg\u00fan Art. 27 LGT, calculado antes de que sea real. Sin sustos para ti ni para tu cliente.",
+    title: "Datos Centralizados",
+    desc: "Recibe los datos del expediente desde el despacho o notaría, ya estructurados en Ulpiano.",
   },
   {
-    icon: <SearchCheckIcon />,
-    title: "Trazabilidad ante la ATC",
-    desc: "Cada paso del c\u00e1lculo fiscal documentado con referencia normativa. Auditable desde el primer d\u00eda. El expediente habla por s\u00ed solo ante una inspecci\u00f3n.",
+    title: "Configuración Fiscal",
+    desc: "Aplica las reducciones por parentesco, vivienda habitual o empresa familiar correspondientes.",
   },
   {
-    icon: <RefreshIcon />,
-    title: "Rec\u00e1lculo Normativo Autom\u00e1tico",
-    desc: "Cuando la Llei 19/2010 se modifica, los expedientes activos se actualizan solos. Sin repasarlos uno a uno. Sin riesgo de aplicar normativa derogada.",
+    title: "Cálculo Inteligente",
+    desc: "Ulpiano calcula al céntimo la base imponible, liquidable y la cuota íntegra de cada heredero.",
   },
   {
-    icon: <TrendingUpIcon />,
-    title: "ROI Medible por Expediente",
-    desc: "Menos horas de c\u00e1lculo manual, menos riesgo de error, menos contingencias. El ahorro de tiempo es cuantificable expediente a expediente.",
+    title: "Modelo 650 Listo",
+    desc: "Genera los modelos de autoliquidación con total precisión, listos para su presentación telemática.",
   },
 ];
 
 const testimonials = [
   {
-    quote:
-      "Antes dedic\u00e1bamos dos horas por heredero al c\u00e1lculo del ISD. Con Ulpiano, el embudo fiscal completo sale en minutos y con la norma citada. Ante la ATC, el expediente se defiende solo.",
-    author: "Laura G., Asesora Fiscal",
-    location: "Asesor\u00eda en Girona",
+    quote: "La tranquilidad de saber que cada reducción que aplicamos está respaldada por la norma actualizada no tiene precio ante una inspección.",
+    author: "Elena R., Asesora Fiscal",
+    location: "Madrid",
   },
   {
-    quote:
-      "El rec\u00e1lculo autom\u00e1tico ante cambios normativos nos ha evitado m\u00e1s de una contingencia. Antes repas\u00e1bamos expedientes uno a uno. Ahora se actualizan solos.",
-    author: "Marc T., Director de Fiscalidad",
-    location: "Barcelona",
-  },
-];
-
-const crossLinks = [
-  {
-    href: "/soluciones/fiscalidad-sucesoria",
-    label: "Fiscalidad Sucesoria",
-    desc: "Motor ISD automatizado",
-  },
-  {
-    href: "/soluciones/planificacion-sucesoria",
-    label: "Planificaci\u00f3n Sucesoria",
-    desc: "M\u00f3dulo patrimonial completo",
-  },
-  {
-    href: "/soluciones/documentacion-sucesoria",
-    label: "Documentaci\u00f3n Sucesoria",
-    desc: "Generaci\u00f3n documental inteligente",
+    quote: "Antes dedicábamos horas a revisar hojas de cálculo para el ISD. Ahora, la plataforma nos genera los modelos en minutos y sin errores.",
+    author: "Javier S., Socio Director",
+    location: "Valencia",
   },
 ];
 
 /* =============================================
    MAIN COMPONENT
    ============================================= */
-
 export function AsesoriasClient() {
   const revealRef = useReveal();
 
-  const stagger = (i: number) => ({ transitionDelay: `${i * 100}ms` });
-
   return (
     <div ref={revealRef}>
-      {/* SECCI\u00d3N 1: HERO */}
-      <section
-        style={{
-          background: "var(--night)",
-          paddingTop: "calc(64px + var(--space-16))",
-          paddingBottom: "var(--space-24)",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            top: -120,
-            right: -120,
-            width: 400,
-            height: 400,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle, rgba(45,106,79,0.08) 0%, transparent 70%)",
-            pointerEvents: "none",
-          }}
-        />
-        <div className="container" style={{ textAlign: "center" }}>
-          <div
-            className="eyebrow reveal"
-            style={{
-              color: "rgba(255,255,255,0.5)",
-              marginBottom: "var(--space-4)",
-            }}
-          >
-            PENSADO PARA ASESORES FISCALES
+      {/* ═══ HERO ═══ */}
+      <section className="bg-night pt-[calc(64px+4rem)] pb-24 relative overflow-hidden">
+        {/* Decorative Grid & Glow */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute left-1/2 top-0 -z-10 -translate-x-1/2 h-[400px] w-[600px] rounded-full bg-emerald-500 opacity-[0.12] blur-[120px]" />
+        
+        <div className="container relative z-10 text-center max-w-[850px]">
+          <div className="flex items-center justify-center gap-3 mb-8 reveal">
+            <div className="h-[1px] w-8 bg-emerald-500/50" />
+            <span className="text-emerald-400/90 text-xs font-bold tracking-[0.2em] uppercase">
+              Pensado para Asesorías
+            </span>
+            <div className="h-[1px] w-8 bg-emerald-500/50" />
           </div>
-          <h1
-            className="h1 reveal"
-            style={{
-              color: "var(--white)",
-              maxWidth: 720,
-              margin: "0 auto",
-              ...stagger(1),
-            }}
-          >
-            El ISD Recalculado ante Cada Cambio Normativo. La Alerta antes del
-            Plazo. La Trazabilidad ante la ATC.
+          
+          <h1 className="text-4xl sm:text-5xl lg:text-[52px] font-bold text-white leading-[1.15] mb-8 reveal tracking-tight text-balance" style={{ animationDelay: '100ms' }}>
+            El ISD, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">automatizado</span>. El Modelo 650, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">auditable</span>.
           </h1>
-          <p
-            className="body-lg reveal"
-            style={{
-              color: "rgba(255,255,255,0.75)",
-              maxWidth: 600,
-              margin: "var(--space-6) auto 0",
-              ...stagger(2),
-            }}
-          >
-            Con Ulpiano, el ISD de cada heredero sale calculado con la Llei
-            19/2010 citada en cada paso. Cuando la norma cambia, los expedientes
-            activos se recalculan solos. El Modelo 650, autocompleto. La alerta
-            de plazo, antes de que sea un problema.
+          
+          <p className="text-lg md:text-xl leading-relaxed text-white/60 mb-12 reveal text-balance mx-auto max-w-[680px]" style={{ animationDelay: '200ms' }}>
+            Recálculo automático ante cambios normativos, control de plazos riguroso y trazabilidad absoluta para inspecciones de Hacienda.
           </p>
-          <div
-            className="reveal"
-            style={{
-              display: "flex",
-              gap: "var(--space-4)",
-              justifyContent: "center",
-              marginTop: "var(--space-8)",
-              flexWrap: "wrap",
-              ...stagger(3),
-            }}
-          >
-            <Link href="/demo" className="btn-primary">
+          
+          <div className="flex flex-wrap items-center justify-center gap-4 reveal" style={{ animationDelay: '300ms' }}>
+            <Link href="/demo" className="btn-primary shadow-[0_0_20px_rgba(45,106,79,0.4)] hover:shadow-[0_0_30px_rgba(45,106,79,0.6)] px-8 py-3.5 text-base">
               Reserva tu Demo
             </Link>
-            <a href="#propuesta" className="btn-ghost">
-              M&aacute;s Informaci&oacute;n &rarr;
-            </a>
+            <Link href="#propuesta" className="btn-ghost group text-white/80 hover:text-white px-6">
+              Descubrir ventajas
+              <ArrowRight size={18} className="transition-transform group-hover:translate-y-1 ml-2 rotate-90 group-hover:rotate-90" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* SECCI\u00d3N 2: PROPUESTA DE VALOR */}
-      <section
-        id="propuesta"
-        style={{ background: "var(--white)", padding: "var(--space-20) 0" }}
-      >
+      {/* ═══ PROPUESTA DE VALOR ═══ */}
+      <section id="propuesta" className="py-24 bg-white border-b border-slate-200">
         <div className="container">
-          <div
-            style={{
-              textAlign: "center",
-              marginBottom: "var(--space-12)",
-            }}
-          >
-            <div
-              className="eyebrow reveal"
-              style={{
-                color: "var(--slate)",
-                marginBottom: "var(--space-4)",
-              }}
-            >
-              PARA TU ASESOR&Iacute;A
-            </div>
-            <h2 className="h2 reveal" style={stagger(1)}>
-              &iquest;Por Qu&eacute; Ulpiano para Asesores Fiscales?
+          <div className="reveal text-center max-w-[700px] mx-auto mb-20">
+            <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
+              Para tu asesoría fiscal
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight mb-4">
+              Precisión fiscal sin margen de error
             </h2>
-            <p
-              className="body-lg reveal"
-              style={{
-                color: "var(--slate)",
-                maxWidth: 600,
-                margin: "var(--space-4) auto 0",
-                ...stagger(2),
-              }}
-            >
-              El Motor Fiscal ISD Completo, las Alertas de Plazo y la
-              Trazabilidad Auditable ante la ATC
+            <p className="text-[17px] text-slate-500">
+              Olvídate de las hojas de cálculo complejas y los errores humanos. Ulpiano aporta rigor normativo a cada liquidación del Impuesto de Sucesiones.
             </p>
           </div>
 
-          <div className="ases-features-grid">
-            {featureBlocks.map((block, blockIdx) => (
-              <div
-                key={block.title}
-                className="card reveal"
-                style={stagger(blockIdx)}
-              >
-                <div
-                  style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: "50%",
-                    background: "var(--green-bg)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "var(--ulpiano-green)",
-                    marginBottom: "var(--space-5)",
-                  }}
-                >
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featureBlocks.map((block, i) => (
+              <div key={block.title} className="reveal bg-slate-50 rounded-3xl p-8 border border-slate-200 transition-all hover:shadow-md hover:bg-white" style={{ animationDelay: `${i * 100}ms` }}>
+                <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 border border-emerald-100/50">
                   {block.icon}
                 </div>
-                <h3
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 600,
-                    color: "var(--ink)",
-                    marginBottom: "var(--space-2)",
-                  }}
-                >
+                <h3 className="text-xl font-bold text-ink mb-2">
                   {block.title}
                 </h3>
-                <p
-                  className="body-sm"
-                  style={{
-                    color: "var(--slate)",
-                    marginBottom: "var(--space-5)",
-                  }}
-                >
+                <p className="text-[15px] font-medium text-emerald-600 mb-6">
                   {block.subtitle}
                 </p>
-                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                  {block.features.map((feat) => (
-                    <li
-                      key={feat.title}
-                      style={{
-                        marginBottom: "var(--space-4)",
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: "var(--space-3)",
-                          marginBottom: 4,
-                        }}
-                      >
-                        <span style={{ flexShrink: 0, marginTop: 3 }}>
-                          <CheckIcon />
-                        </span>
-                        <span
-                          style={{
-                            fontSize: 15,
-                            fontWeight: 500,
-                            color: "var(--ink)",
-                          }}
-                        >
-                          {feat.title}
-                        </span>
+                <div className="space-y-5">
+                  {block.features.map((feat, j) => (
+                    <div key={j} className="flex items-start gap-3">
+                      <CheckCircle2 size={18} className="text-emerald-500 mt-0.5 shrink-0" />
+                      <div>
+                        <div className="font-semibold text-[15px] text-ink mb-1">{feat.title}</div>
+                        <p className="text-sm text-slate-600 leading-relaxed m-0">{feat.desc}</p>
                       </div>
-                      <p
-                        style={{
-                          fontSize: 15,
-                          color: "var(--slate)",
-                          lineHeight: 1.7,
-                          paddingLeft: 28,
-                          margin: 0,
-                        }}
-                      >
-                        {feat.desc}
-                      </p>
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECCI\u00d3N 2B: CLAIMS STRIP */}
-      <section
-        style={{
-          background: "var(--surface)",
-          padding: "var(--space-12) 0",
-        }}
-      >
+      {/* ═══ CLAIMS RÁPIDOS ═══ */}
+      <section className="py-12 bg-slate-900 border-b border-slate-800">
         <div className="container">
-          <div className="ases-claims-grid">
+          <div className="flex flex-wrap justify-center gap-4 lg:gap-8">
             {claims.map((claim, i) => (
-              <div
-                key={claim}
-                className="reveal"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--space-3)",
-                  background: "var(--white)",
-                  border: "1px solid var(--mist)",
-                  borderLeft: "3px solid var(--ulpiano-green)",
-                  borderRadius: 8,
-                  padding: "var(--space-4) var(--space-6)",
-                  ...stagger(i),
-                }}
-              >
-                <span style={{ flexShrink: 0 }}>
-                  <CheckCircleSmall />
-                </span>
-                <span
-                  style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                    color: "var(--ink)",
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {claim}
-                </span>
+              <div key={i} className="reveal flex items-center gap-3 bg-slate-800/50 border border-slate-700 px-5 py-3 rounded-xl" style={{ animationDelay: `${i * 100}ms` }}>
+                <CheckCircle2 size={18} className="text-emerald-400" />
+                <span className="text-sm font-medium text-white/90">{claim}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECCI\u00d3N 3: BENEFICIOS */}
-      <section
-        style={{ background: "var(--white)", padding: "var(--space-20) 0" }}
-      >
-        <div className="container">
-          <div
-            style={{
-              textAlign: "center",
-              marginBottom: "var(--space-12)",
-            }}
-          >
-            <div
-              className="eyebrow reveal"
-              style={{
-                color: "var(--slate)",
-                marginBottom: "var(--space-4)",
-              }}
-            >
-              BENEFICIOS
-            </div>
-            <h2 className="h2 reveal" style={stagger(1)}>
-              Lo que cambia en tu asesor&iacute;a con Ulpiano
+      {/* ═══ CÓMO FUNCIONA ═══ */}
+      <section className="py-24 bg-white border-b border-slate-200 overflow-hidden relative">
+        <div className="container relative z-10">
+          <div className="reveal text-center max-w-[700px] mx-auto mb-16">
+            <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
+              Flujo de Trabajo
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight">
+              Cómo se integra en tu día a día
             </h2>
           </div>
 
-          <div className="ases-benefits-grid">
-            {benefits.map((benefit, i) => (
-              <div
-                key={benefit.title}
-                className="card reveal"
-                style={stagger(i)}
-              >
-                <div
-                  style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: "50%",
-                    background: "var(--green-bg)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "var(--ulpiano-green)",
-                    marginBottom: "var(--space-5)",
-                  }}
-                >
-                  {benefit.icon}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {steps.map((step, i) => (
+              <div key={i} className="reveal relative group" style={{ animationDelay: `${i * 100}ms` }}>
+                <div className="bg-slate-50 border border-slate-200 rounded-3xl p-8 h-full transition-all duration-300 group-hover:bg-white group-hover:shadow-lg group-hover:-translate-y-1 group-hover:border-emerald-500/30">
+                  <div className="text-[64px] font-black text-slate-100 leading-none mb-4 tracking-tighter group-hover:text-emerald-50 transition-colors">
+                    {i + 1}
+                  </div>
+                  <h3 className="text-lg font-bold text-ink mb-3">{step.title}</h3>
+                  <p className="text-[14px] text-slate-600 leading-relaxed">{step.desc}</p>
                 </div>
-                <h3
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 600,
-                    color: "var(--ink)",
-                    marginBottom: "var(--space-3)",
-                  }}
-                >
-                  {benefit.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: 15,
-                    color: "var(--slate)",
-                    lineHeight: 1.7,
-                    margin: 0,
-                  }}
-                >
-                  {benefit.desc}
-                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECCI\u00d3N 4: TESTIMONIOS */}
-      <section
-        style={{
-          background: "var(--surface)",
-          padding: "var(--space-16) 0",
-        }}
-      >
-        <div className="container">
-          {/* Pendiente: testimonios reales de asesores fiscales usuarios */}
-          <div className="ases-testimonials-grid">
+      {/* ═══ TESTIMONIOS ═══ */}
+      <section className="py-24 bg-slate-50">
+        <div className="container max-w-[1000px]">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             {testimonials.map((t, i) => (
-              <div
-                key={t.author}
-                className="reveal"
-                style={{
-                  paddingLeft: "var(--space-6)",
-                  borderLeft: "3px solid var(--ulpiano-green)",
-                  ...stagger(i),
-                }}
-              >
-                <blockquote
-                  style={{
-                    fontFamily: "var(--font-inter), 'Inter', sans-serif",
-                    fontStyle: "italic",
-                    fontSize: 17,
-                    lineHeight: 1.6,
-                    color: "var(--ink)",
-                    margin: 0,
-                  }}
-                >
-                  &ldquo;{t.quote}&rdquo;
-                </blockquote>
-                <p
-                  style={{
-                    marginTop: "var(--space-4)",
-                    fontSize: 14,
-                    fontWeight: 500,
-                    color: "var(--fog)",
-                  }}
-                >
-                  &mdash; {t.author} | {t.location}
+              <div key={i} className="reveal bg-white rounded-3xl p-8 lg:p-10 border border-slate-200 shadow-sm relative" style={{ animationDelay: `${i * 100}ms` }}>
+                <div className="text-emerald-500 mb-6">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z" opacity="0.2"/>
+                  </svg>
+                </div>
+                <p className="text-lg font-medium text-ink leading-relaxed mb-8">
+                  "{t.quote}"
                 </p>
+                <div className="flex items-center gap-4 mt-auto">
+                  <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-400 text-lg">
+                    {t.author.charAt(0)}
+                  </div>
+                  <div>
+                    <div className="font-bold text-ink text-sm">{t.author}</div>
+                    <div className="text-sm text-slate-500">{t.location}</div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECCI\u00d3N 5: CROSS-LINKS */}
-      <section
-        style={{ background: "var(--white)", padding: "var(--space-12) 0" }}
-      >
+      {/* ═══ CROSS-LINKS ═══ */}
+      <section className="py-16 bg-white border-t border-slate-200">
         <div className="container">
-          <div className="ases-crosslinks-grid">
-            {crossLinks.map((link, i) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="card reveal"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--space-4)",
-                  textDecoration: "none",
-                  ...stagger(i),
-                }}
-              >
-                <div style={{ flex: 1 }}>
-                  <div
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 600,
-                      color: "var(--ink)",
-                      marginBottom: 2,
-                    }}
-                  >
-                    {link.label}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 14,
-                      color: "var(--slate)",
-                    }}
-                  >
-                    {link.desc}
-                  </div>
-                </div>
-                <span style={{ color: "var(--ulpiano-green)", flexShrink: 0 }}>
-                  <ArrowIcon />
-                </span>
+          <div className="text-center mb-10">
+            <span className="text-slate-400 font-bold tracking-widest text-xs uppercase block">
+              Explora nuestras soluciones
+            </span>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                href: "/soluciones/procesamiento-documental",
+                label: "Procesamiento con IA",
+                desc: "Extracción automática de datos registrales",
+              },
+              {
+                href: "/soluciones/fiscalidad-sucesoria",
+                label: "Fiscalidad Sucesoria",
+                desc: "Cálculo preciso del impuesto (ISD)",
+              },
+              {
+                href: "/pensado-para/despachos",
+                label: "Para Despachos",
+                desc: "Plataforma integral para abogados",
+              },
+            ].map((link, i) => (
+              <Link key={i} href={link.href} className="reveal group block p-6 rounded-2xl border border-slate-200 hover:border-emerald-500/30 hover:bg-emerald-50/30 transition-all text-center" style={{ animationDelay: `${i * 100}ms` }}>
+                <h3 className="text-lg font-bold text-ink mb-1 group-hover:text-emerald-700 transition-colors">{link.label}</h3>
+                <p className="text-sm text-slate-500 m-0">{link.desc}</p>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECCI\u00d3N 6: CTA FINAL */}
-      <section
-        style={{
-          background:
-            "linear-gradient(180deg, #0F1F3D 0%, #142647 100%)",
-          padding: "var(--space-24) 0",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            bottom: -100,
-            left: -100,
-            width: 360,
-            height: 360,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle, rgba(45,106,79,0.08) 0%, transparent 70%)",
-            pointerEvents: "none",
-          }}
-        />
-        <div className="container" style={{ textAlign: "center" }}>
-          <h2 className="h2 reveal ases-cta-h2">
-            El ISD de tu Pr&oacute;ximo Expediente, Calculado en Minutos. Con la
-            Norma Citada.
+      {/* ═══ CTA FINAL ═══ */}
+      <section className="bg-night py-24 relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(45,106,79,0.15)_0%,transparent_70%)] pointer-events-none" />
+        <div className="container relative z-10 text-center max-w-[700px]">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-6">
+            Seguridad fiscal para tu asesoría
           </h2>
-          <p
-            className="body-lg reveal"
-            style={{
-              color: "rgba(255,255,255,0.75)",
-              maxWidth: 560,
-              margin: "var(--space-6) auto 0",
-              ...stagger(1),
-            }}
-          >
-            Descubre c&oacute;mo Ulpiano puede eliminar el c&aacute;lculo manual
-            del ISD en tu asesor&iacute;a y ofrecerte trazabilidad completa ante
-            la ATC.
+          <p className="text-lg text-white/60 mb-10">
+            Minimiza riesgos, evita cálculos manuales y ofrece a tus clientes liquidaciones impecables y respaldadas por la ley.
           </p>
-          <div
-            className="reveal"
-            style={{
-              display: "flex",
-              gap: "var(--space-4)",
-              justifyContent: "center",
-              marginTop: "var(--space-10)",
-              flexWrap: "wrap",
-              ...stagger(2),
-            }}
-          >
-            <Link href="/demo" className="btn-primary">
-              Reserva tu Demo
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link href="/demo" className="btn-primary px-8 py-3.5 shadow-[0_0_20px_rgba(45,106,79,0.4)]">
+              Solicita tu demo gratis
             </Link>
-            <Link href="/registro" className="btn-ghost">
-              Empieza Ahora &rarr;
+            <Link href="/registro" className="btn-ghost text-white/80 hover:text-white px-6 border border-white/20">
+              Crear cuenta ahora <ArrowRight size={18} className="ml-2 inline" />
             </Link>
           </div>
-          <p
-            className="reveal"
-            style={{
-              color: "rgba(255,255,255,0.5)",
-              fontSize: 14,
-              marginTop: "var(--space-4)",
-              ...stagger(3),
-            }}
-          >
-            Ulpiano &ndash; Innovaci&oacute;n en Derecho Sucesorio
-          </p>
         </div>
       </section>
-
-      {/* RESPONSIVE STYLES */}
-      <style>{`
-        .ases-features-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: var(--space-8);
-        }
-        .ases-claims-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: var(--space-6);
-        }
-        .ases-benefits-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: var(--space-6);
-        }
-        .ases-testimonials-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: var(--space-8);
-        }
-        .ases-crosslinks-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: var(--space-6);
-        }
-        .ases-cta-h2 {
-          color: var(--white);
-          max-width: 680px;
-          margin: 0 auto;
-        }
-
-        @media (max-width: 1024px) {
-          .ases-features-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .ases-crosslinks-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        @media (max-width: 768px) {
-          .ases-features-grid {
-            grid-template-columns: 1fr;
-          }
-          .ases-benefits-grid {
-            grid-template-columns: 1fr;
-          }
-          .ases-testimonials-grid {
-            grid-template-columns: 1fr;
-          }
-          .ases-crosslinks-grid {
-            grid-template-columns: 1fr;
-          }
-          .ases-cta-h2 {
-            font-size: 28px;
-          }
-        }
-      `}</style>
     </div>
   );
 }

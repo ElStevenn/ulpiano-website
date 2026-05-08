@@ -3,19 +3,20 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import {
+  CheckCircle2,
+  ArrowRight,
   ShieldPlus,
   FileBarChart,
   HeartPulse,
   PackagePlus,
   Smile,
   ShieldCheck,
-  Sparkles,
+  Sparkles
 } from "lucide-react";
 
 /* =============================================
    SCROLL REVEAL HOOK
    ============================================= */
-
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -27,15 +28,20 @@ function useReveal() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
+            entry.target.classList.add("animate-fade-in-up");
+            entry.target.classList.remove("opacity-0");
+            observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
     );
 
     const children = node.querySelectorAll(".reveal");
-    children.forEach((child) => observer.observe(child));
+    children.forEach((child) => {
+      child.classList.add("opacity-0");
+      observer.observe(child);
+    });
 
     return () => observer.disconnect();
   }, []);
@@ -44,767 +50,308 @@ function useReveal() {
 }
 
 /* =============================================
-   INLINE SVG ICONS
-   ============================================= */
-
-function CheckIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--ulpiano-green)"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
-}
-
-function ArrowIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <line x1="5" y1="12" x2="19" y2="12" />
-      <polyline points="12 5 19 12 12 19" />
-    </svg>
-  );
-}
-
-function CheckCircleSmall() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--ulpiano-green)"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-      <polyline points="22 4 12 14.01 9 11.01" />
-    </svg>
-  );
-}
-
-/* =============================================
    DATA
    ============================================= */
-
 const featureBlocks = [
   {
-    icon: <ShieldPlus size={24} />,
+    icon: <ShieldPlus size={28} strokeWidth={1.5} />,
     title: "Complemento a Pólizas de Vida y Decesos",
-    subtitle:
-      "Tu póliza no termina en la indemnización. La tramitación sucesoria, integrada.",
+    subtitle: "Tu póliza no termina en la indemnización. La tramitación sucesoria, integrada.",
     features: [
       {
         title: "Servicio Post-Fallecimiento Estructurado",
-        desc: "Del fallecimiento a la distribución de la herencia — las familias de tus asegurados reciben un camino gestionado, no solo una indemnización económica.",
+        desc: "Del fallecimiento a la distribución de la herencia — las familias reciben un camino gestionado, no solo una indemnización.",
       },
       {
         title: "Propuesta de Valor Diferenciada",
-        desc: "Paquete integral: póliza + gestión sucesoria. Ningún competidor ofrece esta combinación. Tu aseguradora se posiciona como solución completa para la vida y el fallecimiento.",
+        desc: "Paquete integral: póliza + gestión sucesoria. Ningún competidor ofrece esta combinación de tranquilidad y servicio.",
       },
     ],
   },
   {
-    icon: <FileBarChart size={24} />,
+    icon: <FileBarChart size={28} strokeWidth={1.5} />,
     title: "Expediente Sucesorio y Fiscalidad del Cobro",
-    subtitle:
-      "Los datos del asegurado, vinculados al expediente. El impacto fiscal, calculado.",
+    subtitle: "Los datos del asegurado, vinculados al expediente. El impacto fiscal, calculado.",
     features: [
       {
-        title: "Datos del Asegurado Vinculados al Expediente",
-        desc: "Los datos del asegurado y sus beneficiarios fluyen directamente al expediente sucesorio. Sin re-entrada manual. Sin duplicidades.",
+        title: "Datos Vinculados Automáticamente",
+        desc: "Los datos del asegurado y sus beneficiarios fluyen directamente al expediente sucesorio. Sin re-entrada manual.",
       },
       {
-        title: "Impacto Fiscal del Cobro de la Póliza",
-        desc: "La carga fiscal estimada que implica el cobro de la póliza tras el fallecimiento, calculada y presentada a la familia. Entienden qué recibirán y qué pagarán.",
+        title: "Impacto Fiscal Estimado",
+        desc: "Calculamos la carga fiscal que implica el cobro de la póliza para la familia. Entienden exactamente qué recibirán y qué pagarán.",
       },
     ],
   },
   {
-    icon: <HeartPulse size={24} />,
-    title: "Fidelización y Cumplimiento Normativo",
-    subtitle:
-      "Transparencia para el asegurado. Cumplimiento normativo actualizado.",
+    icon: <HeartPulse size={28} strokeWidth={1.5} />,
+    title: "Fidelización y Cumplimiento",
+    subtitle: "Transparencia total para el asegurado y cumplimiento normativo actualizado.",
     features: [
       {
-        title: "Visibilidad Completa para el Asegurado",
-        desc: "Los pasos sucesorios, el estado de la póliza, las acciones pendientes — todo transparente. El asegurado y su familia ven el proceso completo.",
+        title: "Visibilidad para la Familia",
+        desc: "Los pasos sucesorios, el estado de la póliza y las acciones pendientes en un portal transparente.",
       },
       {
-        title: "Cumplimiento Normativo Actualizado",
-        desc: "La plataforma se mantiene al día con la legislación española y autonómica. Documentación cifrada. El riesgo regulatorio, gestionado.",
+        title: "Seguridad y Normativa",
+        desc: "Documentación cifrada y cumplimiento estricto con la legislación autonómica y estatal vigente.",
       },
     ],
   },
 ];
 
 const claims = [
-  "El servicio sucesorio, integrado en tu póliza de vida",
-  "El impacto fiscal del cobro, calculado para la familia",
-  "El expediente del asegurado, estructurado desde el primer día",
-  "La fidelización que va más allá de la indemnización",
+  "Servicio sucesorio integrado en póliza",
+  "Impacto fiscal del cobro calculado",
+  "Expediente del asegurado estructurado",
+  "Fidelización real post-indemnización",
 ];
 
-const benefits = [
+const steps = [
   {
-    icon: <PackagePlus size={24} />,
-    title: "Catálogo de Productos Ampliado",
-    desc: "Tu póliza de vida no termina en la indemnización. Incluye la gestión sucesoria completa. Eso es diferenciación real en un mercado saturado.",
+    title: "Apertura del Siniestro",
+    desc: "Al activarse la póliza, se crea automáticamente un expediente sucesorio digital para la familia en Ulpiano.",
   },
   {
-    icon: <Smile size={24} />,
-    title: "Experiencia del Asegurado Mejorada",
-    desc: "En el momento más difícil, tu aseguradora ofrece más que dinero: ofrece un camino estructurado para gestionar la herencia. Eso fideliza.",
+    title: "Portal de Beneficiarios",
+    desc: "Los herederos acceden de forma segura para subir certificados y consultar el impacto fiscal del seguro.",
   },
   {
-    icon: <ShieldCheck size={24} />,
-    title: "Menor Riesgo Operativo",
-    desc: "Cumplimiento normativo actualizado, documentación cifrada, expedientes trazables. Menos incidencias, menos reclamaciones.",
+    title: "Gestión Sucesoria",
+    desc: "Ulpiano guía a la familia por todos los trámites legales, impuestos y reparto, sin que la aseguradora sume carga operativa.",
   },
   {
-    icon: <Sparkles size={24} />,
-    title: "Imagen de Innovación",
-    desc: "Servicios digitales que añaden transparencia y practicidad a tus pólizas. Eso se percibe en el mercado y se valora por el asegurado.",
+    title: "Resolución y Fidelización",
+    desc: "La familia resuelve la herencia fácilmente, asociando esa tranquilidad directamente a la marca de tu aseguradora.",
   },
 ];
 
 const testimonials = [
   {
-    quote:
-      "Integrar la gestión sucesoria en nuestras pólizas de vida ha sido el mayor diferenciador de los últimos años. Los clientes perciben un valor que ningún competidor ofrece.",
+    quote: "Integrar la gestión sucesoria en nuestras pólizas de vida ha sido el mayor diferenciador de los últimos años. Los clientes perciben un valor que ningún competidor ofrece.",
     author: "Patricia S., Directora de Producto",
-    location: "Aseguradora en Madrid",
+    location: "Aseguradora Nacional",
   },
   {
-    quote:
-      "El cálculo del impacto fiscal del cobro de la póliza es información que las familias agradecen enormemente. Antes llegaban sin saber qué iban a pagar de impuestos.",
-    author: "Javier M., Responsable de Canal",
-    location: "Barcelona",
-  },
-];
-
-const crossLinks = [
-  {
-    href: "/soluciones/fiscalidad-sucesoria",
-    label: "Fiscalidad Sucesoria",
-    desc: "Motor ISD automatizado",
-  },
-  {
-    href: "/soluciones/procesamiento-documental",
-    label: "Procesamiento Documental",
-    desc: "Documentos procesados automáticamente",
-  },
-  {
-    href: "/soluciones/planificacion-sucesoria",
-    label: "Planificación Sucesoria",
-    desc: "Módulo patrimonial completo",
+    quote: "Saber el impacto fiscal del cobro de la póliza es una información que las familias agradecen enormemente. Evita sorpresas con Hacienda y genera confianza total.",
+    author: "Fernando G., Director de Siniestros",
+    location: "Correduría Internacional",
   },
 ];
 
 /* =============================================
    MAIN COMPONENT
    ============================================= */
-
 export function AseguradorasClient() {
   const revealRef = useReveal();
 
-  const stagger = (i: number) => ({ transitionDelay: `${i * 100}ms` });
-
   return (
     <div ref={revealRef}>
-      {/* SECCIÓN 1: HERO */}
-      <section
-        style={{
-          background: "var(--night)",
-          paddingTop: "calc(64px + var(--space-16))",
-          paddingBottom: "var(--space-24)",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            top: -120,
-            right: -120,
-            width: 400,
-            height: 400,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle, rgba(45,106,79,0.08) 0%, transparent 70%)",
-            pointerEvents: "none",
-          }}
-        />
-        <div className="container" style={{ textAlign: "center" }}>
-          <div
-            className="eyebrow reveal"
-            style={{
-              color: "rgba(255,255,255,0.5)",
-              marginBottom: "var(--space-4)",
-            }}
-          >
-            PENSADO PARA ASEGURADORAS
+      {/* ═══ HERO ═══ */}
+      <section className="bg-night pt-[calc(64px+4rem)] pb-24 relative overflow-hidden">
+        {/* Decorative Grid & Glow */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute left-1/2 top-0 -z-10 -translate-x-1/2 h-[400px] w-[600px] rounded-full bg-emerald-500 opacity-[0.12] blur-[120px]" />
+        
+        <div className="container relative z-10 text-center max-w-[850px]">
+          <div className="flex items-center justify-center gap-3 mb-8 reveal">
+            <div className="h-[1px] w-8 bg-emerald-500/50" />
+            <span className="text-emerald-400/90 text-xs font-bold tracking-[0.2em] uppercase">
+              Pensado para Aseguradoras
+            </span>
+            <div className="h-[1px] w-8 bg-emerald-500/50" />
           </div>
-          <h1
-            className="h1 reveal"
-            style={{
-              color: "var(--white)",
-              maxWidth: 720,
-              margin: "0 auto",
-              ...stagger(1),
-            }}
-          >
-            La Tramitación Sucesoria que Complementa tus Pólizas de Vida. El
-            Servicio Post-Fallecimiento que Fideliza.
+          
+          <h1 className="text-4xl sm:text-5xl lg:text-[52px] font-bold text-white leading-[1.15] mb-8 reveal tracking-tight text-balance" style={{ animationDelay: '100ms' }}>
+            Pólizas de vida y decesos con gestión sucesoria <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">integrada</span>.
           </h1>
-          <p
-            className="body-lg reveal"
-            style={{
-              color: "rgba(255,255,255,0.75)",
-              maxWidth: 600,
-              margin: "var(--space-6) auto 0",
-              ...stagger(2),
-            }}
-          >
-            Con Ulpiano, cuando tu asegurado fallece, la familia recibe más que
-            una indemnización — recibe el camino completo de la sucesión,
-            estructurado y gestionado. Tu póliza se convierte en un servicio
-            integral.
+          
+          <p className="text-lg md:text-xl leading-relaxed text-white/60 mb-12 reveal text-balance mx-auto max-w-[680px]" style={{ animationDelay: '200ms' }}>
+            Transforma la indemnización en un servicio integral. Ofrece a los beneficiarios expediente digital, cálculo fiscal y apoyo documental completo.
           </p>
-          <div
-            className="reveal"
-            style={{
-              display: "flex",
-              gap: "var(--space-4)",
-              justifyContent: "center",
-              marginTop: "var(--space-8)",
-              flexWrap: "wrap",
-              ...stagger(3),
-            }}
-          >
-            <Link href="/demo" className="btn-primary">
+          
+          <div className="flex flex-wrap items-center justify-center gap-4 reveal" style={{ animationDelay: '300ms' }}>
+            <Link href="/demo" className="btn-primary shadow-[0_0_20px_rgba(45,106,79,0.4)] hover:shadow-[0_0_30px_rgba(45,106,79,0.6)] px-8 py-3.5 text-base">
               Reserva tu Demo
             </Link>
-            <Link href="#propuesta" className="btn-ghost">
-              Quiero Más Información &rarr;
+            <Link href="#propuesta" className="btn-ghost group text-white/80 hover:text-white px-6">
+              Descubrir ventajas
+              <ArrowRight size={18} className="transition-transform group-hover:translate-y-1 ml-2 rotate-90 group-hover:rotate-90" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN 2: PROPUESTA DE VALOR */}
-      <section
-        id="propuesta"
-        style={{ background: "var(--white)", padding: "var(--space-20) 0" }}
-      >
+      {/* ═══ PROPUESTA DE VALOR ═══ */}
+      <section id="propuesta" className="py-24 bg-white border-b border-slate-200">
         <div className="container">
-          <div
-            style={{
-              textAlign: "center",
-              marginBottom: "var(--space-12)",
-            }}
-          >
-            <div
-              className="eyebrow reveal"
-              style={{
-                color: "var(--slate)",
-                marginBottom: "var(--space-4)",
-              }}
-            >
-              PARA TU ASEGURADORA
-            </div>
-            <h2 className="h2 reveal" style={stagger(1)}>
-              &iquest;Por Qué Ulpiano para Aseguradoras?
+          <div className="reveal text-center max-w-[700px] mx-auto mb-20">
+            <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
+              Para tu compañía de seguros
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight mb-4">
+              ¿Por qué Ulpiano para aseguradoras?
             </h2>
-            <p
-              className="body-lg reveal"
-              style={{
-                color: "var(--slate)",
-                maxWidth: 600,
-                margin: "var(--space-4) auto 0",
-                ...stagger(2),
-              }}
-            >
-              Complementa tus Pólizas con la Gestión Sucesoria Digital, el
-              Impacto Fiscal Calculado y la Fidelización Real
+            <p className="text-[17px] text-slate-500">
+              Ve más allá de la transferencia económica. Posiciona tus pólizas como la solución definitiva que aporta orden y tranquilidad cuando la familia más lo necesita.
             </p>
           </div>
 
-          {/* Feature Blocks Grid */}
-          <div className="aseg-features-grid">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featureBlocks.map((block, i) => (
-              <div key={block.title} className="card reveal" style={stagger(i)}>
-                <div
-                  style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: "50%",
-                    background: "var(--green-bg)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "var(--ulpiano-green)",
-                    marginBottom: "var(--space-5)",
-                  }}
-                >
+              <div key={block.title} className="reveal bg-slate-50 rounded-3xl p-8 border border-slate-200 transition-all hover:shadow-md hover:bg-white" style={{ animationDelay: `${i * 100}ms` }}>
+                <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 border border-emerald-100/50">
                   {block.icon}
                 </div>
-                <h3
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 600,
-                    color: "var(--ink)",
-                    marginBottom: "var(--space-2)",
-                  }}
-                >
+                <h3 className="text-xl font-bold text-ink mb-2">
                   {block.title}
                 </h3>
-                <p
-                  className="body-sm"
-                  style={{
-                    color: "var(--slate)",
-                    marginBottom: "var(--space-5)",
-                  }}
-                >
+                <p className="text-[15px] font-medium text-emerald-600 mb-6">
                   {block.subtitle}
                 </p>
-                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                  {block.features.map((feat) => (
-                    <li
-                      key={feat.title}
-                      style={{
-                        marginBottom: "var(--space-4)",
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: "var(--space-3)",
-                          marginBottom: 4,
-                        }}
-                      >
-                        <span style={{ flexShrink: 0, marginTop: 3 }}>
-                          <CheckIcon />
-                        </span>
-                        <span
-                          style={{
-                            fontSize: 15,
-                            fontWeight: 500,
-                            color: "var(--ink)",
-                          }}
-                        >
-                          {feat.title}
-                        </span>
+                <div className="space-y-5">
+                  {block.features.map((feat, j) => (
+                    <div key={j} className="flex items-start gap-3">
+                      <CheckCircle2 size={18} className="text-emerald-500 mt-0.5 shrink-0" />
+                      <div>
+                        <div className="font-semibold text-[15px] text-ink mb-1">{feat.title}</div>
+                        <p className="text-sm text-slate-600 leading-relaxed m-0">{feat.desc}</p>
                       </div>
-                      <p
-                        style={{
-                          fontSize: 15,
-                          color: "var(--slate)",
-                          lineHeight: 1.7,
-                          paddingLeft: 28,
-                          margin: 0,
-                        }}
-                      >
-                        {feat.desc}
-                      </p>
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN 2B: CLAIMS STRIP */}
-      <section
-        style={{
-          background: "var(--surface)",
-          padding: "var(--space-12) 0",
-        }}
-      >
+      {/* ═══ CLAIMS RÁPIDOS ═══ */}
+      <section className="py-12 bg-slate-900 border-b border-slate-800">
         <div className="container">
-          <div className="aseg-claims-grid">
+          <div className="flex flex-wrap justify-center gap-4 lg:gap-8">
             {claims.map((claim, i) => (
-              <div
-                key={claim}
-                className="reveal"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--space-3)",
-                  background: "var(--white)",
-                  border: "1px solid var(--mist)",
-                  borderLeft: "3px solid var(--ulpiano-green)",
-                  borderRadius: 8,
-                  padding: "var(--space-4) var(--space-6)",
-                  ...stagger(i),
-                }}
-              >
-                <span style={{ flexShrink: 0 }}>
-                  <CheckCircleSmall />
-                </span>
-                <span
-                  style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                    color: "var(--ink)",
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {claim}
-                </span>
+              <div key={i} className="reveal flex items-center gap-3 bg-slate-800/50 border border-slate-700 px-5 py-3 rounded-xl" style={{ animationDelay: `${i * 100}ms` }}>
+                <CheckCircle2 size={18} className="text-emerald-400" />
+                <span className="text-sm font-medium text-white/90">{claim}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN 3: BENEFICIOS */}
-      <section
-        style={{ background: "var(--white)", padding: "var(--space-20) 0" }}
-      >
-        <div className="container">
-          <div
-            style={{
-              textAlign: "center",
-              marginBottom: "var(--space-12)",
-            }}
-          >
-            <div
-              className="eyebrow reveal"
-              style={{
-                color: "var(--slate)",
-                marginBottom: "var(--space-4)",
-              }}
-            >
-              BENEFICIOS
-            </div>
-            <h2 className="h2 reveal" style={stagger(1)}>
-              Lo que cambia en tu aseguradora con Ulpiano
+      {/* ═══ CÓMO FUNCIONA ═══ */}
+      <section className="py-24 bg-white border-b border-slate-200 overflow-hidden relative">
+        <div className="container relative z-10">
+          <div className="reveal text-center max-w-[700px] mx-auto mb-16">
+            <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
+              Flujo de Trabajo Integrado
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight">
+              Una extensión natural de tu servicio
             </h2>
           </div>
 
-          <div className="aseg-benefits-grid">
-            {benefits.map((benefit, i) => (
-              <div
-                key={benefit.title}
-                className="card reveal"
-                style={stagger(i)}
-              >
-                <div
-                  style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: "50%",
-                    background: "var(--green-bg)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "var(--ulpiano-green)",
-                    marginBottom: "var(--space-5)",
-                  }}
-                >
-                  {benefit.icon}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {steps.map((step, i) => (
+              <div key={i} className="reveal relative group" style={{ animationDelay: `${i * 100}ms` }}>
+                <div className="bg-slate-50 border border-slate-200 rounded-3xl p-8 h-full transition-all duration-300 group-hover:bg-white group-hover:shadow-lg group-hover:-translate-y-1 group-hover:border-emerald-500/30">
+                  <div className="text-[64px] font-black text-slate-100 leading-none mb-4 tracking-tighter group-hover:text-emerald-50 transition-colors">
+                    {i + 1}
+                  </div>
+                  <h3 className="text-lg font-bold text-ink mb-3">{step.title}</h3>
+                  <p className="text-[14px] text-slate-600 leading-relaxed">{step.desc}</p>
                 </div>
-                <h3
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 600,
-                    color: "var(--ink)",
-                    marginBottom: "var(--space-3)",
-                  }}
-                >
-                  {benefit.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: 15,
-                    color: "var(--slate)",
-                    lineHeight: 1.7,
-                    margin: 0,
-                  }}
-                >
-                  {benefit.desc}
-                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN 4: TESTIMONIOS */}
-      <section
-        style={{
-          background: "var(--surface)",
-          padding: "var(--space-16) 0",
-        }}
-      >
-        <div className="container">
-          <p
-            style={{
-              fontSize: 12,
-              color: "var(--fog)",
-              textAlign: "center",
-              marginBottom: "var(--space-8)",
-              fontStyle: "italic",
-            }}
-          >
-            Pendiente: testimonios reales de responsables de aseguradoras
-          </p>
-          <div className="aseg-testimonials-grid">
+      {/* ═══ TESTIMONIOS ═══ */}
+      <section className="py-24 bg-slate-50">
+        <div className="container max-w-[1000px]">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             {testimonials.map((t, i) => (
-              <div
-                key={i}
-                className="reveal"
-                style={{
-                  paddingLeft: "var(--space-6)",
-                  borderLeft: "3px solid var(--ulpiano-green)",
-                  ...stagger(i),
-                }}
-              >
-                <blockquote
-                  style={{
-                    fontStyle: "italic",
-                    fontSize: 17,
-                    lineHeight: 1.6,
-                    color: "var(--ink)",
-                    margin: 0,
-                  }}
-                >
-                  &ldquo;{t.quote}&rdquo;
-                </blockquote>
-                <p
-                  style={{
-                    marginTop: "var(--space-4)",
-                    fontSize: 14,
-                    fontWeight: 500,
-                    color: "var(--fog)",
-                    margin: "var(--space-4) 0 0",
-                  }}
-                >
-                  &mdash; {t.author} | {t.location}
+              <div key={i} className="reveal bg-white rounded-3xl p-8 lg:p-10 border border-slate-200 shadow-sm relative" style={{ animationDelay: `${i * 100}ms` }}>
+                <div className="text-emerald-500 mb-6">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z" opacity="0.2"/>
+                  </svg>
+                </div>
+                <p className="text-lg font-medium text-ink leading-relaxed mb-8">
+                  "{t.quote}"
                 </p>
+                <div className="flex items-center gap-4 mt-auto">
+                  <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-400 text-lg">
+                    {t.author.charAt(0)}
+                  </div>
+                  <div>
+                    <div className="font-bold text-ink text-sm">{t.author}</div>
+                    <div className="text-sm text-slate-500">{t.location}</div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN 5: CROSS-LINKS */}
-      <section
-        style={{ background: "var(--white)", padding: "var(--space-12) 0" }}
-      >
+      {/* ═══ CROSS-LINKS ═══ */}
+      <section className="py-16 bg-white border-t border-slate-200">
         <div className="container">
-          <div className="aseg-crosslinks-grid">
-            {crossLinks.map((link, i) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="card reveal"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--space-4)",
-                  textDecoration: "none",
-                  transition: "border-color 0.2s",
-                  ...stagger(i),
-                }}
-              >
-                <div style={{ flex: 1 }}>
-                  <span
-                    style={{
-                      fontSize: 15,
-                      fontWeight: 600,
-                      color: "var(--ink)",
-                    }}
-                  >
-                    {link.label}
-                  </span>
-                  <span
-                    style={{
-                      display: "block",
-                      fontSize: 13,
-                      color: "var(--slate)",
-                      marginTop: 2,
-                    }}
-                  >
-                    {link.desc}
-                  </span>
-                </div>
-                <span style={{ color: "var(--ulpiano-green)", flexShrink: 0 }}>
-                  <ArrowIcon />
-                </span>
+          <div className="text-center mb-10">
+            <span className="text-slate-400 font-bold tracking-widest text-xs uppercase block">
+              Explora nuestras soluciones
+            </span>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                href: "/soluciones/procesamiento-documental",
+                label: "Procesamiento con IA",
+                desc: "Lectura inteligente de documentos",
+              },
+              {
+                href: "/soluciones/fiscalidad-sucesoria",
+                label: "Fiscalidad Sucesoria",
+                desc: "Motor de cálculo tributario",
+              },
+              {
+                href: "/soluciones/documentacion-sucesoria",
+                label: "Documentación Sucesoria",
+                desc: "Generación de escritura de herencia",
+              },
+            ].map((link, i) => (
+              <Link key={i} href={link.href} className="reveal group block p-6 rounded-2xl border border-slate-200 hover:border-emerald-500/30 hover:bg-emerald-50/30 transition-all text-center" style={{ animationDelay: `${i * 100}ms` }}>
+                <h3 className="text-lg font-bold text-ink mb-1 group-hover:text-emerald-700 transition-colors">{link.label}</h3>
+                <p className="text-sm text-slate-500 m-0">{link.desc}</p>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN 6: CTA FINAL */}
-      <section
-        style={{
-          background: "var(--night)",
-          padding: "var(--space-24) 0",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            bottom: -80,
-            left: -80,
-            width: 300,
-            height: 300,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle, rgba(45,106,79,0.08) 0%, transparent 70%)",
-            pointerEvents: "none",
-          }}
-        />
-        <div className="container" style={{ textAlign: "center" }}>
-          <h2
-            className="h2 reveal aseg-cta-h2"
-            style={{
-              color: "var(--white)",
-              maxWidth: 640,
-              margin: "0 auto",
-            }}
-          >
-            Diferénciate con el Servicio Sucesorio que Complementa tus Pólizas
-            de Vida
+      {/* ═══ CTA FINAL ═══ */}
+      <section className="bg-night py-24 relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(45,106,79,0.15)_0%,transparent_70%)] pointer-events-none" />
+        <div className="container relative z-10 text-center max-w-[700px]">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-6">
+            Diferencia tu cartera de productos
           </h2>
-          <p
-            className="body-lg reveal"
-            style={{
-              color: "rgba(255,255,255,0.7)",
-              maxWidth: 520,
-              margin: "var(--space-6) auto 0",
-              ...stagger(1),
-            }}
-          >
-            Descubre cómo Ulpiano puede ampliar tu catálogo de productos y
-            ofrecer a tus asegurados un servicio que va más allá de la
-            indemnización.
+          <p className="text-lg text-white/60 mb-10">
+            Fideliza a las siguientes generaciones integrando la gestión sucesoria digital directamente en tus pólizas de vida.
           </p>
-          <div
-            className="reveal"
-            style={{
-              display: "flex",
-              gap: "var(--space-4)",
-              justifyContent: "center",
-              marginTop: "var(--space-8)",
-              flexWrap: "wrap",
-              ...stagger(2),
-            }}
-          >
-            <Link href="/demo" className="btn-primary">
-              Reserva tu Demo
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link href="/demo" className="btn-primary px-8 py-3.5 shadow-[0_0_20px_rgba(45,106,79,0.4)]">
+              Solicita tu demo gratis
             </Link>
-            <Link href="/registro" className="btn-ghost">
-              Empieza Ahora &rarr;
+            <Link href="/registro" className="btn-ghost text-white/80 hover:text-white px-6 border border-white/20">
+              Crear cuenta ahora <ArrowRight size={18} className="ml-2 inline" />
             </Link>
           </div>
-          <p
-            className="reveal"
-            style={{
-              fontSize: 14,
-              color: "rgba(255,255,255,0.6)",
-              marginTop: "var(--space-4)",
-              ...stagger(3),
-            }}
-          >
-            Ulpiano – Innovación en Derecho Sucesorio
-          </p>
         </div>
       </section>
-
-      {/* RESPONSIVE STYLES */}
-      <style>{`
-        .aseg-features-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: var(--space-8);
-        }
-        .aseg-claims-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: var(--space-6);
-        }
-        .aseg-benefits-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: var(--space-6);
-        }
-        .aseg-testimonials-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: var(--space-10);
-        }
-        .aseg-crosslinks-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: var(--space-6);
-        }
-        .aseg-cta-h2 {
-          font-size: 42px;
-        }
-
-        @media (max-width: 1024px) {
-          .aseg-features-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .aseg-crosslinks-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        @media (max-width: 768px) {
-          .aseg-features-grid {
-            grid-template-columns: 1fr;
-          }
-          .aseg-claims-grid {
-            grid-template-columns: 1fr;
-          }
-          .aseg-benefits-grid {
-            grid-template-columns: 1fr;
-          }
-          .aseg-testimonials-grid {
-            grid-template-columns: 1fr;
-            gap: var(--space-8);
-          }
-          .aseg-crosslinks-grid {
-            grid-template-columns: 1fr;
-          }
-          .aseg-cta-h2 {
-            font-size: 28px !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

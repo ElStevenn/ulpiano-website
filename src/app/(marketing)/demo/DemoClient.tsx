@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { CheckCircle2, Calendar, Monitor, Clock, ShieldCheck, ChevronDown, ArrowRight, Shield } from "lucide-react";
 
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
@@ -11,112 +12,18 @@ function useReveal() {
     const observer = new IntersectionObserver(
       (entries) =>
         entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add("visible");
+          if (e.isIntersecting) e.target.classList.add("animate-fade-in-up");
         }),
       { threshold: 0.12 }
     );
-    node.querySelectorAll(".reveal").forEach((c) => observer.observe(c));
+    // Add opacity-0 to children initially to ensure they fade in
+    node.querySelectorAll(".reveal").forEach((c) => {
+      c.classList.add("opacity-0");
+      observer.observe(c);
+    });
     return () => observer.disconnect();
   }, []);
   return ref;
-}
-
-/* ─── Icons ─── */
-
-function CalendarIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--ulpiano-green)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-      <line x1="16" y1="2" x2="16" y2="6" />
-      <line x1="8" y1="2" x2="8" y2="6" />
-      <line x1="3" y1="10" x2="21" y2="10" />
-    </svg>
-  );
-}
-
-function ClockIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--ulpiano-green)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
-    </svg>
-  );
-}
-
-function MonitorIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--ulpiano-green)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-      <line x1="8" y1="21" x2="16" y2="21" />
-      <line x1="12" y1="17" x2="12" y2="21" />
-    </svg>
-  );
-}
-
-function ShieldIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--ulpiano-green)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-      <polyline points="9 12 11 14 15 10" />
-    </svg>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ulpiano-green)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
-}
-
-function ArrowIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M3 8h10" />
-      <path d="M9 4l4 4-4 4" />
-    </svg>
-  );
-}
-
-function LockIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--fog)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-    </svg>
-  );
-}
-
-function ChevronDown() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <polyline points="6 9 12 15 18 9" />
-    </svg>
-  );
-}
-
-function StepNumberIcon({ n }: { n: number }) {
-  return (
-    <div
-      style={{
-        width: 36,
-        height: 36,
-        borderRadius: "50%",
-        border: "2px solid var(--ulpiano-green)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexShrink: 0,
-        fontFamily: "var(--font-mono)",
-        fontSize: 15,
-        fontWeight: 600,
-        color: "var(--ulpiano-green)",
-      }}
-    >
-      {n}
-    </div>
-  );
 }
 
 /* ─── Data ─── */
@@ -144,7 +51,7 @@ const nextSteps = [
   {
     step: 1,
     title: "Completa el formulario",
-    desc: "Solo nombre, email y despacho. En 30 segundos.",
+    desc: "Solo nombre, email y despacho. En menos de 30 segundos.",
   },
   {
     step: 2,
@@ -165,7 +72,7 @@ const faqs = [
   },
   {
     q: "¿Es realmente sin compromiso?",
-    a: "Sí. La sesión es informativa. No cerramos con precio ni pedimos datos de pago. Si quieres probar por tu cuenta después, puedes empezar gratis.",
+    a: "Sí. La sesión es puramente informativa. No cerramos con precio ni pedimos datos de pago. Si quieres probar por tu cuenta después, puedes empezar gratis.",
   },
   {
     q: "¿Puedo traer a un compañero del despacho?",
@@ -186,64 +93,29 @@ const faqs = [
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div
-      style={{
-        borderBottom: "1px solid var(--mist)",
-        padding: "var(--space-5) 0",
-      }}
-    >
+    <div className="border-b border-slate-200 py-5">
       <button
         onClick={() => setOpen(!open)}
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: "var(--space-4)",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          textAlign: "left",
-          padding: 0,
-        }}
+        className="w-full flex justify-between items-center text-left focus:outline-none group"
         aria-expanded={open}
       >
-        <span
-          style={{
-            fontSize: 16,
-            fontWeight: 500,
-            color: "var(--ink)",
-            lineHeight: 1.4,
-          }}
-        >
+        <span className="text-base font-semibold text-ink group-hover:text-emerald-600 transition-colors">
           {q}
         </span>
         <span
-          style={{
-            flexShrink: 0,
-            transition: "transform 200ms ease",
-            transform: open ? "rotate(180deg)" : "rotate(0deg)",
-            color: "var(--slate)",
-          }}
+          className={`flex-shrink-0 text-slate-400 transition-transform duration-300 ${
+            open ? "rotate-180" : "rotate-0"
+          }`}
         >
-          <ChevronDown />
+          <ChevronDown size={20} />
         </span>
       </button>
       <div
-        style={{
-          maxHeight: open ? 200 : 0,
-          overflow: "hidden",
-          transition: "max-height 300ms ease",
-        }}
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          open ? "max-h-64 opacity-100 mt-3" : "max-h-0 opacity-0 mt-0"
+        }`}
       >
-        <p
-          style={{
-            fontSize: 15,
-            color: "var(--slate)",
-            lineHeight: 1.7,
-            paddingTop: "var(--space-3)",
-          }}
-        >
+        <p className="text-[15px] text-slate-600 leading-relaxed pb-2">
           {a}
         </p>
       </div>
@@ -255,7 +127,6 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 export function DemoClient() {
   const revealRef = useReveal();
-  const stagger = (i: number) => ({ transitionDelay: `${i * 100}ms` });
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [formError, setFormError] = useState("");
@@ -315,88 +186,55 @@ export function DemoClient() {
   }
 
   return (
-    <div ref={revealRef}>
-      {/* ═══ HERO — Outcome-focused, not format-focused ═══ */}
-      <section
+    <div ref={revealRef} className="bg-white">
+      {/* ═══ HERO — Dark & Spectacualr ═══ */}
+      <section className="relative overflow-hidden bg-night px-6 pt-[calc(64px+4rem)] pb-24"
         style={{
-          background: "var(--night)",
-          paddingTop: "calc(64px + var(--space-16))",
-          paddingBottom: "var(--space-20)",
-          position: "relative",
-          overflow: "hidden",
+          backgroundImage: `
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px',
+          backgroundPosition: 'center top'
         }}
       >
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            top: -100,
-            right: -200,
-            width: 600,
-            height: 600,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(45,106,79,0.08) 0%, transparent 70%)",
-            pointerEvents: "none",
-          }}
-        />
-        <div className="container" style={{ textAlign: "center" }}>
-          <p
-            className="eyebrow reveal"
-            style={{ color: "rgba(255,255,255,0.5)", marginBottom: "var(--space-4)" }}
-          >
-            VE CÓMO FUNCIONA
-          </p>
-          <h1
-            className="h1 reveal"
-            style={{ color: "var(--white)", maxWidth: 800, margin: "0 auto", ...stagger(1) }}
-          >
-            El expediente que hoy te cuesta 6 horas, resuelto en 25 minutos
+        {/* Background glow effects */}
+        <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[radial-gradient(ellipse_at_center,var(--ulpiano-green)_0%,transparent_50%)] opacity-20 blur-[100px] pointer-events-none" />
+        <div className="absolute -top-[10%] -right-[10%] w-[600px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(45,106,79,0.3)_0%,transparent_60%)] opacity-30 blur-[80px] pointer-events-none" />
+
+        <div className="container relative z-10 text-center">
+          <div className="reveal flex items-center justify-center gap-3 mb-6">
+            <div className="h-[1px] w-8 bg-emerald-500/50" />
+            <span className="text-emerald-400/90 text-xs font-bold tracking-[0.2em] uppercase">
+              Descubre Ulpiano
+            </span>
+            <div className="h-[1px] w-8 bg-emerald-500/50" />
+          </div>
+
+          <h1 className="reveal text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-balance text-white leading-tight max-w-[900px] mx-auto" style={{ animationDelay: '100ms' }}>
+            El expediente que hoy te cuesta 6 horas, resuelto en <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-[var(--ulpiano-green)]">25 minutos</span>
           </h1>
-          <p
-            className="body-lg reveal"
-            style={{
-              color: "rgba(255,255,255,0.75)",
-              maxWidth: 620,
-              margin: "var(--space-6) auto 0",
-              ...stagger(2),
-            }}
-          >
-            Reserva una sesión personalizada. Verás la plataforma funcionando con un caso
-            real del sector sucesorio catalán — inventario, cálculo del ISD, y
-            generación del cuaderno particional.
+          
+          <p className="reveal text-lg text-white/60 max-w-[660px] mx-auto mt-6 leading-relaxed" style={{ animationDelay: '200ms' }}>
+            Reserva una sesión personalizada. Verás la plataforma funcionando con un caso real del sector sucesorio catalán: inventario, cálculo del ISD y generación del cuaderno particional.
           </p>
 
-          <div
-            className="reveal"
-            style={{
-              display: "flex",
-              gap: "var(--space-4)",
-              justifyContent: "center",
-              marginTop: "var(--space-8)",
-              flexWrap: "wrap",
-              ...stagger(3),
-            }}
-          >
-            <a href="#reservar" className="btn-primary btn-primary--large">
+          <div className="reveal flex flex-wrap gap-4 justify-center mt-10" style={{ animationDelay: '300ms' }}>
+            <a href="#reservar" className="btn-primary shadow-[0_0_20px_rgba(45,106,79,0.4)] hover:shadow-[0_0_30px_rgba(45,106,79,0.6)] px-8 py-3.5 text-base">
               Reservar mi sesión
             </a>
-            <a href="#que-veras" className="btn-ghost" style={{ color: "var(--white)" }}>
-              Ver qué incluye <ArrowIcon />
+            <a href="#que-veras" className="btn-ghost group text-white/80 hover:text-white px-6">
+              Ver qué incluye 
+              <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
             </a>
           </div>
         </div>
       </section>
 
       {/* ═══ SOCIAL PROOF STRIP ═══ */}
-      <section
-        style={{
-          background: "var(--surface)",
-          padding: "var(--space-8) 0",
-          borderBottom: "1px solid var(--mist)",
-        }}
-      >
+      <section className="bg-white border-b border-slate-100 py-10 relative z-20 shadow-sm">
         <div className="container">
-          <div className="demo-proof-strip reveal">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 reveal">
             {[
               {
                 number: "25",
@@ -413,31 +251,13 @@ export function DemoClient() {
                 unit: "",
                 label: "Derecho foral catalán integrado (CCCat, Llei 19/2010).",
               },
-            ].map((s) => (
-              <div
-                key={s.label}
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "var(--space-4)",
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: 28,
-                    color: "var(--ulpiano-green)",
-                    lineHeight: 1,
-                    flexShrink: 0,
-                    minWidth: 56,
-                  }}
-                >
+            ].map((s, i) => (
+              <div key={i} className="flex items-start gap-4">
+                <span className="font-mono text-3xl font-bold text-emerald-600 leading-none flex-shrink-0 min-w-[70px]">
                   {s.number}
-                  {s.unit && (
-                    <span style={{ fontSize: 16 }}>{s.unit}</span>
-                  )}
+                  {s.unit && <span className="text-xl ml-1">{s.unit}</span>}
                 </span>
-                <p style={{ fontSize: 14, color: "var(--slate)", lineHeight: 1.5 }}>
+                <p className="text-[15px] text-slate-600 leading-relaxed font-medium">
                   {s.label}
                 </p>
               </div>
@@ -447,58 +267,33 @@ export function DemoClient() {
       </section>
 
       {/* ═══ FORM + CONTENT GRID ═══ */}
-      <section
-        id="que-veras"
-        style={{ background: "var(--white)", padding: "var(--space-20) 0" }}
-      >
+      <section id="que-veras" className="py-24 bg-slate-50/50">
         <div className="container">
-          <div className="demo-grid">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_440px] gap-16 lg:gap-20 items-start">
+            
             {/* Left: what you'll see */}
-            <div className="reveal" style={stagger(0)}>
-              <p className="eyebrow" style={{ color: "var(--slate)" }}>
-                QUÉ VERÁS EN LA SESIÓN
-              </p>
-              <h2
-                className="h2"
-                style={{ color: "var(--ink)", marginTop: "var(--space-3)", maxWidth: 480 }}
-              >
+            <div className="reveal">
+              <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
+                Qué verás en la sesión
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight max-w-[480px]">
                 Un caso real, de principio a fin
               </h2>
-              <p
-                className="body-sm"
-                style={{ color: "var(--slate)", marginTop: "var(--space-4)", maxWidth: 460 }}
-              >
-                Trabajamos sobre la plataforma desde el primer minuto. Sin
-                presentación comercial, sin diapositivas.
+              <p className="text-[17px] text-slate-600 mt-4 max-w-[460px] leading-relaxed">
+                Trabajamos sobre la plataforma desde el primer minuto. Sin presentaciones comerciales aburridas, sin diapositivas.
               </p>
 
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "var(--space-6)",
-                  marginTop: "var(--space-8)",
-                }}
-              >
+              <div className="flex flex-col gap-6 mt-10">
                 {demoTopics.map((topic, i) => (
-                  <div
-                    key={i}
-                    className="reveal"
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      gap: "var(--space-3)",
-                      ...stagger(i + 1),
-                    }}
-                  >
-                    <span style={{ flexShrink: 0, marginTop: 3 }}>
-                      <CheckIcon />
-                    </span>
+                  <div key={i} className="reveal flex items-start gap-4 p-4 rounded-xl hover:bg-white border border-transparent hover:border-slate-200 transition-all shadow-sm hover:shadow-md" style={{ animationDelay: `${i * 100}ms` }}>
+                    <div className="flex-shrink-0 mt-1 text-emerald-500 bg-emerald-50 p-1.5 rounded-lg">
+                      <CheckCircle2 size={22} strokeWidth={2} />
+                    </div>
                     <div>
-                      <p style={{ fontSize: 15, fontWeight: 600, color: "var(--ink)", lineHeight: 1.4 }}>
+                      <p className="text-base font-bold text-ink">
                         {topic.title}
                       </p>
-                      <p style={{ fontSize: 14, color: "var(--slate)", lineHeight: 1.6, marginTop: 2 }}>
+                      <p className="text-[15px] text-slate-600 leading-relaxed mt-1">
                         {topic.desc}
                       </p>
                     </div>
@@ -507,39 +302,17 @@ export function DemoClient() {
               </div>
 
               {/* How it works strip */}
-              <div
-                style={{
-                  display: "flex",
-                  gap: "var(--space-6)",
-                  marginTop: "var(--space-10)",
-                  flexWrap: "wrap",
-                }}
-              >
+              <div className="flex flex-wrap gap-6 mt-12 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 {[
-                  { icon: <CalendarIcon />, text: "Tú eliges fecha y hora" },
-                  { icon: <MonitorIcon />, text: "Por videoconferencia" },
-                  { icon: <ClockIcon />, text: "25 min, sin compromiso" },
-                ].map((step) => (
-                  <div
-                    key={step.text}
-                    className="reveal"
-                    style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}
-                  >
-                    <div
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: "50%",
-                        background: "var(--green-bg)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                      }}
-                    >
+                  { icon: <Calendar size={20} />, text: "Tú eliges fecha y hora" },
+                  { icon: <Monitor size={20} />, text: "Por videoconferencia" },
+                  { icon: <Clock size={20} />, text: "25 min, sin compromiso" },
+                ].map((step, i) => (
+                  <div key={i} className="reveal flex items-center gap-3" style={{ animationDelay: `${(i+3) * 100}ms` }}>
+                    <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
                       {step.icon}
                     </div>
-                    <span style={{ fontSize: 14, fontWeight: 500, color: "var(--ink)" }}>
+                    <span className="text-[15px] font-semibold text-ink">
                       {step.text}
                     </span>
                   </div>
@@ -547,98 +320,47 @@ export function DemoClient() {
               </div>
             </div>
 
-            {/* Right: form — reduced friction, value-oriented CTA */}
-            <div id="reservar" className="reveal" style={stagger(2)}>
-              <div
-                className="card"
-                style={{
-                  padding: "var(--space-8)",
-                  position: "sticky",
-                  top: 96,
-                  borderTop: "3px solid var(--ulpiano-green)",
-                }}
-              >
+            {/* Right: Glassmorphic Form Card */}
+            <div id="reservar" className="reveal lg:sticky lg:top-32" style={{ animationDelay: "200ms" }}>
+              <div className="bg-white rounded-3xl p-8 sm:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-slate-200 relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[var(--ulpiano-green)] to-emerald-400" />
+                
                 {submitted ? (
-                  <div style={{ textAlign: "center", padding: "var(--space-8) 0" }}>
-                    <div
-                      style={{
-                        width: 56,
-                        height: 56,
-                        borderRadius: "50%",
-                        background: "var(--green-bg)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        margin: "0 auto var(--space-6)",
-                      }}
-                    >
-                      <ShieldIcon />
+                  <div className="text-center py-10">
+                    <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center mx-auto mb-6">
+                      <ShieldCheck size={32} strokeWidth={2} />
                     </div>
-                    <h3 style={{ color: "var(--ink)", fontSize: 22 }}>
-                      Sesión reservada
+                    <h3 className="text-2xl font-bold text-ink mb-3">
+                      Sesión solicitada
                     </h3>
-                    <p
-                      style={{
-                        color: "var(--slate)",
-                        fontSize: 15,
-                        lineHeight: 1.6,
-                        marginTop: "var(--space-3)",
-                        maxWidth: 360,
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                      }}
-                    >
-                      Recibirás un email en menos de 24h con los horarios
-                      disponibles para elegir el que mejor te convenga.
+                    <p className="text-[15px] text-slate-600 leading-relaxed mb-8">
+                      Recibirás un email en menos de 24h con los horarios disponibles para elegir el que mejor te convenga.
                     </p>
-                    <div
-                      style={{
-                        background: "var(--surface)",
-                        borderRadius: 8,
-                        padding: "var(--space-4)",
-                        marginTop: "var(--space-6)",
-                        fontSize: 14,
-                        color: "var(--slate)",
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      <strong style={{ color: "var(--ink)" }}>¿Mientras tanto?</strong>{" "}
-                      Explora las soluciones que verás en la sesión.
+                    <div className="bg-slate-50 rounded-xl p-5 text-sm text-slate-600 border border-slate-100 text-left">
+                      <strong className="text-ink block mb-1">¿Mientras tanto?</strong>
+                      Explora en detalle todas las soluciones que verás durante la sesión.
                     </div>
                     <Link
                       href="/soluciones"
-                      className="btn-ghost btn-ghost--dark"
-                      style={{ marginTop: "var(--space-4)", display: "inline-flex" }}
+                      className="btn-ghost w-full justify-center mt-6 border border-slate-200 hover:bg-slate-50"
                     >
-                      Ver soluciones <ArrowIcon />
+                      Ver soluciones <ArrowRight size={16} />
                     </Link>
                   </div>
                 ) : (
                   <>
-                    <div style={{ marginBottom: "var(--space-6)" }}>
-                      <h3
-                        style={{
-                          color: "var(--ink)",
-                          fontSize: 20,
-                          marginBottom: "var(--space-2)",
-                        }}
-                      >
-                        Reserva tu sesión personalizada
+                    <div className="mb-8">
+                      <h3 className="text-2xl font-bold text-ink mb-2">
+                        Reserva tu sesión
                       </h3>
-                      <p style={{ color: "var(--slate)", fontSize: 14 }}>
+                      <p className="text-[15px] text-slate-500">
                         3 campos — menos de 30 segundos.
                       </p>
                     </div>
-                    <form
-                      onSubmit={handleSubmit}
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "var(--space-5)",
-                      }}
-                    >
+                    
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                       <div>
-                        <label htmlFor="name" style={labelStyle}>
+                        <label htmlFor="name" className="block text-[14px] font-semibold text-ink mb-2">
                           Nombre completo
                         </label>
                         <input
@@ -648,11 +370,11 @@ export function DemoClient() {
                           required
                           placeholder="María García López"
                           onFocus={handleFormStarted}
-                          style={inputStyle}
+                          className="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-[15px] text-ink placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
                         />
                       </div>
                       <div>
-                        <label htmlFor="email" style={labelStyle}>
+                        <label htmlFor="email" className="block text-[14px] font-semibold text-ink mb-2">
                           Email profesional
                         </label>
                         <input
@@ -661,11 +383,11 @@ export function DemoClient() {
                           name="email"
                           required
                           placeholder="maria@despacho.com"
-                          style={inputStyle}
+                          className="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-[15px] text-ink placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
                         />
                       </div>
                       <div>
-                        <label htmlFor="company" style={labelStyle}>
+                        <label htmlFor="company" className="block text-[14px] font-semibold text-ink mb-2">
                           Despacho / Empresa
                         </label>
                         <input
@@ -674,47 +396,27 @@ export function DemoClient() {
                           name="company"
                           required
                           placeholder="Nombre del despacho"
-                          style={inputStyle}
+                          className="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-[15px] text-ink placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
                         />
                       </div>
+                      
                       {formError && (
-                        <p style={{ fontSize: 13, color: "var(--error)", lineHeight: 1.4 }}>
+                        <p className="text-[14px] text-red-600 bg-red-50 p-3 rounded-lg border border-red-100">
                           {formError}
                         </p>
                       )}
+                      
                       <button
                         type="submit"
-                        className="btn-primary"
                         disabled={sending}
-                        style={{
-                          width: "100%",
-                          marginTop: "var(--space-2)",
-                          padding: "16px 32px",
-                          fontSize: 16,
-                        }}
+                        className="btn-primary w-full py-4 text-[16px] shadow-[0_8px_20px_rgba(45,106,79,0.3)] hover:shadow-[0_10px_25px_rgba(45,106,79,0.4)] hover:-translate-y-0.5 mt-2"
                       >
-                        {sending ? "Reservando..." : "Ver Ulpiano en acción →"}
+                        {sending ? "Procesando..." : "Ver Ulpiano en acción"} <ArrowRight size={18} className="ml-1" />
                       </button>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 8,
-                          alignItems: "center",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 6,
-                            fontSize: 12,
-                            color: "var(--fog)",
-                          }}
-                        >
-                          <LockIcon />
-                          <span>Sin compromiso · No pedimos datos de pago</span>
-                        </div>
+                      
+                      <div className="flex items-center justify-center gap-2 text-[13px] text-slate-400 mt-2 font-medium">
+                        <Shield size={14} className="text-emerald-500" />
+                        <span>Sin compromiso · No pedimos datos de pago</span>
                       </div>
                     </form>
                   </>
@@ -726,72 +428,26 @@ export function DemoClient() {
       </section>
 
       {/* ═══ SOCIAL PROOF — Testimonial ═══ */}
-      <section
-        style={{
-          background: "var(--night)",
-          padding: "var(--space-16) 0",
-        }}
-      >
-        <div className="container">
-          <div className="demo-testimonial-grid">
-            <div className="reveal" style={stagger(0)}>
-              <blockquote
-                style={{
-                  borderLeft: "3px solid var(--ulpiano-green)",
-                  paddingLeft: "var(--space-6)",
-                  margin: 0,
-                }}
-              >
-                <p
-                  style={{
-                    fontStyle: "italic",
-                    fontSize: 19,
-                    color: "var(--white)",
-                    lineHeight: 1.6,
-                  }}
-                >
-                  &ldquo;Desde que usamos Ulpiano, la preparación de un
-                  expediente sucesorio nos lleva la mitad de tiempo. Y el
-                  cliente entiende lo que paga.&rdquo;
+      <section className="bg-night py-24 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(45,106,79,0.15)_0%,transparent_70%)] pointer-events-none" />
+        <div className="container relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
+            <div className="reveal">
+              <blockquote className="border-l-4 border-emerald-500 pl-6 m-0">
+                <p className="text-xl text-white leading-relaxed font-medium italic">
+                  &ldquo;Desde que usamos Ulpiano, la preparación de un expediente sucesorio nos lleva la mitad de tiempo. Y el cliente entiende perfectamente lo que paga.&rdquo;
                 </p>
-                <footer
-                  style={{
-                    fontSize: 14,
-                    color: "var(--fog)",
-                    marginTop: "var(--space-4)",
-                  }}
-                >
+                <footer className="text-[15px] text-white/50 mt-5 font-medium">
                   — Marta R., Abogada | Despacho en Girona
                 </footer>
               </blockquote>
             </div>
-            <div className="reveal" style={stagger(1)}>
-              <blockquote
-                style={{
-                  borderLeft: "3px solid var(--ulpiano-green)",
-                  paddingLeft: "var(--space-6)",
-                  margin: 0,
-                }}
-              >
-                <p
-                  style={{
-                    fontStyle: "italic",
-                    fontSize: 19,
-                    color: "var(--white)",
-                    lineHeight: 1.6,
-                  }}
-                >
-                  &ldquo;La visualización del árbol familiar y las simulaciones
-                  fiscales cambiaron la forma en que presentamos las herencias a
-                  nuestros clientes.&rdquo;
+            <div className="reveal" style={{ animationDelay: "150ms" }}>
+              <blockquote className="border-l-4 border-emerald-500 pl-6 m-0">
+                <p className="text-xl text-white leading-relaxed font-medium italic">
+                  &ldquo;La visualización del árbol familiar y las simulaciones fiscales cambiaron la forma en que presentamos las herencias a nuestros clientes.&rdquo;
                 </p>
-                <footer
-                  style={{
-                    fontSize: 14,
-                    color: "var(--fog)",
-                    marginTop: "var(--space-4)",
-                  }}
-                >
+                <footer className="text-[15px] text-white/50 mt-5 font-medium">
                   — Jordi P., Abogado Civilista | Barcelona
                 </footer>
               </blockquote>
@@ -801,230 +457,73 @@ export function DemoClient() {
       </section>
 
       {/* ═══ QUÉ PASA DESPUÉS — Reduce uncertainty ═══ */}
-      <section style={{ background: "var(--white)", padding: "var(--space-16) 0" }}>
-        <div className="container" style={{ maxWidth: 720 }}>
-          <div className="reveal" style={{ textAlign: "center", marginBottom: "var(--space-10)" }}>
-            <p className="eyebrow" style={{ color: "var(--slate)" }}>
-              CÓMO FUNCIONA
-            </p>
-            <h2
-              className="h2"
-              style={{ color: "var(--ink)", marginTop: "var(--space-3)" }}
-            >
+      <section className="bg-white py-24">
+        <div className="container max-w-[720px]">
+          <div className="reveal text-center mb-16">
+            <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
+              Cómo funciona
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-ink">
               De formulario a sesión en 3 pasos
             </h2>
           </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "var(--space-8)",
-            }}
-          >
+          
+          <div className="flex flex-col gap-10">
             {nextSteps.map((s, i) => (
-              <div
-                key={s.step}
-                className="reveal"
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "var(--space-5)",
-                  ...stagger(i),
-                }}
-              >
-                <StepNumberIcon n={s.step} />
-                <div>
-                  <p
-                    style={{
-                      fontSize: 17,
-                      fontWeight: 600,
-                      color: "var(--ink)",
-                      lineHeight: 1.3,
-                    }}
-                  >
+              <div key={s.step} className="reveal flex items-start gap-6" style={{ animationDelay: `${i * 150}ms` }}>
+                <div className="w-12 h-12 rounded-full border-2 border-emerald-500 text-emerald-600 flex items-center justify-center font-mono text-xl font-bold flex-shrink-0 bg-emerald-50 shadow-sm">
+                  {s.step}
+                </div>
+                <div className="pt-2">
+                  <p className="text-xl font-bold text-ink leading-tight">
                     {s.title}
                   </p>
-                  <p
-                    style={{
-                      fontSize: 15,
-                      color: "var(--slate)",
-                      lineHeight: 1.6,
-                      marginTop: 4,
-                    }}
-                  >
+                  <p className="text-[16px] text-slate-600 leading-relaxed mt-2">
                     {s.desc}
                   </p>
                 </div>
               </div>
             ))}
           </div>
-          <div className="reveal" style={{ textAlign: "center", marginTop: "var(--space-10)" }}>
-            <a href="#reservar" className="btn-primary">
-              Reservar mi sesión
+          
+          <div className="reveal text-center mt-16 pt-10 border-t border-slate-100">
+            <a href="#reservar" className="btn-primary px-8 py-3.5 shadow-[0_0_20px_rgba(45,106,79,0.3)] hover:shadow-[0_0_30px_rgba(45,106,79,0.5)]">
+              Quiero reservar mi sesión
             </a>
           </div>
         </div>
       </section>
 
       {/* ═══ FAQ — Objection handling ═══ */}
-      <section style={{ background: "var(--surface)", padding: "var(--space-16) 0" }}>
-        <div className="container" style={{ maxWidth: 720 }}>
-          <div className="reveal" style={{ marginBottom: "var(--space-8)" }}>
-            <p className="eyebrow" style={{ color: "var(--slate)" }}>
-              PREGUNTAS FRECUENTES
-            </p>
-            <h2
-              className="h2"
-              style={{ color: "var(--ink)", marginTop: "var(--space-3)" }}
-            >
+      <section className="bg-slate-50 py-24 border-t border-slate-200">
+        <div className="container max-w-[760px]">
+          <div className="reveal mb-12 text-center">
+            <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
+              Preguntas Frecuentes
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-ink">
               Antes de reservar
             </h2>
           </div>
-          <div className="reveal" style={stagger(1)}>
-            {faqs.map((faq) => (
-              <FaqItem key={faq.q} q={faq.q} a={faq.a} />
+          <div className="reveal bg-white rounded-2xl shadow-sm border border-slate-200 px-6 sm:px-8 py-2">
+            {faqs.map((faq, i) => (
+              <FaqItem key={i} q={faq.q} a={faq.a} />
             ))}
           </div>
         </div>
       </section>
 
       {/* ═══ ALTERNATIVA ═══ */}
-      <section style={{ background: "var(--white)", padding: "var(--space-10) 0" }}>
-        <div
-          className="container reveal"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "var(--space-6)",
-            flexWrap: "wrap",
-            textAlign: "center",
-          }}
-        >
-          <p style={{ fontSize: 16, fontWeight: 500, color: "var(--ink)" }}>
+      <section className="bg-white py-16 border-t border-slate-200">
+        <div className="container reveal flex items-center justify-center gap-6 flex-wrap text-center">
+          <p className="text-lg font-medium text-ink">
             ¿Prefieres probar por tu cuenta primero?
           </p>
-          <Link href="/precios" className="btn-ghost btn-ghost--dark">
-            Empieza gratis sin tarjeta <ArrowIcon />
+          <Link href="/precios" className="btn-ghost border border-slate-200 hover:bg-slate-50">
+            Empieza gratis sin tarjeta <ArrowRight size={18} className="ml-1" />
           </Link>
         </div>
       </section>
-
-      {/* ═══ CTA FINAL ═══ */}
-      <section className="cta-final" style={{ padding: "var(--space-24) 0" }}>
-        <div className="cta-final__orb" />
-        <div className="cta-final__content container">
-          <h2
-            className="h2 reveal"
-            style={{
-              color: "var(--white)",
-              maxWidth: 680,
-              margin: "0 auto",
-              textAlign: "center",
-            }}
-          >
-            Tu próximo expediente sucesorio, resuelto en la mitad de tiempo
-          </h2>
-          <p
-            className="reveal"
-            style={{
-              fontSize: 17,
-              color: "rgba(255,255,255,0.7)",
-              maxWidth: 520,
-              margin: "var(--space-4) auto 0",
-              textAlign: "center",
-              lineHeight: 1.6,
-              ...stagger(1),
-            }}
-          >
-            Una sesión de 25 minutos. Un caso real. Cero presentaciones
-            comerciales. Tú decides si encaja en tu despacho.
-          </p>
-          <div
-            className="reveal"
-            style={{
-              display: "flex",
-              gap: "var(--space-4)",
-              justifyContent: "center",
-              marginTop: "var(--space-8)",
-              flexWrap: "wrap",
-              ...stagger(2),
-            }}
-          >
-            <a href="#reservar" className="btn-primary btn-primary--large">
-              Reservar mi sesión →
-            </a>
-          </div>
-          <p
-            className="reveal"
-            style={{
-              fontSize: 13,
-              color: "rgba(255,255,255,0.5)",
-              marginTop: "var(--space-4)",
-              textAlign: "center",
-              ...stagger(3),
-            }}
-          >
-            Sin compromiso · Respondemos en menos de 24h
-          </p>
-        </div>
-      </section>
-
-      <style>{`
-        .demo-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: var(--space-12);
-          align-items: start;
-        }
-        .demo-proof-strip {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: var(--space-8);
-        }
-        .demo-testimonial-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: var(--space-10);
-        }
-        @media (max-width: 899px) {
-          .demo-grid {
-            grid-template-columns: 1fr;
-            gap: var(--space-8);
-          }
-          .demo-proof-strip {
-            grid-template-columns: 1fr;
-            gap: var(--space-6);
-          }
-          .demo-testimonial-grid {
-            grid-template-columns: 1fr;
-            gap: var(--space-8);
-          }
-        }
-      `}</style>
     </div>
   );
 }
-
-/* ─── Shared form styles ─── */
-
-const labelStyle: React.CSSProperties = {
-  display: "block",
-  fontSize: 13,
-  fontWeight: 500,
-  color: "var(--ink)",
-  marginBottom: 6,
-};
-
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "12px 14px",
-  fontSize: 15,
-  fontFamily: "var(--font-body)",
-  color: "var(--ink)",
-  background: "var(--surface)",
-  border: "1px solid var(--mist)",
-  borderRadius: 8,
-  outline: "none",
-  transition: "border-color 200ms ease, box-shadow 200ms ease",
-};

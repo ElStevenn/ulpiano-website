@@ -13,12 +13,13 @@ import {
   Download,
   Calculator,
   Receipt,
+  ArrowRight,
+  CheckCircle2,
 } from "lucide-react";
 
 /* =============================================
    SCROLL REVEAL HOOK
    ============================================= */
-
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -30,7 +31,7 @@ function useReveal() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
+            entry.target.classList.add("animate-fade-in-up");
           }
         });
       },
@@ -38,7 +39,10 @@ function useReveal() {
     );
 
     const children = node.querySelectorAll(".reveal");
-    children.forEach((child) => observer.observe(child));
+    children.forEach((child) => {
+      child.classList.add("opacity-0");
+      observer.observe(child);
+    });
 
     return () => observer.disconnect();
   }, []);
@@ -47,141 +51,8 @@ function useReveal() {
 }
 
 /* =============================================
-   ANIMATED COUNTER
-   ============================================= */
-
-function AnimatedMetric({
-  value,
-  suffix,
-  label,
-}: {
-  value: number;
-  suffix: string;
-  label: string;
-}) {
-  const [display, setDisplay] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const hasAnimated = useRef(false);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !hasAnimated.current) {
-          hasAnimated.current = true;
-          const duration = 2000;
-          const start = performance.now();
-          const animate = (now: number) => {
-            const elapsed = now - start;
-            const progress = Math.min(elapsed / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            setDisplay(Math.round(eased * value));
-            if (progress < 1) requestAnimationFrame(animate);
-          };
-          requestAnimationFrame(animate);
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [value]);
-
-  return (
-    <div ref={ref} className="text-center">
-      <div
-        className="mono"
-        style={{
-          fontSize: 56,
-          fontWeight: 400,
-          color: "var(--green-light)",
-          lineHeight: 1,
-          letterSpacing: "-0.02em",
-        }}
-      >
-        {display}
-        {suffix && (
-          <span style={{ fontSize: 32 }}>{suffix}</span>
-        )}
-      </div>
-      <div
-        style={{
-          width: 40,
-          height: 2,
-          background: "rgba(255,255,255,0.15)",
-          margin: "var(--space-3) auto",
-        }}
-      />
-      <div
-        style={{
-          fontSize: 15,
-          color: "rgba(255,255,255,0.7)",
-          maxWidth: 240,
-          margin: "0 auto",
-          lineHeight: 1.5,
-        }}
-      >
-        {label}
-      </div>
-    </div>
-  );
-}
-
-/* =============================================
-   CHECK ICON
-   ============================================= */
-
-function CheckIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--ulpiano-green)"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
-}
-
-/* =============================================
-   WORD ICON (SVG)
-   ============================================= */
-
-function WordIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
-    >
-      <rect x="2" y="2" width="20" height="20" rx="3" fill="#2B579A" />
-      <path
-        d="M7 7l2.5 10L12 11l2.5 6L17 7"
-        stroke="white"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-    </svg>
-  );
-}
-
-/* =============================================
    TAB PANEL COMPONENT
    ============================================= */
-
 function TabPanel({
   claim,
   checks,
@@ -192,55 +63,21 @@ function TabPanel({
   mockupLabel: string;
 }) {
   return (
-    <div className="tab-panel-grid">
+    <div className="grid md:grid-cols-2 gap-10 items-center animate-fade-in-up">
       <div>
-        <p
-          style={{
-            fontSize: 20,
-            fontWeight: 600,
-            color: "var(--ink)",
-            lineHeight: 1.4,
-            marginBottom: "var(--space-6)",
-          }}
-        >
-          &ldquo;{claim}&rdquo;
+        <p className="text-xl font-bold text-ink leading-snug mb-8">
+          "{claim}"
         </p>
-        <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-          {checks.map((check) => (
-            <li
-              key={check}
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: "var(--space-3)",
-                marginBottom: "var(--space-4)",
-                fontSize: 15,
-                color: "var(--ink)",
-                lineHeight: 1.5,
-              }}
-            >
-              <span style={{ flexShrink: 0, marginTop: 3 }}>
-                <CheckIcon />
-              </span>
+        <ul className="space-y-4">
+          {checks.map((check, i) => (
+            <li key={i} className="flex items-start gap-3 text-[15px] text-ink leading-relaxed">
+              <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
               {check}
             </li>
           ))}
         </ul>
       </div>
-      <div
-        style={{
-          background: "var(--surface)",
-          borderRadius: "var(--radius-md)",
-          border: "1px solid var(--mist)",
-          height: 260,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "var(--fog)",
-          fontSize: 15,
-          fontWeight: 500,
-        }}
-      >
+      <div className="bg-slate-50 border border-slate-200 rounded-2xl h-[260px] flex items-center justify-center text-slate-400 font-medium text-[15px] shadow-inner">
         {mockupLabel}
       </div>
     </div>
@@ -250,7 +87,6 @@ function TabPanel({
 /* =============================================
    DATA
    ============================================= */
-
 const comparisonRows = [
   {
     before: "Copias nombres y NIFs del inventario al cuaderno particional",
@@ -281,291 +117,115 @@ const comparisonRows = [
 /* =============================================
    MAIN COMPONENT
    ============================================= */
-
 export function DocumentacionClient() {
   const [activeTab, setActiveTab] = useState(0);
   const revealRef = useReveal();
 
-  const stagger = (i: number) => ({ transitionDelay: `${i * 100}ms` });
-
   return (
     <div ref={revealRef}>
-      {/* SECCIÓN 1: HERO */}
-      <section
-        style={{
-          background: "var(--night)",
-          paddingTop: "calc(64px + var(--space-12))",
-          paddingBottom: "var(--space-20)",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {/* Decorative orb */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            top: -120,
-            right: -120,
-            width: 400,
-            height: 400,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle, rgba(45,106,79,0.12) 0%, transparent 70%)",
-            pointerEvents: "none",
-          }}
-        />
-        <div className="container">
-          <div className="doc-hero-grid" style={{ alignItems: "center" }}>
-            {/* Left — Copy */}
+      {/* ═══ HERO ═══ */}
+      <section className="bg-night pt-[calc(64px+3rem)] pb-20 relative overflow-hidden">
+        {/* Decorative Grid & Glow */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-emerald-500 opacity-[0.15] blur-[100px]" />
+        
+        <div className="container relative z-10">
+          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-8 items-center">
+            
+            {/* Left Copy */}
             <div>
-              <div
-                className="eyebrow reveal"
-                style={{
-                  color: "rgba(255,255,255,0.5)",
-                  marginBottom: "var(--space-4)",
-                }}
-              >
-                DOCUMENTACI&Oacute;N SUCESORIA
+              <div className="flex items-center gap-3 mb-6 reveal">
+                <div className="h-[1px] w-8 bg-emerald-500/50" />
+                <span className="text-emerald-400/90 text-xs font-bold tracking-[0.2em] uppercase">
+                  Documentación Sucesoria
+                </span>
               </div>
-              <h1
-                className="h1 reveal"
-                style={{
-                  color: "var(--white)",
-                  maxWidth: 600,
-                  ...stagger(1),
-                }}
-              >
-                El cuaderno particional, generado. Con tus datos, tu expediente
-                y la norma aplicada.
+              <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-bold text-white leading-[1.1] mb-6 reveal tracking-tight" style={{ animationDelay: '100ms' }}>
+                El cuaderno particional, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">generado</span>. Con tus datos y la norma.
               </h1>
-              <p
-                className="body-lg reveal"
-                style={{
-                  color: "rgba(255,255,255,0.75)",
-                  maxWidth: 520,
-                  marginTop: "var(--space-6)",
-                  ...stagger(2),
-                }}
-              >
-                Ulpiano toma el inventario patrimonial, el escenario sucesorio y
-                el c&aacute;lculo fiscal del expediente y produce el borrador
-                del cuaderno particional en Word. Con los nombres correctos, las
-                cifras coherentes y las referencias legales citadas.
+              <p className="text-lg leading-relaxed text-white/60 max-w-[500px] reveal" style={{ animationDelay: '200ms' }}>
+                Ulpiano toma el inventario patrimonial, el escenario sucesorio y el cálculo fiscal del expediente y produce el borrador del cuaderno particional en Word. Con los nombres correctos, las cifras coherentes y las referencias legales citadas.
               </p>
-              <div
-                className="reveal"
-                style={{
-                  display: "flex",
-                  gap: "var(--space-4)",
-                  marginTop: "var(--space-8)",
-                  flexWrap: "wrap",
-                  ...stagger(3),
-                }}
-              >
-                <Link href="/demo" className="btn-primary">
+              
+              <div className="flex flex-wrap gap-4 mt-10 reveal" style={{ animationDelay: '300ms' }}>
+                <Link href="/demo" className="btn-primary shadow-[0_0_20px_rgba(45,106,79,0.4)] hover:shadow-[0_0_30px_rgba(45,106,79,0.6)] px-8 py-3.5 text-base">
                   Solicita tu demo gratuita
                 </Link>
-                <a href="#como-funciona" className="btn-ghost">
-                  Ver un ejemplo de documento generado &rarr;
+                <a href="#como-funciona" className="btn-ghost group text-white/80 hover:text-white px-6">
+                  Ver cómo funciona 
+                  <ArrowRight size={18} className="transition-transform group-hover:translate-x-1 ml-2" />
                 </a>
               </div>
             </div>
 
-            {/* Right — Mockup: Cuaderno Particional */}
-            <div className="reveal doc-hero-mockup-wrap" style={stagger(2)}>
-              <div style={{ position: "relative" }}>
-                {/* Floating badge */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: -12,
-                    right: -8,
-                    zIndex: 10,
-                    background: "var(--green-bg)",
-                    color: "#2D6A4F",
-                    fontSize: 12,
-                    fontWeight: 500,
-                    padding: "6px 12px",
-                    borderRadius: 6,
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-                  }}
-                >
-                  &#10003; Generado desde expediente
-                </div>
-
-                <div className="mockup-window" style={{ marginBottom: -40 }}>
-                  <div className="mockup-titlebar">
-                    <div className="mockup-dot" />
-                    <div className="mockup-dot" />
-                    <div className="mockup-dot" />
-                    <span className="mockup-title">
-                      Cuaderno Particional — Exp. 2024-0847
-                    </span>
+            {/* Right Mockup */}
+            <div className="reveal relative z-10" style={{ animationDelay: '200ms' }}>
+              <div className="rounded-2xl border border-white/10 shadow-[0_30px_100px_-15px_rgba(0,0,0,0.8),0_0_40px_-10px_rgba(45,106,79,0.4)] bg-[#09090b]/90 backdrop-blur-xl overflow-hidden ring-1 ring-white/10">
+                <div className="bg-white/5 px-5 py-3 border-b border-white/10 flex items-center justify-between">
+                  <div className="flex gap-1.5 items-center">
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
+                    <span className="text-[12px] font-medium text-white/50 ml-3">Cuaderno Particional — Exp. 2024-0847</span>
                   </div>
-                  <div
-                    style={{
-                      padding: "var(--space-6)",
-                      background: "var(--white)",
-                    }}
-                  >
-                    {/* Document header */}
-                    <div style={{ textAlign: "center", marginBottom: "var(--space-5)" }}>
-                      <div
-                        style={{
-                          fontFamily: "var(--font-dm), 'DM Sans', sans-serif",
-                          fontWeight: 700,
-                          fontSize: 16,
-                          color: "var(--ink)",
-                          letterSpacing: "0.04em",
-                        }}
-                      >
-                        CUADERNO PARTICIONAL
-                      </div>
-                      <div
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 500,
-                          color: "var(--slate)",
-                          marginTop: 4,
-                        }}
-                      >
-                        Herencia de D. Joan Puig i Ferrer
-                      </div>
+                  <div className="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-1">
+                    <CheckCircle2 size={12} /> Generado
+                  </div>
+                </div>
+                
+                <div className="bg-white p-6 sm:p-8 min-h-[360px] relative">
+                  {/* Document header */}
+                  <div className="text-center mb-8">
+                    <div className="font-dm-sans font-bold text-base text-ink tracking-[0.04em]">
+                      CUADERNO PARTICIONAL
                     </div>
+                    <div className="text-sm font-medium text-slate-500 mt-1">
+                      Herencia de D. Joan Puig i Ferrer
+                    </div>
+                  </div>
 
-                    {/* Section 1: Inventario */}
-                    <div style={{ marginBottom: "var(--space-4)" }}>
-                      <div
-                        style={{
-                          fontSize: 13,
-                          fontWeight: 600,
-                          color: "var(--ink)",
-                          marginBottom: "var(--space-2)",
-                        }}
-                      >
-                        PRIMERO.&mdash; INVENTARIO DE BIENES
-                      </div>
-                      {/* Simulated text lines */}
-                      <div
-                        style={{
-                          height: 8,
-                          background: "var(--surface)",
-                          borderRadius: 4,
-                          marginBottom: 6,
-                          width: "100%",
-                        }}
-                      />
-                      <div
-                        style={{
-                          height: 8,
-                          background: "var(--surface)",
-                          borderRadius: 4,
-                          marginBottom: "var(--space-3)",
-                          width: "80%",
-                        }}
-                      />
+                  {/* Section 1: Inventario */}
+                  <div className="mb-6">
+                    <div className="text-[13px] font-bold text-ink mb-3">
+                      PRIMERO.— INVENTARIO DE BIENES
                     </div>
+                    <div className="h-2 bg-slate-100 rounded mb-2 w-full" />
+                    <div className="h-2 bg-slate-100 rounded mb-4 w-4/5" />
+                  </div>
 
-                    {/* Simulated table */}
-                    <div
-                      style={{
-                        border: "1px solid var(--mist)",
-                        borderRadius: 6,
-                        overflow: "hidden",
-                        marginBottom: "var(--space-4)",
-                      }}
-                    >
-                      {[
-                        { name: "Inmueble Girona", value: "€ 425.000", status: "Adjudicat" },
-                        { name: "Cta. Bancària", value: "€ 87.340", status: "Adjudicat" },
-                        { name: "Fons inversió", value: "€ 156.200", status: "Adjudicat" },
-                      ].map((row, i) => (
-                        <div
-                          key={row.name}
-                          style={{
-                            display: "grid",
-                            gridTemplateColumns: "1fr auto auto",
-                            gap: "var(--space-3)",
-                            padding: "8px 12px",
-                            fontSize: 13,
-                            alignItems: "center",
-                            borderTop: i > 0 ? "1px solid var(--mist)" : "none",
-                            background: "var(--white)",
-                          }}
-                        >
-                          <span style={{ color: "var(--ink)" }}>{row.name}</span>
-                          <span
-                            className="mono"
-                            style={{
-                              color: "var(--ink)",
-                              fontSize: 13,
-                              textAlign: "right",
-                            }}
-                          >
-                            {row.value}
-                          </span>
-                          <span
-                            style={{
-                              background: "var(--green-bg)",
-                              color: "#2D6A4F",
-                              fontSize: 11,
-                              fontWeight: 500,
-                              padding: "2px 8px",
-                              borderRadius: 4,
-                            }}
-                          >
-                            {row.status}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Section 2: Legítima */}
-                    <div style={{ marginBottom: "var(--space-4)" }}>
-                      <div
-                        style={{
-                          fontSize: 13,
-                          fontWeight: 600,
-                          color: "var(--ink)",
-                          marginBottom: "var(--space-2)",
-                        }}
-                      >
-                        SEGON.&mdash; LEG&Iacute;TIMA
+                  {/* Simulated table */}
+                  <div className="border border-slate-200 rounded-lg overflow-hidden mb-6">
+                    {[
+                      { name: "Inmueble Girona", value: "€ 425.000", status: "Adjudicat" },
+                      { name: "Cta. Bancària", value: "€ 87.340", status: "Adjudicat" },
+                      { name: "Fons inversió", value: "€ 156.200", status: "Adjudicat" },
+                    ].map((row, i) => (
+                      <div key={row.name} className={`grid grid-cols-[1fr_auto_auto] gap-3 px-4 py-2.5 text-[13px] items-center ${i > 0 ? 'border-t border-slate-100' : ''}`}>
+                        <span className="text-ink">{row.name}</span>
+                        <span className="font-mono text-ink text-right">{row.value}</span>
+                        <span className="bg-emerald-50 text-emerald-700 text-[11px] font-semibold px-2 py-0.5 rounded">
+                          {row.status}
+                        </span>
                       </div>
-                      <div
-                        className="mono"
-                        style={{
-                          fontSize: 16,
-                          color: "var(--ulpiano-green)",
-                          fontWeight: 500,
-                        }}
-                      >
-                        &euro; 167.135,00
-                      </div>
-                    </div>
+                    ))}
+                  </div>
 
-                    {/* Footer: Export */}
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "var(--space-2)",
-                        paddingTop: "var(--space-3)",
-                        borderTop: "1px solid var(--mist)",
-                      }}
-                    >
-                      <WordIcon size={16} />
-                      <span
-                        style={{
-                          fontSize: 12,
-                          fontWeight: 500,
-                          color: "var(--slate)",
-                        }}
-                      >
-                        Exportar a Word
-                      </span>
+                  {/* Section 2: Legítima */}
+                  <div className="mb-6">
+                    <div className="text-[13px] font-bold text-ink mb-2">
+                      SEGON.— LEGÍTIMA
                     </div>
+                    <div className="font-mono text-base text-emerald-600 font-semibold">
+                      € 167.135,00
+                    </div>
+                  </div>
+
+                  {/* Export Button Overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white to-transparent border-t border-slate-100 flex justify-end">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors shadow-sm">
+                      <Download size={16} />
+                      Exportar a Word
+                    </button>
                   </div>
                 </div>
               </div>
@@ -574,133 +234,47 @@ export function DocumentacionClient() {
         </div>
       </section>
 
-      {/* SECCIÓN 2: EL PROBLEMA */}
-      <section
-        style={{ background: "var(--white)", padding: "var(--space-20) 0" }}
-      >
-        <div
-          className="container"
-          style={{ maxWidth: 720, textAlign: "center" }}
-        >
-          <div
-            className="eyebrow reveal"
-            style={{
-              color: "var(--slate)",
-              marginBottom: "var(--space-4)",
-            }}
-          >
-            EL PROBLEMA
-          </div>
-          <h2 className="h2 reveal" style={stagger(1)}>
-            Copiar datos del Excel al Word no es trabajo jur&iacute;dico
-          </h2>
-          <div
-            className="reveal"
-            style={{
-              marginTop: "var(--space-8)",
-              textAlign: "left",
-              ...stagger(2),
-            }}
-          >
-            <p
-              className="body-lg"
-              style={{ color: "var(--slate)", lineHeight: 1.7 }}
-            >
-              El cuaderno particional es el documento que cierra el expediente
-              sucesorio. Y su redacci&oacute;n, tal como se hace hoy, es un
-              ejercicio de transcripci&oacute;n: copiar nombres y DNIs del
-              inventario, trasladar cifras del c&aacute;lculo fiscal, insertar
-              referencias normativas consultadas por separado, y revisar tres
-              veces que todo cuadre entre los documentos.
-            </p>
-            <p
-              className="body-lg"
-              style={{
-                color: "var(--slate)",
-                lineHeight: 1.7,
-                marginTop: "var(--space-6)",
-              }}
-            >
-              Un despacho que gestiona 50 expedientes al a&ntilde;o dedica
-              cientos de horas a un trabajo que no requiere criterio
-              jur&iacute;dico &mdash; requiere que los datos no se pierdan entre
-              un documento y otro. Cada transcripci&oacute;n manual es una
-              oportunidad para el error: un NIF mal copiado, una cifra que no
-              coincide con el Modelo 660, una referencia catastral de otro
-              inmueble.
-            </p>
-            <p
-              className="body-lg"
-              style={{
-                color: "var(--slate)",
-                lineHeight: 1.7,
-                marginTop: "var(--space-6)",
-              }}
-            >
-              El problema no es que el documento sea complejo. Es que se redacta
-              desconectado de los datos que lo alimentan.
-            </p>
+      {/* ═══ EL PROBLEMA ═══ */}
+      <section className="py-24 bg-slate-50 border-b border-slate-200">
+        <div className="container max-w-[720px]">
+          <div className="reveal text-center">
+            <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
+              El problema
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight mb-8">
+              Copiar datos del Excel al Word no es trabajo jurídico
+            </h2>
+            <div className="text-left text-[17px] text-slate-600 leading-relaxed space-y-6">
+              <p>
+                El cuaderno particional es el documento que cierra el expediente sucesorio. Y su redacción, tal como se hace hoy, es un ejercicio de transcripción: copiar nombres y DNIs del inventario, trasladar cifras del cálculo fiscal, insertar referencias normativas consultadas por separado, y revisar tres veces que todo cuadre entre los documentos.
+              </p>
+              <p>
+                Un despacho que gestiona 50 expedientes al año dedica cientos de horas a un trabajo que no requiere criterio jurídico — requiere que los datos no se pierdan entre un documento y otro. Cada transcripción manual es una oportunidad para el error.
+              </p>
+            </div>
           </div>
 
           {/* Visual: broken flow diagram */}
-          <div
-            className="reveal"
-            style={{
-              marginTop: "var(--space-10)",
-              ...stagger(3),
-            }}
-          >
-            <div className="doc-broken-flow">
+          <div className="reveal mt-12">
+            <div className="flex items-center justify-center gap-2 sm:gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
               {[
-                { label: "Excel", icon: "📊" },
-                { label: "Word", icon: "📄" },
-                { label: "Word v2", icon: "📄" },
-                { label: "Word v3", icon: "📄" },
+                { label: "Excel", icon: <FileText className="text-emerald-600" /> },
+                { label: "Word v1", icon: <FileText className="text-blue-600" /> },
+                { label: "Word v2", icon: <FileText className="text-blue-600" /> },
+                { label: "Word final", icon: <FileText className="text-blue-600" /> },
               ].map((item, i) => (
-                <div key={item.label} className="doc-broken-flow__item">
+                <div key={item.label} className="flex items-center gap-2 sm:gap-4">
                   {i > 0 && (
-                    <div className="doc-broken-flow__arrow">
-                      <span
-                        style={{
-                          fontSize: 11,
-                          color: "var(--fog)",
-                          fontWeight: 500,
-                        }}
-                      >
-                        copiar
-                      </span>
+                    <div className="flex flex-col items-center">
+                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1 hidden sm:block">copiar</span>
+                      <ArrowRight className="text-slate-300" size={16} />
                     </div>
                   )}
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: 4,
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 8,
-                        border: "1px dashed var(--mist)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 18,
-                      }}
-                    >
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-12 h-12 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center shadow-sm">
                       {item.icon}
                     </div>
-                    <span
-                      style={{
-                        fontSize: 13,
-                        color: "var(--fog)",
-                      }}
-                    >
-                      {item.label}
-                    </span>
+                    <span className="text-xs font-semibold text-slate-500">{item.label}</span>
                   </div>
                 </div>
               ))}
@@ -709,910 +283,211 @@ export function DocumentacionClient() {
         </div>
       </section>
 
-      {/* SECCIÓN 3: QUÉ PRODUCE — LOS 4 OUTPUTS */}
-      <section
-        style={{
-          background: "var(--surface)",
-          padding: "var(--space-20) 0",
-        }}
-      >
+      {/* ═══ RESULTADOS (OUTPUTS) ═══ */}
+      <section className="py-24 bg-white">
         <div className="container">
-          <div
-            style={{
-              textAlign: "center",
-              marginBottom: "var(--space-12)",
-            }}
-          >
-            <div
-              className="eyebrow reveal"
-              style={{
-                color: "var(--slate)",
-                marginBottom: "var(--space-4)",
-              }}
-            >
-              RESULTADOS
-            </div>
-            <h2 className="h2 reveal" style={stagger(1)}>
-              Los documentos que salen del expediente
+          <div className="reveal text-center max-w-[700px] mx-auto mb-16">
+            <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
+              Documentos
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight mb-4">
+              Los 4 documentos que Ulpiano genera automáticamente
             </h2>
-            <p
-              className="body-lg reveal"
-              style={{
-                color: "var(--slate)",
-                marginTop: "var(--space-4)",
-                ...stagger(2),
-              }}
-            >
-              Cada documento se genera a partir de datos ya validados en
-              Ulpiano. Sin copiar. Sin transcribir. Sin rehacer tablas.
-            </p>
           </div>
 
-          <div className="doc-outputs-grid">
-            {/* Card 1: Cuaderno particional */}
-            <div className="card reveal" style={stagger(0)}>
-              <div
-                style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: "50%",
-                  background: "var(--green-bg)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--ulpiano-green)",
-                  marginBottom: "var(--space-5)",
-                }}
-              >
-                <FileText size={24} />
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+            {/* Card 1 */}
+            <div className="reveal bg-slate-50 rounded-3xl p-8 lg:p-10 border border-slate-200 transition-all hover:shadow-md">
+              <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6">
+                <ClipboardList size={28} strokeWidth={1.5} />
               </div>
-              <h3
-                style={{
-                  fontSize: 20,
-                  fontWeight: 600,
-                  color: "var(--ink)",
-                  marginBottom: "var(--space-3)",
-                }}
-              >
-                El borrador del cuaderno particional, en Word
+              <h3 className="text-2xl font-bold text-ink mb-4">
+                Inventario formal
               </h3>
-              <p
-                className="body-sm"
-                style={{
-                  color: "var(--slate)",
-                  marginBottom: "var(--space-5)",
-                }}
-              >
-                El documento central de la herencia, generado desde los datos
-                del expediente: identificaci&oacute;n de causante y herederos,
-                inventario de bienes con valoraciones, c&aacute;lculo de
-                leg&iacute;timas, adjudicaci&oacute;n por lotes y
-                liquidaci&oacute;n fiscal por beneficiario. En formato Word
-                editable, con estructura profesional y referencias legales
-                citadas. Tu trabajo es revisar y ajustar, no redactar desde
-                cero.
+              <p className="text-[15.5px] text-slate-600 leading-relaxed mb-8">
+                Declaración del caudal relicto neto con descripción completa de bienes inmuebles, mobiliario, activos financieros, derechos y deudas del causante.
               </p>
-              <div
-                className="badge"
-                style={{ marginBottom: "var(--space-5)" }}
-              >
-                Word editable &middot; Datos del expediente
-              </div>
-              {/* File preview block */}
-              <div
-                style={{
-                  background: "var(--surface)",
-                  borderRadius: "var(--radius-sm)",
-                  padding: "var(--space-4)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--space-3)",
-                }}
-              >
-                <WordIcon size={20} />
-                <span
-                  className="mono"
-                  style={{ fontSize: 13, color: "var(--slate)" }}
-                >
-                  cuaderno_particional_exp2024-0847.docx
-                </span>
-              </div>
             </div>
 
-            {/* Card 2: Inventario formal */}
-            <div className="card reveal" style={stagger(1)}>
-              <div
-                style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: "50%",
-                  background: "var(--green-bg)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--ulpiano-green)",
-                  marginBottom: "var(--space-5)",
-                }}
-              >
-                <ClipboardList size={24} />
+            {/* Card 2 */}
+            <div className="reveal bg-slate-50 rounded-3xl p-8 lg:p-10 border border-slate-200 transition-all hover:shadow-md" style={{ animationDelay: '100ms' }}>
+              <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6">
+                <FolderCheck size={28} strokeWidth={1.5} />
               </div>
-              <h3
-                style={{
-                  fontSize: 20,
-                  fontWeight: 600,
-                  color: "var(--ink)",
-                  marginBottom: "var(--space-3)",
-                }}
-              >
-                El inventario patrimonial como documento, no como tabla
+              <h3 className="text-2xl font-bold text-ink mb-4">
+                Cuaderno particional
               </h3>
-              <p
-                className="body-sm"
-                style={{
-                  color: "var(--slate)",
-                  marginBottom: "var(--space-5)",
-                }}
-              >
-                El inventario que registraste en el Planificador de Herencias se
-                convierte en un documento formal: activos clasificados por
-                categor&iacute;a, valoraciones a fecha de devengo, pasivos
-                deducibles, y caudal relicto neto resultante. Listo para
-                incorporar al expediente notarial o presentar ante la
-                administraci&oacute;n.
+              <p className="text-[15.5px] text-slate-600 leading-relaxed mb-6">
+                Documento que especifica qué bienes recibe cada heredero, en qué proporción, y cómo se efectúa el pago de legados, deudas y gastos del expediente.
               </p>
-              <div className="badge">Formato oficial &middot; Exportable</div>
             </div>
 
-            {/* Card 3: Escritura de partición */}
-            <div className="card reveal" style={stagger(2)}>
-              <div
-                style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: "50%",
-                  background: "var(--green-bg)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--ulpiano-green)",
-                  marginBottom: "var(--space-5)",
-                }}
-              >
-                <Stamp size={24} />
+            {/* Card 3 */}
+            <div className="reveal bg-slate-50 rounded-3xl p-8 lg:p-10 border border-slate-200 transition-all hover:shadow-md">
+              <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mb-6">
+                <Stamp size={28} strokeWidth={1.5} />
               </div>
-              <h3
-                style={{
-                  fontSize: 20,
-                  fontWeight: 600,
-                  color: "var(--ink)",
-                  marginBottom: "var(--space-3)",
-                }}
-              >
-                La escritura, con los datos que ya tienes
+              <h3 className="text-2xl font-bold text-ink mb-4">
+                Escritura de partición
               </h3>
-              <p
-                className="body-sm"
-                style={{
-                  color: "var(--slate)",
-                  marginBottom: "var(--space-5)",
-                }}
-              >
-                Borrador de la escritura de aceptaci&oacute;n y partici&oacute;n
-                de herencia con los datos de todos los intervinientes, la
-                descripci&oacute;n de bienes adjudicados, las cargas asumidas y
-                las referencias registrales. El sistema inserta
-                autom&aacute;ticamente las cl&aacute;usulas procedentes
-                seg&uacute;n el tipo de sucesi&oacute;n (testada, intestada, con
-                pacto sucesorio) y el derecho aplicable.
+              <p className="text-[15.5px] text-slate-600 leading-relaxed mb-6">
+                Documento notarial que formaliza la distribución del patrimonio entre herederos. Se firma ante notario y es el título definitivo de transmisión.
               </p>
-              <div className="badge">
-                Adaptado al tipo de sucesi&oacute;n
-              </div>
             </div>
 
-            {/* Card 4: Coherencia documental */}
-            <div className="card reveal" style={stagger(3)}>
-              <div
-                style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: "50%",
-                  background: "var(--green-bg)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--ulpiano-green)",
-                  marginBottom: "var(--space-5)",
-                }}
-              >
-                <Link2 size={24} />
+            {/* Card 4 */}
+            <div className="reveal bg-slate-50 rounded-3xl p-8 lg:p-10 border border-slate-200 transition-all hover:shadow-md" style={{ animationDelay: '100ms' }}>
+              <div className="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mb-6">
+                <Receipt size={28} strokeWidth={1.5} />
               </div>
-              <h3
-                style={{
-                  fontSize: 20,
-                  fontWeight: 600,
-                  color: "var(--ink)",
-                  marginBottom: "var(--space-3)",
-                }}
-              >
-                Un dato se introduce una vez. Aparece correcto en todos los
-                documentos.
+              <h3 className="text-2xl font-bold text-ink mb-4">
+                Modelos fiscales (650, 660)
               </h3>
-              <p
-                className="body-sm"
-                style={{
-                  color: "var(--slate)",
-                  marginBottom: "var(--space-5)",
-                }}
-              >
-                El NIF de un heredero, el valor de un inmueble, la cuota del
-                ISD: cada dato existe una sola vez en el expediente y se propaga
-                a todos los documentos generados. Si corriges una
-                valoraci&oacute;n en el inventario, se actualiza en el cuaderno
-                particional y en la escritura. Sin versiones contradictorias. Sin
-                errores de transcripci&oacute;n.
+              <p className="text-[15.5px] text-slate-600 leading-relaxed mb-6">
+                Declaraciones de autoliquidación del ISD de cada heredero. Los Models 650 individuales y el Modelo 660 compartido con el inventario de bienes.
               </p>
-              <div className="badge badge--info">
-                Dato &uacute;nico &middot; Propagaci&oacute;n autom&aacute;tica
-              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN 4: CÓMO FUNCIONA */}
-      <section
-        id="como-funciona"
-        style={{ background: "var(--white)", padding: "var(--space-20) 0" }}
-      >
+      {/* ═══ CÓMO FUNCIONA ═══ */}
+      <section id="como-funciona" className="py-24 bg-slate-900 text-white">
         <div className="container">
-          <div
-            style={{
-              textAlign: "center",
-              marginBottom: "var(--space-12)",
-            }}
-          >
-            <div
-              className="eyebrow reveal"
-              style={{
-                color: "var(--slate)",
-                marginBottom: "var(--space-4)",
-              }}
-            >
-              PROCESO
-            </div>
-            <h2 className="h2 reveal" style={stagger(1)}>
-              Del expediente al documento, sin copiar nada
+          <div className="reveal text-center max-w-[700px] mx-auto mb-20">
+            <span className="text-emerald-400 font-bold tracking-wider text-xs uppercase mb-3 block">
+              Flujo de datos
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight">
+              De dato estructurado a documento en tres pasos
             </h2>
           </div>
 
-          <div className="doc-steps-grid">
+          <div className="grid md:grid-cols-3 gap-10 lg:gap-8 relative">
+            {/* Connecting line for desktop */}
+            <div className="hidden md:block absolute top-10 left-16 right-16 h-[1px] bg-slate-800" />
+            
             {[
               {
                 num: "01",
-                icon: <FolderCheck size={24} />,
-                title: "Completa el expediente",
-                desc: "El inventario patrimonial, el escenario sucesorio y el cálculo fiscal ya están en Ulpiano. Si utilizas el Planificador de Herencias y el Motor Fiscal, los datos están listos.",
-                link: "/soluciones/planificacion-sucesoria",
+                title: "Consolida en Ulpiano",
+                desc: "Rellena el expediente con los bienes, herederos y el cálculo de la legítima. Estos son tus datos maestros.",
               },
               {
                 num: "02",
-                icon: <MousePointerClick size={24} />,
-                title: "Selecciona el documento",
-                desc: "Cuaderno particional, inventario formal, escritura de partición. Cada plantilla sabe qué datos necesita del expediente y los obtiene automáticamente.",
+                title: "Genera el borrador",
+                desc: "Ulpiano inyecta esos datos maestros en las plantillas jurídicas preconfiguradas, seleccionando las cláusulas correctas.",
               },
               {
                 num: "03",
-                icon: <Search size={24} />,
-                title: "Revisa el borrador",
-                desc: "El documento se genera en Word con estructura profesional, cifras coherentes y referencias legales. Tú revisas, ajustas las cláusulas que requieran tu criterio jurídico, y validas.",
-              },
-              {
-                num: "04",
-                icon: <Download size={24} />,
-                title: "Exporta y presenta",
-                desc: "Descarga el documento definitivo en Word o PDF. Listo para firma, para el protocolo notarial o para la presentación ante la administración tributaria.",
+                title: "Exporta a Word",
+                desc: "Descarga el documento final. Edita los últimos detalles de formato en tu procesador de textos habitual.",
               },
             ].map((step, i) => (
-              <div
-                key={step.num}
-                className="reveal doc-step-item"
-                style={{ position: "relative", ...stagger(i) }}
-              >
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    top: -8,
-                    left: 0,
-                    fontFamily:
-                      "var(--font-dm), 'DM Sans', sans-serif",
-                    fontWeight: 700,
-                    fontSize: 72,
-                    color: "var(--mist)",
-                    opacity: 0.5,
-                    lineHeight: 1,
-                    pointerEvents: "none",
-                  }}
-                >
+              <div key={i} className="reveal relative z-10 text-center flex flex-col items-center" style={{ animationDelay: `${i * 100}ms` }}>
+                <div className="w-20 h-20 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center font-mono text-2xl font-bold text-emerald-400 mb-6 shadow-xl">
                   {step.num}
                 </div>
-                <div style={{ position: "relative", paddingTop: 56 }}>
-                  <div
-                    style={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: "50%",
-                      border: "2px solid var(--ulpiano-green)",
-                      background: "var(--white)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "var(--ulpiano-green)",
-                      marginBottom: "var(--space-3)",
-                    }}
-                  >
-                    {step.icon}
-                  </div>
-                  <h3
-                    style={{
-                      fontSize: 18,
-                      fontWeight: 600,
-                      color: "var(--ink)",
-                      marginBottom: "var(--space-3)",
-                    }}
-                  >
-                    {step.title}
-                  </h3>
-                  <p className="body-sm" style={{ color: "var(--slate)" }}>
-                    {step.desc}
-                  </p>
-                </div>
+                <h3 className="text-xl font-bold text-white mb-3">
+                  {step.title}
+                </h3>
+                <p className="text-[15px] text-slate-400 leading-relaxed">
+                  {step.desc}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN 5: CATÁLOGO DE DOCUMENTOS */}
-      <section
-        style={{
-          background: "var(--surface)",
-          padding: "var(--space-20) 0",
-        }}
-      >
-        <div className="container">
-          <div
-            style={{
-              textAlign: "center",
-              marginBottom: "var(--space-12)",
-            }}
-          >
-            <div
-              className="eyebrow reveal"
-              style={{
-                color: "var(--slate)",
-                marginBottom: "var(--space-4)",
-              }}
-            >
-              DOCUMENTOS
-            </div>
-            <h2 className="h2 reveal" style={stagger(1)}>
-              Cada documento del expediente, generado desde los mismos datos
+      {/* ═══ PARA QUIÉN (SEGMENTOS) ═══ */}
+      <section className="py-24 bg-white border-b border-slate-200">
+        <div className="container max-w-[900px]">
+          <div className="reveal text-center mb-12">
+            <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
+              Versatilidad
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight">
+              Un único generador, infinitas posibilidades
             </h2>
           </div>
 
-          <div className="doc-catalog-grid">
-            {/* Cuaderno particional */}
-            <div
-              className="reveal"
-              style={{
-                border: "1px solid var(--mist)",
-                borderRadius: "var(--radius-sm)",
-                padding: "var(--space-6)",
-                background: "var(--white)",
-                ...stagger(0),
-              }}
-            >
-              <div
-                style={{
-                  color: "var(--ulpiano-green)",
-                  marginBottom: "var(--space-3)",
-                }}
-              >
-                <FileText size={20} />
-              </div>
-              <h3
-                style={{
-                  fontSize: 18,
-                  fontWeight: 600,
-                  color: "var(--ink)",
-                  marginBottom: "var(--space-2)",
-                }}
-              >
-                Cuaderno particional
-              </h3>
-              <p
-                style={{
-                  fontSize: 14,
-                  color: "var(--slate)",
-                  lineHeight: 1.6,
-                }}
-              >
-                Identificaci&oacute;n de intervinientes, inventario valorado,
-                leg&iacute;timas, formaci&oacute;n de lotes,
-                adjudicaci&oacute;n y liquidaci&oacute;n fiscal.
-              </p>
-              <div
-                style={{
-                  marginTop: "var(--space-4)",
-                  fontSize: 11,
-                  fontWeight: 500,
-                  color: "var(--slate)",
-                  letterSpacing: "0.04em",
-                  textTransform: "uppercase",
-                }}
-              >
-                DOCUMENTO CENTRAL
-              </div>
-            </div>
-
-            {/* Inventario formal */}
-            <div
-              className="reveal"
-              style={{
-                border: "1px solid var(--mist)",
-                borderRadius: "var(--radius-sm)",
-                padding: "var(--space-6)",
-                background: "var(--white)",
-                ...stagger(1),
-              }}
-            >
-              <div
-                style={{
-                  color: "var(--ulpiano-green)",
-                  marginBottom: "var(--space-3)",
-                }}
-              >
-                <ClipboardList size={20} />
-              </div>
-              <h3
-                style={{
-                  fontSize: 18,
-                  fontWeight: 600,
-                  color: "var(--ink)",
-                  marginBottom: "var(--space-2)",
-                }}
-              >
-                Inventario formal de bienes
-              </h3>
-              <p
-                style={{
-                  fontSize: 14,
-                  color: "var(--slate)",
-                  lineHeight: 1.6,
-                }}
-              >
-                Activos clasificados, valoraciones a fecha de devengo, pasivos
-                deducibles, caudal relicto neto. Apto para acta notarial.
-              </p>
-              <div
-                style={{
-                  marginTop: "var(--space-4)",
-                  fontSize: 11,
-                  fontWeight: 500,
-                  color: "var(--slate)",
-                  letterSpacing: "0.04em",
-                  textTransform: "uppercase",
-                }}
-              >
-                INVENTARIO
-              </div>
-            </div>
-
-            {/* Escritura de partición */}
-            <div
-              className="reveal"
-              style={{
-                border: "1px solid var(--mist)",
-                borderRadius: "var(--radius-sm)",
-                padding: "var(--space-6)",
-                background: "var(--white)",
-                ...stagger(2),
-              }}
-            >
-              <div
-                style={{
-                  color: "var(--ulpiano-green)",
-                  marginBottom: "var(--space-3)",
-                }}
-              >
-                <Stamp size={20} />
-              </div>
-              <h3
-                style={{
-                  fontSize: 18,
-                  fontWeight: 600,
-                  color: "var(--ink)",
-                  marginBottom: "var(--space-2)",
-                }}
-              >
-                Escritura de partici&oacute;n
-              </h3>
-              <p
-                style={{
-                  fontSize: 14,
-                  color: "var(--slate)",
-                  lineHeight: 1.6,
-                }}
-              >
-                Otorgantes, bienes adjudicados, cargas, referencias registrales.
-                Cl&aacute;usulas seg&uacute;n tipo de sucesi&oacute;n.
-              </p>
-              <div
-                style={{
-                  marginTop: "var(--space-4)",
-                  fontSize: 11,
-                  fontWeight: 500,
-                  color: "var(--slate)",
-                  letterSpacing: "0.04em",
-                  textTransform: "uppercase",
-                }}
-              >
-                ESCRITURA
-              </div>
-            </div>
-
-            {/* Modelo 660 */}
-            <div
-              className="reveal"
-              style={{
-                border: "1px solid var(--mist)",
-                borderLeft: "3px solid var(--ulpiano-green)",
-                borderRadius: "var(--radius-sm)",
-                padding: "var(--space-6)",
-                background: "var(--white)",
-                position: "relative",
-                overflow: "hidden",
-                ...stagger(3),
-              }}
-            >
-              <div
-                className="mono"
-                aria-hidden="true"
-                style={{
-                  position: "absolute",
-                  top: -4,
-                  right: 16,
-                  fontSize: 28,
-                  color: "var(--mist)",
-                  lineHeight: 1,
-                }}
-              >
-                660
-              </div>
-              <div
-                style={{
-                  color: "var(--ulpiano-green)",
-                  marginBottom: "var(--space-3)",
-                }}
-              >
-                <Calculator size={20} />
-              </div>
-              <h3
-                style={{
-                  fontSize: 18,
-                  fontWeight: 600,
-                  color: "var(--ink)",
-                  marginBottom: "var(--space-2)",
-                }}
-              >
-                Modelo 660
-              </h3>
-              <p
-                style={{
-                  fontSize: 14,
-                  color: "var(--slate)",
-                  lineHeight: 1.6,
-                }}
-              >
-                Inventario de bienes y derechos en formato oficial. Generado
-                desde el expediente.
-              </p>
-              <div
-                style={{
-                  marginTop: "var(--space-4)",
-                  fontSize: 11,
-                  fontWeight: 500,
-                  color: "var(--slate)",
-                  letterSpacing: "0.04em",
-                  textTransform: "uppercase",
-                }}
-              >
-                MODELO FISCAL
-              </div>
-            </div>
-
-            {/* Modelo 650 */}
-            <div
-              className="reveal"
-              style={{
-                border: "1px solid var(--mist)",
-                borderLeft: "3px solid var(--ulpiano-green)",
-                borderRadius: "var(--radius-sm)",
-                padding: "var(--space-6)",
-                background: "var(--white)",
-                position: "relative",
-                overflow: "hidden",
-                ...stagger(4),
-              }}
-            >
-              <div
-                className="mono"
-                aria-hidden="true"
-                style={{
-                  position: "absolute",
-                  top: -4,
-                  right: 16,
-                  fontSize: 28,
-                  color: "var(--mist)",
-                  lineHeight: 1,
-                }}
-              >
-                650
-              </div>
-              <div
-                style={{
-                  color: "var(--ulpiano-green)",
-                  marginBottom: "var(--space-3)",
-                }}
-              >
-                <Receipt size={20} />
-              </div>
-              <h3
-                style={{
-                  fontSize: 18,
-                  fontWeight: 600,
-                  color: "var(--ink)",
-                  marginBottom: "var(--space-2)",
-                }}
-              >
-                Modelo 650
-              </h3>
-              <p
-                style={{
-                  fontSize: 14,
-                  color: "var(--slate)",
-                  lineHeight: 1.6,
-                }}
-              >
-                Autoliquidaci&oacute;n individual por heredero. Base,
-                reducciones, tarifa, bonificaci&oacute;n, cuota a ingresar.
-              </p>
-              <div
-                style={{
-                  marginTop: "var(--space-4)",
-                  fontSize: 11,
-                  fontWeight: 500,
-                  color: "var(--slate)",
-                  letterSpacing: "0.04em",
-                  textTransform: "uppercase",
-                }}
-              >
-                MODELO FISCAL
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECCIÓN 6: PARA QUIÉN */}
-      <section
-        style={{ background: "var(--white)", padding: "var(--space-20) 0" }}
-      >
-        <div className="container">
-          <div
-            style={{
-              textAlign: "center",
-              marginBottom: "var(--space-10)",
-            }}
-          >
-            <div
-              className="eyebrow reveal"
-              style={{
-                color: "var(--slate)",
-                marginBottom: "var(--space-4)",
-              }}
-            >
-              SEGMENTOS
-            </div>
-            <h2 className="h2 reveal" style={stagger(1)}>
-              Documentos profesionales para quien los necesita profesionales
-            </h2>
-          </div>
-
-          {/* Tabs */}
-          <div
-            className="reveal"
-            style={{
-              display: "flex",
-              gap: "var(--space-3)",
-              justifyContent: "center",
-              marginBottom: "var(--space-10)",
-              flexWrap: "wrap",
-              ...stagger(2),
-            }}
-          >
-            {[
-              "Despachos de abogados",
-              "Asesorías fiscales",
-              "Notarías",
-            ].map((label, i) => (
+          <div className="reveal flex flex-wrap justify-center gap-2 mb-12">
+            {["Abogados", "Notarías", "Asesorías"].map((label, i) => (
               <button
                 key={label}
-                className={`tab-btn ${activeTab === i ? "active" : ""}`}
                 onClick={() => setActiveTab(i)}
-                role="tab"
-                aria-selected={activeTab === i}
+                className={`px-6 py-3 rounded-full text-[15px] font-semibold transition-all ${
+                  activeTab === i 
+                    ? "bg-emerald-500 text-white shadow-md" 
+                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                }`}
               >
                 {label}
               </button>
             ))}
           </div>
 
-          {/* Tab panels */}
-          <div className="reveal" style={stagger(3)}>
+          <div className="reveal">
             {activeTab === 0 && (
               <TabPanel
-                claim="El cuaderno particional que os costó tres días, listo en 20 minutos."
+                claim="Asegura que el cuaderno cuadra con la liquidación fiscal presentada."
                 checks={[
-                  "El borrador se genera con los datos del expediente — tú revisas y ajustas",
-                  "Cada cifra del documento tiene trazabilidad al cálculo original",
-                  "Formato Word editable con estructura profesional estándar",
+                  "Evita discrepancias entre el modelo 650 y el reparto civil",
+                  "Acelera la preparación documental para la firma",
+                  "Reduce el tiempo administrativo no facturable",
                 ]}
-                mockupLabel="Vista del Cuaderno Particional"
+                mockupLabel="Vista Abogado"
               />
             )}
             {activeTab === 1 && (
               <TabPanel
-                claim="El Modelo 650 de tu cliente, coherente con el inventario y el cálculo. Sin transcribir nada."
+                claim="Recibe expedientes pulidos y listos para elevar a público."
                 checks={[
-                  "Modelos 650 y 660 generados automáticamente desde el expediente",
-                  "Datos fiscales trazables: base imponible, reducciones, bonificaciones",
-                  "Actualización automática si cambia el reparto o la normativa",
+                  "Datos de comparecientes y bienes ya estructurados",
+                  "Cálculo de legítimas transparente y comprobable",
+                  "Generación ágil de la escritura de partición",
                 ]}
-                mockupLabel="Vista del Modelo 650"
+                mockupLabel="Vista Notarial"
               />
             )}
             {activeTab === 2 && (
               <TabPanel
-                claim="La escritura de partición con los datos ya verificados. Lista para el protocolo."
+                claim="El cierre fiscal no es el final. Entrega el documento jurídico a tu cliente."
                 checks={[
-                  "Borrador de escritura con datos de otorgantes, bienes y referencias registrales",
-                  "Cláusulas adaptadas al tipo de sucesión y al derecho aplicable",
-                  "Integración con el inventario y el árbol familiar del expediente",
+                  "Ofrece un servicio integral sucesorio, no solo tributario",
+                  "Los datos del modelo 660 nutren directamente el cuaderno",
+                  "Seguridad jurídica sin depender de plantillas obsoletas",
                 ]}
-                mockupLabel="Vista de la Escritura"
+                mockupLabel="Vista Asesoría"
               />
             )}
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN 7: COMPARATIVA */}
-      <section
-        style={{
-          background: "var(--surface)",
-          padding: "var(--space-20) 0",
-        }}
-      >
-        <div className="container">
-          <div
-            style={{
-              textAlign: "center",
-              marginBottom: "var(--space-12)",
-            }}
-          >
-            <div
-              className="eyebrow reveal"
-              style={{
-                color: "var(--slate)",
-                marginBottom: "var(--space-4)",
-              }}
-            >
-              DIFERENCIADORES
-            </div>
-            <h2 className="h2 reveal" style={stagger(1)}>
-              Lo que cambia cuando el documento se genera desde el expediente
+      {/* ═══ COMPARATIVA ═══ */}
+      <section className="py-24 bg-slate-50">
+        <div className="container max-w-[900px]">
+          <div className="reveal text-center mb-16">
+            <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
+              Diferenciadores
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight">
+              Lo que el copy-paste no puede hacer por ti
             </h2>
           </div>
 
-          {/* Desktop table */}
-          <div
-            className="reveal doc-comparison-desktop"
-            style={stagger(2)}
-          >
-            <table className="comparison-table" style={{ maxWidth: 900, margin: "0 auto" }}>
-              <thead>
-                <tr>
-                  <th style={{ background: "var(--surface)", color: "var(--slate)" }}>
-                    Redacci&oacute;n manual
-                  </th>
-                  <th
-                    style={{
-                      background: "rgba(45, 106, 79, 0.08)",
-                      color: "var(--ulpiano-green)",
-                    }}
-                  >
-                    Con Ulpiano
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonRows.map((row, i) => (
-                  <tr key={i}>
-                    <td style={{ color: "var(--slate)" }}>{row.before}</td>
-                    <td style={{ color: "var(--ink)", fontWeight: 500 }}>
-                      {row.after}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Mobile cards */}
-          <div className="doc-comparison-mobile">
+          <div className="space-y-4">
             {comparisonRows.map((row, i) => (
-              <div
-                key={i}
-                className="card reveal"
-                style={{
-                  marginBottom: "var(--space-4)",
-                  ...stagger(i),
-                }}
-              >
-                <div style={{ marginBottom: "var(--space-3)" }}>
-                  <span
-                    style={{
-                      fontSize: 12,
-                      fontWeight: 600,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.05em",
-                      color: "var(--slate)",
-                    }}
-                  >
-                    Hoy:
-                  </span>
-                  <p
-                    className="body-sm"
-                    style={{ color: "var(--slate)", marginTop: 4 }}
-                  >
-                    {row.before}
-                  </p>
+              <div key={i} className="reveal bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm grid md:grid-cols-2 gap-6 items-center" style={{ animationDelay: `${i * 100}ms` }}>
+                <div className="pr-4 md:border-r border-slate-100">
+                  <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Antes</div>
+                  <p className="text-[15px] text-slate-600 leading-relaxed">{row.before}</p>
                 </div>
-                <div>
-                  <span
-                    style={{
-                      fontSize: 12,
-                      fontWeight: 600,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.05em",
-                      color: "var(--ulpiano-green)",
-                    }}
-                  >
-                    Con Ulpiano:
-                  </span>
-                  <p
-                    className="body-sm"
-                    style={{
-                      color: "var(--ink)",
-                      fontWeight: 500,
-                      marginTop: 4,
-                    }}
-                  >
-                    {row.after}
-                  </p>
+                <div className="pl-0 md:pl-4">
+                  <div className="text-[11px] font-bold text-emerald-600 uppercase tracking-widest mb-2">Con Ulpiano</div>
+                  <p className="text-[15.5px] font-medium text-ink leading-relaxed">{row.after}</p>
                 </div>
               </div>
             ))}
@@ -1620,274 +495,26 @@ export function DocumentacionClient() {
         </div>
       </section>
 
-      {/* SECCIÓN 8: MÉTRICAS + TESTIMONIO */}
-      <section
-        style={{
-          background: "var(--night)",
-          padding: "var(--space-24) 0",
-        }}
-      >
-        <div className="container">
-          <div className="doc-metrics-grid">
-            <AnimatedMetric
-              value={20}
-              suffix=" min"
-              label="Tiempo medio de generación del cuaderno particional"
-            />
-            <AnimatedMetric
-              value={0}
-              suffix=""
-              label="Errores de transcripción entre expediente y documento"
-            />
-            <AnimatedMetric
-              value={100}
-              suffix="%"
-              label="Coherencia entre inventario, cálculo fiscal y documentación"
-            />
-          </div>
-
-          {/* Testimonial */}
-          <div
-            className="reveal"
-            style={{
-              maxWidth: 720,
-              margin: "var(--space-16) auto 0",
-              paddingLeft: "var(--space-6)",
-              borderLeft: "3px solid var(--ulpiano-green)",
-            }}
-          >
-            <blockquote
-              style={{
-                fontFamily:
-                  "var(--font-inter), 'Inter', sans-serif",
-                fontStyle: "italic",
-                fontSize: 22,
-                lineHeight: 1.5,
-                color: "var(--white)",
-                margin: 0,
-              }}
-              className="doc-testimonial-quote"
-            >
-              &ldquo;Antes dedic&aacute;bamos dos o tres d&iacute;as a redactar
-              el cuaderno particional de un expediente complejo. Ahora el
-              borrador sale en minutos y nuestro trabajo es el que debe ser:
-              revisar, ajustar y validar con criterio jur&iacute;dico.&rdquo;
-            </blockquote>
-            <p
-              style={{
-                marginTop: "var(--space-4)",
-                fontSize: 14,
-                fontWeight: 500,
-                color: "var(--fog)",
-              }}
-            >
-              &mdash; Abogado, despacho de derecho sucesorio, Barcelona
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* SECCIÓN 9: CTA FINAL */}
-      <section
-        id="solicita-demo"
-        style={{
-          background:
-            "linear-gradient(180deg, #0F1F3D 0%, #142647 100%)",
-          padding: "var(--space-20) 0",
-        }}
-      >
-        <div className="container" style={{ textAlign: "center" }}>
-          <h2
-            className="h2 reveal doc-cta-h2"
-          >
-            Tu criterio jur&iacute;dico es el centro. Ulpiano se encarga de que
-            los datos lleguen correctos al documento.
+      {/* ═══ CTA FINAL ═══ */}
+      <section className="bg-night py-24 relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(45,106,79,0.15)_0%,transparent_70%)] pointer-events-none" />
+        <div className="container relative z-10 text-center max-w-[700px]">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-6">
+            Automatiza la generación de documentos sucesorios hoy
           </h2>
-          <p
-            className="body-lg reveal"
-            style={{
-              color: "rgba(255,255,255,0.75)",
-              maxWidth: 560,
-              margin: "var(--space-6) auto 0",
-              ...stagger(1),
-            }}
-          >
-            Solicita una demo y comprueba c&oacute;mo Ulpiano genera el cuaderno
-            particional, los modelos fiscales y la escritura de partici&oacute;n
-            a partir de los datos del expediente.
+          <p className="text-lg text-white/60 mb-10">
+            Descubre cómo Ulpiano elimina horas de trabajo administrativo y asegura coherencia entre el inventario y el cuaderno particional.
           </p>
-          <div
-            className="reveal"
-            style={{
-              display: "flex",
-              gap: "var(--space-4)",
-              justifyContent: "center",
-              marginTop: "var(--space-10)",
-              flexWrap: "wrap",
-              ...stagger(2),
-            }}
-          >
-            <Link href="/demo" className="btn-primary">
-              Solicita tu demo gratuita
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link href="/demo" className="btn-primary px-8 py-3.5 shadow-[0_0_20px_rgba(45,106,79,0.4)]">
+              Reserva tu demo gratis
             </Link>
-            <a href="#" className="btn-ghost">
-              Crea tu cuenta gratuita &rarr;
-            </a>
+            <Link href="/modelos/modelo-660" className="btn-ghost text-white/80 hover:text-white px-6 border border-white/20">
+              Ver conexión con el Modelo 660 <ArrowRight size={18} className="ml-2 inline" />
+            </Link>
           </div>
         </div>
       </section>
-
-      {/* RESPONSIVE STYLES */}
-      <style>{`
-        .doc-hero-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: var(--space-12);
-          align-items: center;
-        }
-        .doc-outputs-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: var(--space-6);
-        }
-        .doc-steps-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: var(--space-8);
-        }
-        .doc-step-item:not(:last-child)::after {
-          content: '';
-          position: absolute;
-          top: 36px;
-          right: calc(-1 * var(--space-4));
-          width: calc(var(--space-8));
-          border-top: 2px dashed var(--mist);
-        }
-        .doc-catalog-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: var(--space-6);
-        }
-        .doc-metrics-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: var(--space-8);
-        }
-        .doc-comparison-mobile {
-          display: none;
-        }
-        .doc-testimonial-quote {
-          font-size: 22px;
-        }
-        .doc-broken-flow {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: var(--space-2);
-          flex-wrap: wrap;
-        }
-        .doc-broken-flow__item {
-          display: flex;
-          align-items: center;
-          gap: var(--space-2);
-        }
-        .doc-broken-flow__arrow {
-          display: flex;
-          align-items: center;
-          gap: var(--space-1);
-          padding: 0 var(--space-2);
-          border-top: 2px dashed var(--mist);
-          width: 60px;
-          justify-content: center;
-          position: relative;
-        }
-        .doc-broken-flow__arrow span {
-          position: absolute;
-          top: -18px;
-        }
-        .tab-panel-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: var(--space-10);
-          align-items: center;
-        }
-        .doc-cta-h2 {
-          color: var(--white);
-          max-width: 680px;
-          margin: 0 auto;
-        }
-
-        @media (max-width: 1024px) {
-          .doc-hero-grid {
-            grid-template-columns: 1fr;
-            gap: var(--space-10);
-          }
-          .doc-hero-mockup-wrap {
-            max-width: 540px;
-            margin: 0 auto;
-          }
-          .doc-outputs-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .doc-steps-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-6);
-          }
-          .doc-step-item::after {
-            display: none !important;
-          }
-          .doc-catalog-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        @media (max-width: 768px) {
-          .doc-hero-grid {
-            grid-template-columns: 1fr;
-          }
-          .doc-outputs-grid {
-            grid-template-columns: 1fr;
-          }
-          .doc-steps-grid {
-            grid-template-columns: 1fr;
-          }
-          .doc-catalog-grid {
-            grid-template-columns: 1fr;
-          }
-          .doc-metrics-grid {
-            grid-template-columns: 1fr;
-            gap: var(--space-10);
-          }
-          .doc-comparison-desktop {
-            display: none;
-          }
-          .doc-comparison-mobile {
-            display: block;
-          }
-          .doc-testimonial-quote {
-            font-size: 18px !important;
-          }
-          .doc-cta-h2 {
-            font-size: 28px;
-          }
-          .tab-panel-grid {
-            grid-template-columns: 1fr;
-          }
-          .doc-broken-flow {
-            flex-direction: column;
-          }
-          .doc-broken-flow__arrow {
-            width: 2px;
-            height: 30px;
-            border-top: none;
-            border-left: 2px dashed var(--mist);
-          }
-          .doc-broken-flow__arrow span {
-            top: auto;
-            left: 12px;
-          }
-        }
-      `}</style>
     </div>
   );
 }

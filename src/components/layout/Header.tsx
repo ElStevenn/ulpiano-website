@@ -24,6 +24,8 @@ import {
 } from "./nav-config-ca";
 import LangSwitch from "./LangSwitch";
 
+import Image from "next/image";
+
 /* ─── Dropdown item ─── */
 
 function DropdownLink({ item, onClick }: { item: NavDropdownItem; onClick: () => void }) {
@@ -71,11 +73,11 @@ function DesktopDropdown({
 
   const handleMouseEnter = () => {
     if (closeTimeout.current) clearTimeout(closeTimeout.current);
-    openTimeout.current = setTimeout(onOpen, 100);
+    openTimeout.current = setTimeout(onOpen, 150);
   };
   const handleMouseLeave = () => {
     if (openTimeout.current) clearTimeout(openTimeout.current);
-    closeTimeout.current = setTimeout(onClose, 150);
+    closeTimeout.current = setTimeout(onClose, 300);
   };
 
   useEffect(() => {
@@ -96,7 +98,7 @@ function DesktopDropdown({
         onClick={() => (isOpen ? onClose() : onOpen())}
         aria-expanded={isOpen}
         aria-haspopup="true"
-        className={`group inline-flex items-center gap-1 rounded-lg px-4 py-2 text-[14px] font-medium transition-all duration-150 ${
+        className={`cursor-pointer group inline-flex items-center gap-1 rounded-lg px-4 py-2 text-[14px] font-medium transition-all duration-150 ${
           isOpen || isActive
             ? "text-white bg-white/[0.06]"
             : "text-white/60 hover:text-white hover:bg-white/[0.06]"
@@ -111,10 +113,6 @@ function DesktopDropdown({
           }`}
         />
       </button>
-
-      {isActive && !isOpen && (
-        <span className="absolute bottom-0 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[var(--ulpiano-green)]" />
-      )}
 
       <div
         className={`absolute left-1/2 top-full pt-2 -translate-x-1/2 transition-all duration-200 ${
@@ -295,7 +293,8 @@ export default function Header() {
           : "h-16 bg-white/5 backdrop-blur-md border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.1)]"
       }`}>
         <div className="flex-1 flex justify-start">
-          <Link href={homeHref} className="text-white font-dm-sans font-bold text-lg tracking-tight">
+          <Link href={homeHref} className="text-white font-dm-sans font-bold text-xl tracking-[0.1em] flex items-center gap-3">
+            <Image src="/logo_ulpiano_landing.png" alt="Ulpiano Logo" width={28} height={28} className="opacity-95" />
             ULPIANO
           </Link>
         </div>
@@ -358,30 +357,24 @@ export default function Header() {
 
           <Link
             href={iaHref}
-            className={`relative inline-flex items-center rounded-lg px-4 py-2 text-[14px] font-medium transition-all duration-150 ${
+            className={`inline-flex items-center rounded-lg px-4 py-2 text-[14px] font-medium transition-all duration-150 ${
               isIaActive
                 ? "text-white bg-white/[0.06]"
                 : "text-white/60 hover:text-white hover:bg-white/[0.06]"
             }`}
           >
             {t.ia}
-            {isIaActive && (
-              <span className="absolute bottom-0 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[var(--ulpiano-green)]" />
-            )}
           </Link>
 
           <Link
             href={preciosHref}
-            className={`relative inline-flex items-center rounded-lg px-4 py-2 text-[14px] font-medium transition-all duration-150 ${
+            className={`inline-flex items-center rounded-lg px-4 py-2 text-[14px] font-medium transition-all duration-150 ${
               isPreciosActive
                 ? "text-white bg-white/[0.06]"
                 : "text-white/60 hover:text-white hover:bg-white/[0.06]"
             }`}
           >
             {t.precios}
-            {isPreciosActive && (
-              <span className="absolute bottom-0 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[var(--ulpiano-green)]" />
-            )}
           </Link>
         </nav>
 
