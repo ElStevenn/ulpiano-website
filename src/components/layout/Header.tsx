@@ -285,18 +285,22 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className={`fixed top-0 left-0 right-0 z-100 h-14 overflow-visible transition-all duration-300 border-b ${
-        isScrolled
-          ? "bg-night/95 backdrop-blur-xl border-white/[0.06] shadow-lg"
-          : "bg-night/80 backdrop-blur-xl border-white/[0.04]"
+      className={`fixed left-0 right-0 z-50 transition-all duration-500 ease-out px-4 md:px-6 ${
+        isScrolled ? "top-3" : "top-6"
       }`}
     >
-      <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between px-6">
-        <Link href={homeHref} className="text-white font-dm-sans font-bold text-lg tracking-tight">
-          ULPIANO
-        </Link>
+      <div className={`mx-auto flex w-full max-w-[1200px] items-center justify-between rounded-2xl px-6 transition-all duration-500 ${
+        isScrolled 
+          ? "h-14 bg-night/95 backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.2)]" 
+          : "h-16 bg-white/5 backdrop-blur-md border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.1)]"
+      }`}>
+        <div className="flex-1 flex justify-start">
+          <Link href={homeHref} className="text-white font-dm-sans font-bold text-lg tracking-tight">
+            ULPIANO
+          </Link>
+        </div>
 
-        <nav className="hidden lg:flex items-center gap-1" role="navigation" aria-label={t.nav}>
+        <nav className="hidden lg:flex items-center justify-center gap-1" role="navigation" aria-label={t.nav}>
           <DesktopDropdown
             label={t.solutions}
             isActive={isSolucionesActive}
