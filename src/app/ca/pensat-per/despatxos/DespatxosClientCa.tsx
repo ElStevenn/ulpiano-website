@@ -5,13 +5,14 @@ import Link from "next/link";
 import {
   CheckCircle2,
   ArrowRight,
-  HeartHandshake,
-  FileSearch,
-  Monitor,
-  Trophy,
-  Award,
-  Building,
-  TrendingUp
+  ClipboardList,
+  Calculator,
+  FileSignature,
+  Eye,
+  Clock,
+  ShieldCheck,
+  Layers,
+  Network
 } from "lucide-react";
 
 /* =============================================
@@ -54,95 +55,99 @@ function useReveal() {
    ============================================= */
 const featureBlocks = [
   {
-    icon: <HeartHandshake size={28} strokeWidth={1.5} />,
-    title: "Servicio Integral para Familias",
-    subtitle: "Acompaña a tus clientes más allá del servicio funerario inicial.",
+    icon: <Network size={28} strokeWidth={1.5} />,
+    title: "Gestió Digital d'Expedients",
+    subtitle: "L'expedient successori complet, estructurat i clar.",
     features: [
       {
-        title: "Retención de Clientes",
-        desc: "Las familias ya confían en ti. Ofréceles tramitar la herencia sin tener que buscar gestorías externas.",
+        title: "Pas a Pas Digital",
+        desc: "Defineix paràmetres legals (llegítimes, règim foral) i afegeix dades d'hereus i béns.",
       },
       {
-        title: "Confianza Reforzada",
-        desc: "Un servicio completo y transparente que aporta tranquilidad en momentos difíciles.",
+        title: "Diagrames Interactius",
+        desc: "Mostra l'arbre familiar i l'estructura patrimonial, facilitant l'explicació al client.",
       },
     ],
   },
   {
-    icon: <Monitor size={28} strokeWidth={1.5} />,
-    title: "Plataforma de Marca Blanca",
-    subtitle: "Toda la tecnología de Ulpiano, bajo tu propia marca corporativa.",
+    icon: <Calculator size={28} strokeWidth={1.5} />,
+    title: "Atribució i Control Fiscal",
+    subtitle: "Distribució patrimonial i fiscalitat successòria, automatitzades.",
     features: [
       {
-        title: "Portal de Familias Integrado",
-        desc: "Los herederos suben la documentación y siguen el estado de la tramitación en un portal con tu logo.",
+        title: "Reports d'Atribució",
+        desc: "Presenta un desglossament detallat sobre la distribució de béns i l'obligació tributària.",
       },
       {
-        title: "Comunicación Fluida",
-        desc: "Un canal directo para resolver dudas sin colapsar tu centralita ni perderse en emails.",
+        title: "Simulacions d'Impostos",
+        desc: "Calcula en segons quant pagarà cada hereu, considerant reduccions i bonificacions.",
       },
     ],
   },
   {
-    icon: <TrendingUp size={28} strokeWidth={1.5} />,
-    title: "Nuevas Líneas de Ingresos",
-    subtitle: "Rentabilidad adicional sin sobrecargar a tu plantilla actual.",
+    icon: <FileSignature size={28} strokeWidth={1.5} />,
+    title: "Creació de Documents i Signatura",
+    subtitle: "De dades estructurades a documents definitius.",
     features: [
       {
-        title: "Automatización del 80%",
-        desc: "Ulpiano procesa documentos, calcula impuestos y genera borradores. Tú solo revisas y cobras por el valor final.",
+        title: "Automatització Documental",
+        desc: "Genera testaments, pactes successoris i escriptures adaptades a la normativa vigent.",
       },
       {
-        title: "Escalabilidad sin Contrataciones",
-        desc: "Tramita cientos de herencias adicionales sin necesidad de incorporar abogados o fiscalistas en plantilla.",
+        title: "Models Fiscals",
+        desc: "Accelera la formalització autocompletant models 650, 651 i 660 sense errors de transcripció.",
       },
     ],
   },
 ];
 
 const claims = [
-  "Portal de familias con tu marca",
-  "Procesamiento automático de documentos",
-  "Cálculo de impuestos (ISD)",
-  "Nuevos ingresos recurrentes",
+  "Atribucions successòries en minuts",
+  "Planificació legal meditada",
+  "Llegítimes calculades automàticament",
+  "Documentació a punt per signar",
 ];
 
-const steps = [
+const benefits = [
   {
-    title: "Alta de Expediente",
-    desc: "Tras el servicio funerario, abres el expediente sucesorio digital con los datos básicos del causante.",
+    icon: <Eye size={28} strokeWidth={1.5} />,
+    title: "Transparència total per al client",
+    desc: "Ofereix diagrames clars i simulacions en temps real, generant confiança i diferenciant-te de la competència.",
   },
   {
-    title: "Recopilación Fácil",
-    desc: "La familia sube los certificados y testamentos desde su casa a tu portal privado.",
+    icon: <Clock size={28} strokeWidth={1.5} />,
+    title: "Màxima eficiència interna",
+    desc: "Automatitza processos repetitius, elimina la transcripció manual de dades i allibera centenars d'hores de treball.",
   },
   {
-    title: "Procesamiento IA",
-    desc: "Ulpiano lee, clasifica y extrae los datos de los documentos para crear el inventario.",
+    icon: <ShieldCheck size={28} strokeWidth={1.5} />,
+    title: "Reducció de riscos legals",
+    desc: "Ulpiano garanteix la coherència amb la normativa successòria, càlculs fiscals exactes i actualitzacions forals.",
   },
   {
-    title: "Cierre y Liquidación",
-    desc: "Generación automática del cuaderno particional y los modelos de impuestos para la firma.",
+    icon: <Layers size={28} strokeWidth={1.5} />,
+    title: "Un servei integral de principi a fi",
+    desc: "Combina l'assessorament estratègic amb una plataforma robusta que cobreix des de l'inventari fins al pagament de l'ISD.",
   },
 ];
 
 const testimonials = [
   {
-    quote: "Incorporar la gestión de herencias con Ulpiano nos ha permitido aumentar nuestra facturación por familia sin contratar personal adicional.",
-    author: "Alberto T., Director Comercial",
-    location: "Grupo Funerario, Sevilla",
+    quote: "Des que fem servir Ulpiano, la preparació d'un expedient successori ens porta la meitat de temps. I el client entén per fi què està signant.",
+    author: "Marta R., Advocada",
+    location: "Despatx a Girona",
   },
   {
-    quote: "Las familias agradecen muchísimo que les resolvamos el 'papeleo' posterior al sepelio. Es un valor diferencial enorme frente a la competencia.",
-    author: "Nuria F., Gerente",
-    location: "Funeraria Local, Zaragoza",
+    quote: "La visualització de l'arbre familiar i les simulacions fiscals en temps real van canviar radicalment la forma en què presentem les herències a les famílies.",
+    author: "Jordi P., Advocat Civilista",
+    location: "Barcelona",
   },
 ];
 
 /* =============================================
    MAIN COMPONENT
    ============================================= */
-export function FunerariasClient() {
+export function DespatxosClientCa() {
   const revealRef = useReveal();
 
   return (
@@ -153,29 +158,29 @@ export function FunerariasClient() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
         <div className="absolute left-1/2 top-0 -z-10 -translate-x-1/2 h-[400px] w-[600px] rounded-full bg-emerald-500 opacity-[0.12] blur-[120px]" />
         
-        <div className="container relative z-10 text-center max-w-[850px]">
+        <div className="container relative z-10 text-center max-w-[800px]">
           <div className="flex items-center justify-center gap-3 mb-8 reveal">
             <div className="h-[1px] w-8 bg-emerald-500/50" />
             <span className="text-emerald-400/90 text-xs font-bold tracking-[0.2em] uppercase">
-              Pensado para Funerarias
+              Pensat per a Advocats
             </span>
             <div className="h-[1px] w-8 bg-emerald-500/50" />
           </div>
           
-          <h1 className="text-4xl sm:text-5xl lg:text-[52px] font-bold text-white leading-[1.15] mb-8 reveal tracking-tight text-balance" style={{ animationDelay: '100ms' }}>
-            Del servicio funerario a la tramitación sucesoria <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">completa</span>.
+          <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold text-white leading-[1.1] mb-8 reveal tracking-tight text-balance" style={{ animationDelay: '100ms' }}>
+            Optimitza la gestió d'herències i ofereix <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">claredat absoluta</span>
           </h1>
           
-          <p className="text-lg md:text-xl leading-relaxed text-white/60 mb-12 reveal text-balance mx-auto max-w-[680px]" style={{ animationDelay: '200ms' }}>
-            Amplía tus servicios con la gestión digital de herencias. Expedientes estructurados y liquidación de impuestos, sin sobrecargar a tu equipo.
+          <p className="text-lg md:text-xl leading-relaxed text-white/60 mb-12 reveal text-balance mx-auto max-w-[640px]" style={{ animationDelay: '200ms' }}>
+            Agilitza l'elaboració i el seguiment d'expedients successoris, oferint al client diagrames interactius i simulacions fiscals en temps real.
           </p>
           
           <div className="flex flex-wrap items-center justify-center gap-4 reveal" style={{ animationDelay: '300ms' }}>
-            <Link href="/demo" className="btn-primary shadow-[0_0_20px_rgba(45,106,79,0.4)] hover:shadow-[0_0_30px_rgba(45,106,79,0.6)] px-8 py-3.5 text-base">
-              Reserva tu Demo
+            <Link href="/ca/demo" className="btn-primary shadow-[0_0_20px_rgba(45,106,79,0.4)] hover:shadow-[0_0_30px_rgba(45,106,79,0.6)] px-8 py-3.5 text-base">
+              Reserva la teva Demo
             </Link>
             <Link href="#propuesta" className="btn-ghost group text-white/80 hover:text-white px-6">
-              Descubrir ventajas
+              Descobrir avantatges
               <ArrowRight size={18} className="transition-transform group-hover:translate-y-1 ml-2 rotate-90 group-hover:rotate-90" />
             </Link>
           </div>
@@ -187,13 +192,13 @@ export function FunerariasClient() {
         <div className="container">
           <div className="reveal text-center max-w-[700px] mx-auto mb-20">
             <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
-              Para tu empresa funeraria
+              Pel teu despatx
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight mb-4">
-              ¿Por qué Ulpiano para funerarias?
+              Per què Ulpiano per a Advocats?
             </h2>
             <p className="text-[17px] text-slate-500">
-              Transforma la gestión de herencias en una línea de negocio rentable y automatizada, ofreciendo a las familias el apoyo que necesitan tras el servicio.
+              Automatitza tasques de baix valor, visualitza la distribució de béns i escala el teu volum d'expedients amb seguretat jurídica total.
             </p>
           </div>
 
@@ -240,27 +245,27 @@ export function FunerariasClient() {
         </div>
       </section>
 
-      {/* ═══ CÓMO FUNCIONA ═══ */}
-      <section className="py-24 bg-white border-b border-slate-200 overflow-hidden relative">
-        <div className="container relative z-10">
+      {/* ═══ BENEFICIOS CLAVE ═══ */}
+      <section className="py-24 bg-white border-b border-slate-200">
+        <div className="container">
           <div className="reveal text-center max-w-[700px] mx-auto mb-16">
             <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
-              Flujo de Trabajo
+              Beneficis
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight">
-              Cómo se integra en tu día a día
+              El que canvia al teu despatx amb Ulpiano
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {steps.map((step, i) => (
-              <div key={i} className="reveal relative group" style={{ animationDelay: `${i * 100}ms` }}>
-                <div className="bg-slate-50 border border-slate-200 rounded-3xl p-8 h-full transition-all duration-300 group-hover:bg-white group-hover:shadow-lg group-hover:-translate-y-1 group-hover:border-emerald-500/30">
-                  <div className="text-[64px] font-black text-slate-100 leading-none mb-4 tracking-tighter group-hover:text-emerald-50 transition-colors">
-                    {i + 1}
-                  </div>
-                  <h3 className="text-lg font-bold text-ink mb-3">{step.title}</h3>
-                  <p className="text-[14px] text-slate-600 leading-relaxed">{step.desc}</p>
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+            {benefits.map((benefit, i) => (
+              <div key={i} className="reveal bg-slate-50 rounded-3xl p-8 lg:p-10 border border-slate-200 transition-all hover:shadow-md flex flex-col sm:flex-row gap-6 items-start" style={{ animationDelay: `${i * 100}ms` }}>
+                <div className="w-14 h-14 rounded-2xl bg-white shadow-sm border border-slate-100 text-emerald-600 flex items-center justify-center shrink-0">
+                  {benefit.icon}
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-ink mb-3">{benefit.title}</h3>
+                  <p className="text-[15.5px] text-slate-600 leading-relaxed m-0">{benefit.desc}</p>
                 </div>
               </div>
             ))}
@@ -302,25 +307,25 @@ export function FunerariasClient() {
         <div className="container">
           <div className="text-center mb-10">
             <span className="text-slate-400 font-bold tracking-widest text-xs uppercase block">
-              Explora nuestras soluciones
+              Explora les nostres solucions
             </span>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                href: "/soluciones/procesamiento-documental",
-                label: "Procesamiento con IA",
-                desc: "Extracción automática de datos",
+                href: "/ca/solucions/planificacio-successoria",
+                label: "Planificació Successòria",
+                desc: "Mòdul patrimonial complet",
               },
               {
-                href: "/soluciones/documentacion-sucesoria",
-                label: "Documentación Sucesoria",
-                desc: "Generación de escritura particional",
+                href: "/ca/solucions/fiscalitat-successoria",
+                label: "Fiscalitat Successòria",
+                desc: "Motor ISD automatitzat",
               },
               {
-                href: "/pensado-para/despachos",
-                label: "Para Despachos",
-                desc: "Plataforma integral para abogados",
+                href: "/ca/solucions/documentacio-successoria",
+                label: "Documentació Successòria",
+                desc: "Generació documental intel·ligent",
               },
             ].map((link, i) => (
               <Link key={i} href={link.href} className="reveal group block p-6 rounded-2xl border border-slate-200 hover:border-emerald-500/30 hover:bg-emerald-50/30 transition-all text-center" style={{ animationDelay: `${i * 100}ms` }}>
@@ -337,17 +342,17 @@ export function FunerariasClient() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(45,106,79,0.15)_0%,transparent_70%)] pointer-events-none" />
         <div className="container relative z-10 text-center max-w-[700px]">
           <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-6">
-            Abre una nueva línea de negocio
+            Eleva l'estàndard del teu despatx
           </h2>
           <p className="text-lg text-white/60 mb-10">
-            Fideliza a las familias y aumenta la rentabilidad de tu funeraria ofreciendo un servicio de tramitación de herencias integral y automatizado.
+            Uneix-te als professionals que ja han transformat la seva pràctica successòria amb Ulpiano.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/demo" className="btn-primary px-8 py-3.5 shadow-[0_0_20px_rgba(45,106,79,0.4)]">
-              Solicita tu demo gratis
+            <Link href="/ca/demo" className="btn-primary px-8 py-3.5 shadow-[0_0_20px_rgba(45,106,79,0.4)]">
+              Sol·licita la teva demo gratis
             </Link>
-            <Link href="/registro" className="btn-ghost text-white/80 hover:text-white px-6 border border-white/20">
-              Crear cuenta ahora <ArrowRight size={18} className="ml-2 inline" />
+            <Link href="/ca/registre" className="btn-ghost text-white/80 hover:text-white px-6 border border-white/20">
+              Crear compte ara <ArrowRight size={18} className="ml-2 inline" />
             </Link>
           </div>
         </div>

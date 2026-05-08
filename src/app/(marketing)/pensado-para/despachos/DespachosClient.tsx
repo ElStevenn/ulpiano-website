@@ -2,11 +2,22 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import {
+  CheckCircle2,
+  ArrowRight,
+  ClipboardList,
+  Calculator,
+  FileSignature,
+  Eye,
+  Clock,
+  ShieldCheck,
+  Layers,
+  Network
+} from "lucide-react";
 
 /* =============================================
    SCROLL REVEAL HOOK
    ============================================= */
-
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -18,15 +29,20 @@ function useReveal() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
+            entry.target.classList.add("animate-fade-in-up");
+            entry.target.classList.remove("opacity-0");
+            observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
     );
 
     const children = node.querySelectorAll(".reveal");
-    children.forEach((child) => observer.observe(child));
+    children.forEach((child) => {
+      child.classList.add("opacity-0");
+      observer.observe(child);
+    });
 
     return () => observer.disconnect();
   }, []);
@@ -35,217 +51,13 @@ function useReveal() {
 }
 
 /* =============================================
-   SVG ICONS
-   ============================================= */
-
-function CheckIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--ulpiano-green)"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
-}
-
-function ClipboardTreeIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--ulpiano-green)"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-      <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-      <path d="M12 11v6" />
-      <path d="M9 14h6" />
-    </svg>
-  );
-}
-
-function CalculatorChartIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--ulpiano-green)"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="4" y="2" width="16" height="20" rx="2" />
-      <line x1="8" y1="6" x2="16" y2="6" />
-      <line x1="8" y1="10" x2="10" y2="10" />
-      <line x1="14" y1="10" x2="16" y2="10" />
-      <line x1="8" y1="14" x2="10" y2="14" />
-      <line x1="14" y1="14" x2="16" y2="14" />
-      <line x1="8" y1="18" x2="16" y2="18" />
-    </svg>
-  );
-}
-
-function DocumentPenIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--ulpiano-green)"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-      <polyline points="14 2 14 8 20 8" />
-      <path d="M16 13l-4 4-2-2" />
-    </svg>
-  );
-}
-
-function EyeIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--ulpiano-green)"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
-  );
-}
-
-function ClockIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--ulpiano-green)"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
-    </svg>
-  );
-}
-
-function ShieldCheckIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--ulpiano-green)"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-      <polyline points="9 12 11 14 15 10" />
-    </svg>
-  );
-}
-
-function LayersIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--ulpiano-green)"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <polygon points="12 2 2 7 12 12 22 7 12 2" />
-      <polyline points="2 17 12 22 22 17" />
-      <polyline points="2 12 12 17 22 12" />
-    </svg>
-  );
-}
-
-function ArrowIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M3 8h10" />
-      <path d="M9 4l4 4-4 4" />
-    </svg>
-  );
-}
-
-function CheckCircleSmall() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--ulpiano-green)"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-      <polyline points="22 4 12 14.01 9 11.01" />
-    </svg>
-  );
-}
-
-/* =============================================
    DATA
    ============================================= */
-
 const featureBlocks = [
   {
-    icon: <ClipboardTreeIcon />,
-    title: "Gestión Digital de Expedientes y Esquemas Sucesorios",
-    subtitle:
-      "El expediente sucesorio completo, digitalizado y estructurado.",
+    icon: <Network size={28} strokeWidth={1.5} />,
+    title: "Gestión Digital de Expedientes",
+    subtitle: "El expediente sucesorio completo, estructurado y claro.",
     features: [
       {
         title: "Paso a Paso Digital",
@@ -253,84 +65,80 @@ const featureBlocks = [
       },
       {
         title: "Diagramas Interactivos",
-        desc: "Muestra el árbol familiar y la estructura patrimonial, facilitando la explicación al cliente y sorprendiendo con una experiencia clara y atractiva.",
+        desc: "Muestra el árbol familiar y la estructura patrimonial, facilitando la explicación al cliente.",
       },
     ],
   },
   {
-    icon: <CalculatorChartIcon />,
-    title: "Atribución de Bienes y Control Fiscal",
-    subtitle:
-      "Distribución patrimonial y fiscalidad sucesoria, automatizadas.",
+    icon: <Calculator size={28} strokeWidth={1.5} />,
+    title: "Atribución y Control Fiscal",
+    subtitle: "Distribución patrimonial y fiscalidad sucesoria, automatizadas.",
     features: [
       {
         title: "Reportes de Atribución",
-        desc: "Presenta un desglose detallado sobre la distribución de bienes y la obligación tributaria de cada beneficiario. Muestra la estructura del patrimonio y los herederos en un esquema claro y atractivo.",
+        desc: "Presenta un desglose detallado sobre la distribución de bienes y la obligación tributaria.",
       },
       {
         title: "Simulaciones de Impuestos",
-        desc: "Calcula en segundos cuánto pagará cada heredero, considerando reducciones y bonificaciones autonómicas. Ajusta distribuciones en tiempo real para mostrar posibles variaciones en la carga fiscal.",
+        desc: "Calcula en segundos cuánto pagará cada heredero, considerando reducciones y bonificaciones.",
       },
     ],
   },
   {
-    icon: <DocumentPenIcon />,
+    icon: <FileSignature size={28} strokeWidth={1.5} />,
     title: "Creación de Documentos y Firma",
-    subtitle:
-      "De datos estructurados a documentos prácticamente definitivos.",
+    subtitle: "De datos estructurados a documentos definitivos.",
     features: [
       {
-        title: "Automatización de Documentos",
-        desc: "Genera testamentos, pactos sucesorios y escrituras adaptadas a la normativa vigente, reduciendo tareas manuales.",
+        title: "Automatización Documental",
+        desc: "Genera testamentos, pactos sucesorios y escrituras adaptadas a la normativa vigente.",
       },
       {
-        title: "Firma y Registro",
-        desc: "Acelera la formalización con documentos prácticamente definitivos, evitando correcciones de última hora.",
+        title: "Modelos Fiscales",
+        desc: "Acelera la formalización autocompletando modelos 650, 651 y 660 sin errores de transcripción.",
       },
     ],
   },
 ];
 
 const claims = [
-  "Las atribuciones sucesorias en tres minutos",
-  "La herencia legal meditada",
-  "La demanda por legítima preparada",
-  "La demanda por cuarta viudal preparada",
+  "Atribuciones sucesorias en minutos",
+  "Planificación legal meditada",
+  "Legítimas calculadas automáticamente",
+  "Documentación lista para firmar",
 ];
 
 const benefits = [
   {
-    icon: <EyeIcon />,
-    title: "Transparencia para el Cliente",
+    icon: <Eye size={28} strokeWidth={1.5} />,
+    title: "Transparencia total para el cliente",
     desc: "Ofrece diagramas claros y simulaciones en tiempo real, generando confianza y diferenciándote de la competencia.",
   },
   {
-    icon: <ClockIcon />,
-    title: "Mayor Eficiencia Interna",
-    desc: "Automatiza procesos y libera horas de trabajo manual.",
+    icon: <Clock size={28} strokeWidth={1.5} />,
+    title: "Máxima eficiencia interna",
+    desc: "Automatiza procesos repetitivos, elimina la transcripción manual de datos y libera cientos de horas de trabajo.",
   },
   {
-    icon: <ShieldCheckIcon />,
-    title: "Reducción de Errores y Riesgos Legales",
-    desc: "Ulpiano refuerza la coherencia con la normativa sucesoria y actualizaciones forales.",
+    icon: <ShieldCheck size={28} strokeWidth={1.5} />,
+    title: "Reducción de riesgos legales",
+    desc: "Ulpiano garantiza la coherencia con la normativa sucesoria, cálculos fiscales exactos y actualizaciones forales.",
   },
   {
-    icon: <LayersIcon />,
-    title: "Servicio Integral",
-    desc: "Combina el asesoramiento legal con una plataforma robusta que cubre desde la planificación patrimonial hasta la tramitación fiscal.",
+    icon: <Layers size={28} strokeWidth={1.5} />,
+    title: "Un servicio integral de principio a fin",
+    desc: "Combina el asesoramiento estratégico con una plataforma robusta que cubre desde el inventario hasta el pago del ISD.",
   },
 ];
 
 const testimonials = [
   {
-    quote:
-      "Desde que usamos Ulpiano, la preparación de un expediente sucesorio nos lleva la mitad de tiempo. Y el cliente entiende lo que paga.",
+    quote: "Desde que usamos Ulpiano, la preparación de un expediente sucesorio nos lleva la mitad de tiempo. Y el cliente entiende por fin lo que está firmando.",
     author: "Marta R., Abogada",
     location: "Despacho en Girona",
   },
   {
-    quote:
-      "La visualización del árbol familiar y las simulaciones fiscales cambiaron la forma en que presentamos las herencias a nuestros clientes.",
+    quote: "La visualización del árbol familiar y las simulaciones fiscales en tiempo real cambiaron radicalmente la forma en que presentamos las herencias a las familias.",
     author: "Jordi P., Abogado Civilista",
     location: "Barcelona",
   },
@@ -339,216 +147,80 @@ const testimonials = [
 /* =============================================
    MAIN COMPONENT
    ============================================= */
-
 export function DespachosClient() {
   const revealRef = useReveal();
-  const stagger = (i: number) => ({ transitionDelay: `${i * 100}ms` });
 
   return (
     <div ref={revealRef}>
-      {/* ─────────────── SECCIÓN 1: HERO ─────────────── */}
-      <section
-        style={{
-          background: "var(--night)",
-          paddingTop: "calc(64px + var(--space-16))",
-          paddingBottom: "var(--space-24)",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            top: -100,
-            right: -200,
-            width: 600,
-            height: 600,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle, rgba(45,106,79,0.08) 0%, transparent 70%)",
-            pointerEvents: "none",
-          }}
-        />
-        <div className="container" style={{ textAlign: "center" }}>
-          <p
-            className="eyebrow reveal"
-            style={{
-              color: "rgba(255,255,255,0.5)",
-              marginBottom: "var(--space-4)",
-            }}
-          >
-            PENSADO PARA ABOGADOS
-          </p>
-          <h1
-            className="h1 reveal"
-            style={{
-              color: "var(--white)",
-              maxWidth: 720,
-              margin: "0 auto",
-              ...stagger(1),
-            }}
-          >
-            Optimiza tus Expedientes de Herencia y Ofrece a tus Clientes la
-            Claridad que Esperan
+      {/* ═══ HERO ═══ */}
+      <section className="bg-night pt-[calc(64px+4rem)] pb-24 relative overflow-hidden">
+        {/* Decorative Grid & Glow */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute left-1/2 top-0 -z-10 -translate-x-1/2 h-[400px] w-[600px] rounded-full bg-emerald-500 opacity-[0.12] blur-[120px]" />
+        
+        <div className="container relative z-10 text-center max-w-[800px]">
+          <div className="flex items-center justify-center gap-3 mb-8 reveal">
+            <div className="h-[1px] w-8 bg-emerald-500/50" />
+            <span className="text-emerald-400/90 text-xs font-bold tracking-[0.2em] uppercase">
+              Pensado para Abogados
+            </span>
+            <div className="h-[1px] w-8 bg-emerald-500/50" />
+          </div>
+          
+          <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold text-white leading-[1.1] mb-8 reveal tracking-tight text-balance" style={{ animationDelay: '100ms' }}>
+            Optimiza la gestión de herencias y ofrece <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">claridad absoluta</span>
           </h1>
-          <p
-            className="body-lg reveal"
-            style={{
-              color: "rgba(255,255,255,0.75)",
-              maxWidth: 600,
-              margin: "var(--space-6) auto 0",
-              ...stagger(2),
-            }}
-          >
-            Con Ulpiano, agiliza la elaboración y el seguimiento de
-            expedientes sucesorios, ofreciendo al cliente diagramas y
-            visualizaciones que facilitan la comprensión de cada proceso.
+          
+          <p className="text-lg md:text-xl leading-relaxed text-white/60 mb-12 reveal text-balance mx-auto max-w-[640px]" style={{ animationDelay: '200ms' }}>
+            Agiliza la elaboración y el seguimiento de expedientes sucesorios, ofreciendo al cliente diagramas interactivos y simulaciones fiscales en tiempo real.
           </p>
-          <div
-            className="reveal"
-            style={{
-              display: "flex",
-              gap: "var(--space-4)",
-              justifyContent: "center",
-              marginTop: "var(--space-8)",
-              flexWrap: "wrap",
-              ...stagger(3),
-            }}
-          >
-            <Link href="/demo" className="btn-primary">
+          
+          <div className="flex flex-wrap items-center justify-center gap-4 reveal" style={{ animationDelay: '300ms' }}>
+            <Link href="/demo" className="btn-primary shadow-[0_0_20px_rgba(45,106,79,0.4)] hover:shadow-[0_0_30px_rgba(45,106,79,0.6)] px-8 py-3.5 text-base">
               Reserva tu Demo
             </Link>
-            <Link
-              href="#propuesta"
-              className="btn-ghost"
-              style={{ color: "var(--white)" }}
-            >
-              Más Información <ArrowIcon />
+            <Link href="#propuesta" className="btn-ghost group text-white/80 hover:text-white px-6">
+              Descubrir ventajas
+              <ArrowRight size={18} className="transition-transform group-hover:translate-y-1 ml-2 rotate-90 group-hover:rotate-90" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ─────────────── SECCIÓN 2: PROPUESTA DE VALOR ─────────────── */}
-      <section
-        id="propuesta"
-        style={{
-          background: "var(--white)",
-          padding: "var(--space-20) 0",
-        }}
-      >
+      {/* ═══ PROPUESTA DE VALOR ═══ */}
+      <section id="propuesta" className="py-24 bg-white border-b border-slate-200">
         <div className="container">
-          <div className="reveal" style={{ marginBottom: "var(--space-10)" }}>
-            <p className="eyebrow" style={{ color: "var(--slate)" }}>
-              PARA TU DESPACHO
-            </p>
-            <h2
-              className="h2"
-              style={{
-                color: "var(--ink)",
-                marginTop: "var(--space-3)",
-                maxWidth: 700,
-              }}
-            >
-              ¿Por Qué Ulpiano para Abogados?
+          <div className="reveal text-center max-w-[700px] mx-auto mb-20">
+            <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
+              Para tu despacho
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight mb-4">
+              ¿Por qué Ulpiano para Abogados?
             </h2>
-            <p
-              className="body-lg"
-              style={{
-                color: "var(--slate)",
-                marginTop: "var(--space-3)",
-                maxWidth: 600,
-                fontSize: 17,
-              }}
-            >
-              Automatiza la Gestión de Herencias, Visualiza la Distribución de
-              Bienes y Gana Eficiencia
+            <p className="text-[17px] text-slate-500">
+              Automatiza tareas de bajo valor, visualiza la distribución de bienes y escala tu volumen de expedientes con seguridad jurídica total.
             </p>
           </div>
 
-          <div className="desp-features-grid">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featureBlocks.map((block, i) => (
-              <div
-                key={block.title}
-                className="card reveal"
-                style={stagger(i + 1)}
-              >
-                <div
-                  style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: "50%",
-                    background: "var(--green-bg)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
-                  }}
-                >
+              <div key={block.title} className="reveal bg-slate-50 rounded-3xl p-8 border border-slate-200 transition-all hover:shadow-md hover:bg-white" style={{ animationDelay: `${i * 100}ms` }}>
+                <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 border border-emerald-100/50">
                   {block.icon}
                 </div>
-                <h3
-                  style={{
-                    color: "var(--ink)",
-                    marginTop: "var(--space-4)",
-                  }}
-                >
+                <h3 className="text-xl font-bold text-ink mb-2">
                   {block.title}
                 </h3>
-                <p
-                  className="body-sm"
-                  style={{
-                    color: "var(--slate)",
-                    marginTop: "var(--space-2)",
-                  }}
-                >
+                <p className="text-[15px] font-medium text-emerald-600 mb-6">
                   {block.subtitle}
                 </p>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "var(--space-4)",
-                    marginTop: "var(--space-6)",
-                  }}
-                >
-                  {block.features.map((feat) => (
-                    <div key={feat.title}>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: "var(--space-3)",
-                        }}
-                      >
-                        <span
-                          style={{ flexShrink: 0, marginTop: 3 }}
-                        >
-                          <CheckIcon />
-                        </span>
-                        <div>
-                          <div
-                            style={{
-                              fontWeight: 500,
-                              fontSize: 15,
-                              color: "var(--ink)",
-                              lineHeight: 1.4,
-                            }}
-                          >
-                            {feat.title}
-                          </div>
-                          <p
-                            style={{
-                              fontSize: 15,
-                              color: "var(--slate)",
-                              lineHeight: 1.7,
-                              marginTop: 4,
-                            }}
-                          >
-                            {feat.desc}
-                          </p>
-                        </div>
+                <div className="space-y-5">
+                  {block.features.map((feat, j) => (
+                    <div key={j} className="flex items-start gap-3">
+                      <CheckCircle2 size={18} className="text-emerald-500 mt-0.5 shrink-0" />
+                      <div>
+                        <div className="font-semibold text-[15px] text-ink mb-1">{feat.title}</div>
+                        <p className="text-sm text-slate-600 leading-relaxed m-0">{feat.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -559,279 +231,86 @@ export function DespachosClient() {
         </div>
       </section>
 
-      {/* ─────────────── SECCIÓN 2B: CLAIMS RÁPIDOS ─────────────── */}
-      <section
-        style={{
-          background: "var(--surface)",
-          padding: "var(--space-12) 0",
-        }}
-      >
+      {/* ═══ CLAIMS RÁPIDOS ═══ */}
+      <section className="py-12 bg-slate-900 border-b border-slate-800">
         <div className="container">
-          <div className="desp-claims-grid">
+          <div className="flex flex-wrap justify-center gap-4 lg:gap-8">
             {claims.map((claim, i) => (
-              <div
-                key={claim}
-                className="reveal"
-                style={{
-                  background: "var(--white)",
-                  border: "1px solid var(--mist)",
-                  borderRadius: 8,
-                  padding: "var(--space-4) var(--space-6)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--space-3)",
-                  ...stagger(i),
-                }}
-              >
-                <span style={{ flexShrink: 0 }}>
-                  <CheckCircleSmall />
-                </span>
-                <span
-                  style={{
-                    fontWeight: 500,
-                    fontSize: 15,
-                    color: "var(--ink)",
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {claim}
-                </span>
+              <div key={i} className="reveal flex items-center gap-3 bg-slate-800/50 border border-slate-700 px-5 py-3 rounded-xl" style={{ animationDelay: `${i * 100}ms` }}>
+                <CheckCircle2 size={18} className="text-emerald-400" />
+                <span className="text-sm font-medium text-white/90">{claim}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─────────────── SECCIÓN 3: BENEFICIOS CLAVE ─────────────── */}
-      <section
-        style={{
-          background: "var(--white)",
-          padding: "var(--space-20) 0",
-        }}
-      >
+      {/* ═══ BENEFICIOS CLAVE ═══ */}
+      <section className="py-24 bg-white border-b border-slate-200">
         <div className="container">
-          <div className="reveal" style={{ marginBottom: "var(--space-10)" }}>
-            <p className="eyebrow" style={{ color: "var(--slate)" }}>
-              BENEFICIOS
-            </p>
-            <h2
-              className="h2"
-              style={{
-                color: "var(--ink)",
-                marginTop: "var(--space-3)",
-              }}
-            >
+          <div className="reveal text-center max-w-[700px] mx-auto mb-16">
+            <span className="text-emerald-600 font-bold tracking-wider text-xs uppercase mb-3 block">
+              Beneficios
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight">
               Lo que cambia en tu despacho con Ulpiano
             </h2>
           </div>
 
-          <div className="desp-benefits-grid">
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
             {benefits.map((benefit, i) => (
-              <div
-                key={benefit.title}
-                className="card reveal"
-                style={stagger(i + 1)}
-              >
-                <div
-                  style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: "50%",
-                    background: "var(--green-bg)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
-                  }}
-                >
+              <div key={i} className="reveal bg-slate-50 rounded-3xl p-8 lg:p-10 border border-slate-200 transition-all hover:shadow-md flex flex-col sm:flex-row gap-6 items-start" style={{ animationDelay: `${i * 100}ms` }}>
+                <div className="w-14 h-14 rounded-2xl bg-white shadow-sm border border-slate-100 text-emerald-600 flex items-center justify-center shrink-0">
                   {benefit.icon}
                 </div>
-                <h3
-                  style={{
-                    color: "var(--ink)",
-                    marginTop: "var(--space-4)",
-                    fontSize: 20,
-                  }}
-                >
-                  {benefit.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: 15,
-                    color: "var(--slate)",
-                    lineHeight: 1.7,
-                    marginTop: "var(--space-3)",
-                  }}
-                >
-                  {benefit.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────── SECCIÓN 4: TESTIMONIOS ─────────────── */}
-      <section
-        style={{
-          background: "var(--surface)",
-          padding: "var(--space-16) 0",
-        }}
-      >
-        <div className="container">
-          <div className="desp-testimonials-grid">
-            {testimonials.map((t, i) => (
-              <div key={t.author} className="reveal" style={stagger(i + 1)}>
-                <blockquote
-                  style={{
-                    borderLeft: "3px solid var(--ulpiano-green)",
-                    paddingLeft: "var(--space-6)",
-                    margin: 0,
-                  }}
-                >
-                  <p
-                    style={{
-                      fontStyle: "italic",
-                      fontSize: 17,
-                      color: "var(--ink)",
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    &ldquo;{t.quote}&rdquo;
-                  </p>
-                  <footer
-                    style={{
-                      fontSize: 14,
-                      color: "var(--fog)",
-                      marginTop: "var(--space-4)",
-                    }}
-                  >
-                    — {t.author} | {t.location}
-                  </footer>
-                </blockquote>
-                {/* Placeholder para capturas de diagramas */}
-                <div
-                  style={{
-                    marginTop: "var(--space-6)",
-                    background: "var(--white)",
-                    border: "1px solid var(--mist)",
-                    borderRadius: 8,
-                    height: 160,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 13,
-                    color: "var(--fog)",
-                    fontWeight: 500,
-                  }}
-                >
-                  [Pendiente: captura de diagrama sucesorio]
+                <div>
+                  <h3 className="text-xl font-bold text-ink mb-3">{benefit.title}</h3>
+                  <p className="text-[15.5px] text-slate-600 leading-relaxed m-0">{benefit.desc}</p>
                 </div>
               </div>
             ))}
           </div>
-          <p
-            style={{
-              textAlign: "center",
-              fontSize: 13,
-              color: "var(--fog)",
-              marginTop: "var(--space-8)",
-              fontStyle: "italic",
-            }}
-          >
-            Pendiente: testimonios reales de abogados usuarios
-          </p>
         </div>
       </section>
 
-      {/* ─────────────── SECCIÓN 5: CTA FINAL ─────────────── */}
-      <section
-        className="cta-final"
-        style={{ padding: "var(--space-24) 0" }}
-      >
-        <div className="cta-final__orb" />
-        <div className="cta-final__content container">
-          <h2
-            className="h2 reveal"
-            style={{
-              color: "var(--white)",
-              maxWidth: 640,
-              margin: "0 auto",
-              textAlign: "center",
-            }}
-          >
-            Mejora la Experiencia de Tus Clientes y Digitaliza la Gestión
-            Sucesoria
-          </h2>
-          <p
-            className="reveal"
-            style={{
-              fontSize: 17,
-              color: "rgba(255,255,255,0.7)",
-              maxWidth: 520,
-              margin: "var(--space-4) auto 0",
-              textAlign: "center",
-              lineHeight: 1.6,
-              ...stagger(1),
-            }}
-          >
-            Descubre cómo Ulpiano puede agilizar tus casos de herencia y
-            ofrecer una presentación visual del patrimonio más impactante.
-          </p>
-          <div
-            className="reveal"
-            style={{
-              display: "flex",
-              gap: "var(--space-4)",
-              justifyContent: "center",
-              marginTop: "var(--space-8)",
-              flexWrap: "wrap",
-              ...stagger(2),
-            }}
-          >
-            <Link href="/demo" className="btn-primary">
-              Reserva tu Demo
-            </Link>
-            <Link href="/registro" className="btn-ghost">
-              Empieza Ahora <ArrowIcon />
-            </Link>
+      {/* ═══ TESTIMONIOS ═══ */}
+      <section className="py-24 bg-slate-50">
+        <div className="container max-w-[1000px]">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+            {testimonials.map((t, i) => (
+              <div key={i} className="reveal bg-white rounded-3xl p-8 lg:p-10 border border-slate-200 shadow-sm relative" style={{ animationDelay: `${i * 100}ms` }}>
+                <div className="text-emerald-500 mb-6">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z" opacity="0.2"/>
+                  </svg>
+                </div>
+                <p className="text-lg font-medium text-ink leading-relaxed mb-8">
+                  "{t.quote}"
+                </p>
+                <div className="flex items-center gap-4 mt-auto">
+                  <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-400 text-lg">
+                    {t.author.charAt(0)}
+                  </div>
+                  <div>
+                    <div className="font-bold text-ink text-sm">{t.author}</div>
+                    <div className="text-sm text-slate-500">{t.location}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-          <p
-            className="reveal"
-            style={{
-              fontSize: 14,
-              color: "rgba(255,255,255,0.6)",
-              marginTop: "var(--space-4)",
-              textAlign: "center",
-              ...stagger(3),
-            }}
-          >
-            Ulpiano – Innovación en Derecho Sucesorio
-          </p>
         </div>
       </section>
 
-      {/* ─────────────── CROSS-LINKS ─────────────── */}
-      <section
-        style={{
-          background: "var(--surface)",
-          padding: "var(--space-12) 0",
-          borderTop: "1px solid var(--mist)",
-        }}
-      >
+      {/* ═══ CROSS-LINKS ═══ */}
+      <section className="py-16 bg-white border-t border-slate-200">
         <div className="container">
-          <div className="reveal" style={{ textAlign: "center" }}>
-            <p
-              className="eyebrow"
-              style={{
-                color: "var(--slate)",
-                marginBottom: "var(--space-4)",
-              }}
-            >
-              EXPLORA NUESTRAS SOLUCIONES
-            </p>
+          <div className="text-center mb-10">
+            <span className="text-slate-400 font-bold tracking-widest text-xs uppercase block">
+              Explora nuestras soluciones
+            </span>
           </div>
-          <div className="desp-crosslinks-grid">
+          <div className="grid md:grid-cols-3 gap-6">
             {[
               {
                 href: "/soluciones/planificacion-sucesoria",
@@ -849,108 +328,35 @@ export function DespachosClient() {
                 desc: "Generación documental inteligente",
               },
             ].map((link, i) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="card reveal"
-                style={{
-                  textDecoration: "none",
-                  display: "block",
-                  ...stagger(i + 1),
-                }}
-              >
-                <h3
-                  style={{
-                    fontSize: 18,
-                    color: "var(--ink)",
-                    fontWeight: 600,
-                  }}
-                >
-                  {link.label}
-                </h3>
-                <p
-                  style={{
-                    fontSize: 14,
-                    color: "var(--slate)",
-                    marginTop: "var(--space-2)",
-                  }}
-                >
-                  {link.desc}
-                </p>
+              <Link key={i} href={link.href} className="reveal group block p-6 rounded-2xl border border-slate-200 hover:border-emerald-500/30 hover:bg-emerald-50/30 transition-all text-center" style={{ animationDelay: `${i * 100}ms` }}>
+                <h3 className="text-lg font-bold text-ink mb-1 group-hover:text-emerald-700 transition-colors">{link.label}</h3>
+                <p className="text-sm text-slate-500 m-0">{link.desc}</p>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─────────────── RESPONSIVE STYLES ─────────────── */}
-      <style>{`
-        .desp-features-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: var(--space-8);
-        }
-        .desp-claims-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: var(--space-6);
-        }
-        .desp-benefits-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: var(--space-6);
-        }
-        .desp-testimonials-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: var(--space-8);
-        }
-        .desp-crosslinks-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: var(--space-6);
-          margin-top: var(--space-6);
-        }
-
-        @media (max-width: 1023px) {
-          .desp-features-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .desp-features-grid > :last-child {
-            grid-column: 1 / -1;
-          }
-          .desp-crosslinks-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .desp-crosslinks-grid > :last-child {
-            grid-column: 1 / -1;
-          }
-        }
-
-        @media (max-width: 767px) {
-          .desp-features-grid {
-            grid-template-columns: 1fr;
-          }
-          .desp-features-grid > :last-child {
-            grid-column: auto;
-          }
-          .desp-benefits-grid {
-            grid-template-columns: 1fr;
-          }
-          .desp-testimonials-grid {
-            grid-template-columns: 1fr;
-          }
-          .desp-claims-grid {
-            grid-template-columns: 1fr;
-          }
-          .desp-crosslinks-grid {
-            grid-template-columns: 1fr;
-          }
-          .desp-crosslinks-grid > :last-child {
-            grid-column: auto;
-          }
-        }
-      `}</style>
+      {/* ═══ CTA FINAL ═══ */}
+      <section className="bg-night py-24 relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(45,106,79,0.15)_0%,transparent_70%)] pointer-events-none" />
+        <div className="container relative z-10 text-center max-w-[700px]">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-6">
+            Eleva el estándar de tu despacho
+          </h2>
+          <p className="text-lg text-white/60 mb-10">
+            Únete a los profesionales que ya han transformado su práctica sucesoria con Ulpiano.
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link href="/demo" className="btn-primary px-8 py-3.5 shadow-[0_0_20px_rgba(45,106,79,0.4)]">
+              Solicita tu demo gratis
+            </Link>
+            <Link href="/registro" className="btn-ghost text-white/80 hover:text-white px-6 border border-white/20">
+              Crear cuenta ahora <ArrowRight size={18} className="ml-2 inline" />
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
