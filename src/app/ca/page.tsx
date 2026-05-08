@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import HeroCa from "./_components/HeroCa";
 
 export const metadata: Metadata = {
   title: "Plataforma Integral de Gestió Successòria",
@@ -68,36 +69,7 @@ export default function HomeCaPage() {
       />
 
       {/* HERO */}
-      <section
-        style={{
-          background: "var(--night)",
-          paddingTop: "calc(64px + var(--space-16))",
-          paddingBottom: "var(--space-20)",
-          color: "var(--white)",
-        }}
-      >
-        <div className="container">
-          <div className="eyebrow" style={{ color: "rgba(255,255,255,0.5)", marginBottom: "var(--space-4)" }}>
-            PLATAFORMA DE GESTIÓ SUCCESSÒRIA
-          </div>
-          <h1 className="h1" style={{ color: "var(--white)", maxWidth: 820 }}>
-            D&apos;inventari a quadern particional. Sense errors de càlcul. Sense revisió manual de la norma.
-          </h1>
-          <p className="body-lg" style={{ color: "rgba(255,255,255,0.75)", maxWidth: 640, marginTop: "var(--space-6)" }}>
-            Ulpiano és la plataforma que estructura, valida i documenta el procés
-            successori complet. Per a advocats, assessors i notaries que gestionen
-            herències amb volum, complexitat i responsabilitat professional.
-          </p>
-          <div style={{ display: "flex", gap: "var(--space-4)", marginTop: "var(--space-8)", flexWrap: "wrap" }}>
-            <Link href="/ca/demo" className="btn-primary">
-              Sol·licita la teva demo gratuïta
-            </Link>
-            <Link href="/ca/solucions/fiscalitat-successoria" className="btn-ghost">
-              Veure el motor normatiu →
-            </Link>
-          </div>
-        </div>
-      </section>
+      <HeroCa />
 
       {/* OUTPUTS / SOLUCIONS */}
       <section style={{ background: "var(--white)", padding: "var(--space-20) 0" }}>
