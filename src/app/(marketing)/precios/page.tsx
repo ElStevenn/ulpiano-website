@@ -5,7 +5,7 @@ import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
 export const metadata: Metadata = {
   title: "Precios y planes",
   description:
-    "Planes de Ulpiano: Free, Esencial, Avanzado y Pro. Suscripción SaaS con generación de modelos AEAT, motor fiscal del ISD y derecho civil catalán integrado. Precios públicos, sin permanencia.",
+    "Planes de Ulpiano: Free, Esencial, Avanzado y Pro. Suscripción SaaS con generación de modelos AEAT y motor fiscal del ISD integrado. Precios públicos, sin permanencia.",
   alternates: {
     canonical: "https://ulpiano.es/precios",
     languages: {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Precios y planes | Ulpiano",
     description:
-      "Free, Esencial, Avanzado y Pro. La plataforma de gestión sucesoria con motor normativo catalán. Precios públicos y transparentes.",
+      "Free, Esencial, Avanzado y Pro. La plataforma de gestión sucesoria con motor normativo integrado. Precios públicos y transparentes.",
     url: "https://ulpiano.es/precios",
     type: "website",
   },

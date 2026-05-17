@@ -14,12 +14,22 @@ function useReveal() {
     const node = ref.current;
     if (!node) return;
 
+    const els = Array.from(node.querySelectorAll<HTMLElement>(".reveal"));
+    const show = (el: Element) => {
+      el.classList.add("animate-fade-in-up");
+      el.classList.remove("opacity-0");
+    };
+
+    if (typeof IntersectionObserver === "undefined") {
+      els.forEach(show);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-in-up");
-            entry.target.classList.remove("opacity-0");
+            show(entry.target);
             observer.unobserve(entry.target);
           }
         });
@@ -27,13 +37,23 @@ function useReveal() {
       { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
     );
 
-    const children = node.querySelectorAll(".reveal");
-    children.forEach((child) => {
-      child.classList.add("opacity-0");
-      observer.observe(child);
+    els.forEach((el) => {
+      el.classList.add("opacity-0");
+      observer.observe(el);
     });
 
-    return () => observer.disconnect();
+    // Safety net: critical pricing content must never stay invisible if
+    // the observer fails to fire (no-JS edge cases, fast scroll, etc.).
+    const fallback = window.setTimeout(() => {
+      els.forEach((el) => {
+        if (el.classList.contains("opacity-0")) show(el);
+      });
+    }, 1500);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(fallback);
+    };
   }, []);
 
   return ref;
@@ -187,7 +207,7 @@ const discounts = [
   { label: "Pago anual", value: "–15%", note: "Todos los planes de pago, por defecto en el checkout." },
   { label: "Compromiso 2 años", value: "–25%", note: "Sobre el precio anual, en planes Pro y Enterprise." },
   { label: "Early Adopter", value: "–25% de por vida", note: "Para los primeros 20 clientes. Hasta el 31 dic 2026." },
-  { label: "Colegio profesional", value: "–15%", note: "ICAB, ICAGI, ICAM, Notariat Català." },
+  { label: "Colegio profesional", value: "–15%", note: "Para colegiados de cualquier colegio profesional." },
 ];
 
 const faqs = [
@@ -273,46 +293,46 @@ export function PreciosClient() {
           >
             Precios públicos y sin permanencia. Cuota fija predecible y consumo
             variable solo cuando generas valor. El motor del derecho civil
-            catalán y del ISD, incluido en todos los planes.
+            y del ISD, incluido en todos los planes.
           </p>
 
-          {/* Billing toggle */}
-          <div
-            className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1 reveal"
-            style={{ animationDelay: "300ms" }}
-            role="group"
-            aria-label="Periodicidad de facturación"
-          >
-            <button
-              type="button"
-              onClick={() => setAnnual(false)}
-              aria-pressed={!annual}
-              className={`rounded-full px-5 py-2 text-sm font-medium transition-colors ${
-                !annual ? "bg-white text-night" : "text-white/60 hover:text-white"
-              }`}
-            >
-              Mensual
-            </button>
-            <button
-              type="button"
-              onClick={() => setAnnual(true)}
-              aria-pressed={annual}
-              className={`rounded-full px-5 py-2 text-sm font-medium transition-colors ${
-                annual ? "bg-white text-night" : "text-white/60 hover:text-white"
-              }`}
-            >
-              Anual
-              <span className="ml-2 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
-                –15%
-              </span>
-            </button>
-          </div>
         </div>
       </section>
 
       {/* ═══ TIER CARDS ═══ */}
       <section className="bg-surface py-16 md:py-20 border-b border-slate-200">
         <div className="container">
+          <div className="reveal mb-10 flex justify-center">
+            <div
+              className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white p-1 shadow-sm"
+              role="group"
+              aria-label="Periodicidad de facturación"
+            >
+              <button
+                type="button"
+                onClick={() => setAnnual(false)}
+                aria-pressed={!annual}
+                className={`rounded-full px-5 py-2 text-sm font-medium transition-colors ${
+                  !annual ? "bg-night text-white" : "text-slate-500 hover:text-ink"
+                }`}
+              >
+                Mensual
+              </button>
+              <button
+                type="button"
+                onClick={() => setAnnual(true)}
+                aria-pressed={annual}
+                className={`rounded-full px-5 py-2 text-sm font-medium transition-colors ${
+                  annual ? "bg-night text-white" : "text-slate-500 hover:text-ink"
+                }`}
+              >
+                Anual
+                <span className="ml-2 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
+                  –15%
+                </span>
+              </button>
+            </div>
+          </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {tiers.map((t, i) => {
               const price = annual ? t.annual : t.monthly;
@@ -399,7 +419,7 @@ export function PreciosClient() {
 
           <p className="reveal mt-6 text-center text-[13px] text-slate-500">
             Precios sin IVA. El motor de cálculo del ISD y del derecho civil
-            catalán (CCCat) está incluido en todos los planes, sin excepciones.
+            está incluido en todos los planes, sin excepciones.
           </p>
         </div>
       </section>
@@ -414,11 +434,6 @@ export function PreciosClient() {
             <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight mb-3">
               Pagas más solo cuando produces más
             </h2>
-            <p className="text-[17px] text-slate-500 max-w-[640px] mx-auto">
-              Estructura «incluido + extra» tipo Twilio. Predecible en uso
-              normal; el coste por modelo y por bien baja a medida que subes de
-              plan, premiando la consolidación.
-            </p>
           </div>
 
           <div className="reveal overflow-x-auto rounded-2xl border border-slate-200">
@@ -447,8 +462,7 @@ export function PreciosClient() {
           </div>
           <p className="reveal mt-4 text-[13px] text-slate-500">
             El consumo variable se acumula durante el mes y se factura por
-            separado de la cuota. Aviso in-app al llegar al 200% de lo incluido;
-            límite duro opcional.
+            separado de la cuota.
           </p>
         </div>
       </section>
@@ -486,10 +500,6 @@ export function PreciosClient() {
               </tbody>
             </table>
           </div>
-          <p className="reveal mt-4 text-[13px] text-slate-500">
-            «Próx.» = en roadmap; se activa sin coste adicional en los planes
-            indicados cuando se publique. Enterprise: todo a medida.
-          </p>
         </div>
       </section>
 
@@ -552,7 +562,6 @@ export function PreciosClient() {
               <p className="mt-2 text-sm text-slate-500 leading-relaxed">
                 Funerarias, aseguradoras y banca privada: modelo de revenue
                 share o licencia de plataforma con paquete Back-Office adaptado.
-                Va por un carril separado de los planes SaaS.
               </p>
               <Link
                 href="/contacto"
@@ -621,7 +630,7 @@ export function PreciosClient() {
           </h2>
           <p className="text-lg text-white/60 mb-10">
             Empieza gratis o reserva una demo de 25 minutos sobre la plataforma,
-            con un caso de Girona y el CCCat aplicado en directo.
+            con un caso real aplicado en directo.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
