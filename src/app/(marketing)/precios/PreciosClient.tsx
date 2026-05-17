@@ -419,7 +419,7 @@ export function PreciosClient() {
 
           <p className="reveal mt-6 text-center text-[13px] text-slate-500">
             Precios sin IVA. El motor de cálculo del ISD y del derecho civil
-            catalán (CCCat) está incluido en todos los planes, sin excepciones.
+            está incluido en todos los planes, sin excepciones.
           </p>
         </div>
       </section>

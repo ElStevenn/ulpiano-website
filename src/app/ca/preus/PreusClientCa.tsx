@@ -417,7 +417,7 @@ export function PreusClientCa() {
 
           <p className="reveal mt-6 text-center text-[13px] text-slate-500">
             Preus sense IVA. El motor de càlcul de l&apos;ISD i del dret civil
-            català (CCCat) està inclòs en tots els plans, sense excepcions.
+            està inclòs en tots els plans, sense excepcions.
           </p>
         </div>
       </section>
