@@ -273,7 +273,7 @@ export function PreciosClient() {
           >
             Precios públicos y sin permanencia. Cuota fija predecible y consumo
             variable solo cuando generas valor. El motor del derecho civil
-            catalán y del ISD, incluido en todos los planes.
+            y del ISD, incluido en todos los planes.
           </p>
 
         </div>
@@ -414,11 +414,6 @@ export function PreciosClient() {
             <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight mb-3">
               Pagas más solo cuando produces más
             </h2>
-            <p className="text-[17px] text-slate-500 max-w-[640px] mx-auto">
-              Estructura «incluido + extra» tipo Twilio. Predecible en uso
-              normal; el coste por modelo y por bien baja a medida que subes de
-              plan, premiando la consolidación.
-            </p>
           </div>
 
           <div className="reveal overflow-x-auto rounded-2xl border border-slate-200">

@@ -272,8 +272,8 @@ export function PreusClientCa() {
             style={{ animationDelay: "200ms" }}
           >
             Preus públics i sense permanència. Quota fixa predictible i consum
-            variable només quan generes valor. El motor del dret civil català i
-            de l&apos;ISD, inclòs en tots els plans.
+            variable només quan generes valor. El motor del dret civil i de
+            l&apos;ISD, inclòs en tots els plans.
           </p>
 
         </div>
@@ -412,11 +412,6 @@ export function PreusClientCa() {
             <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight mb-3">
               Pagues més només quan produeixes més
             </h2>
-            <p className="text-[17px] text-slate-500 max-w-[640px] mx-auto">
-              Estructura «inclòs + extra» tipus Twilio. Predictible en ús
-              normal; el cost per model i per bé baixa a mesura que puges de
-              pla, premiant la consolidació.
-            </p>
           </div>
 
           <div className="reveal overflow-x-auto rounded-2xl border border-slate-200">
