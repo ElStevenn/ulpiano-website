@@ -628,7 +628,7 @@ export function PreusClientCa() {
           </h2>
           <p className="text-lg text-white/60 mb-10">
             Comença gratis o reserva una demo de 25 minuts sobre la plataforma,
-            amb un cas de Girona i el CCCat aplicat en directe.
+            amb un cas real aplicat en directe.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link

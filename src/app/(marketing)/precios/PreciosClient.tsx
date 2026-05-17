@@ -630,7 +630,7 @@ export function PreciosClient() {
           </h2>
           <p className="text-lg text-white/60 mb-10">
             Empieza gratis o reserva una demo de 25 minutos sobre la plataforma,
-            con un caso de Girona y el CCCat aplicado en directo.
+            con un caso real aplicado en directo.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
