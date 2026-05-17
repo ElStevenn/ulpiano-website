@@ -187,7 +187,7 @@ const discounts = [
   { label: "Pagament anual", value: "–15%", note: "Tots els plans de pagament, per defecte al checkout." },
   { label: "Compromís 2 anys", value: "–25%", note: "Sobre el preu anual, en plans Pro i Enterprise." },
   { label: "Early Adopter", value: "–25% de per vida", note: "Per als primers 20 clients. Fins al 31 des. 2026." },
-  { label: "Col·legi professional", value: "–15%", note: "ICAB, ICAGI, ICAM, Notariat Català." },
+  { label: "Col·legi professional", value: "–15%", note: "Per a col·legiats de qualsevol col·legi professional." },
 ];
 
 const faqs = [
@@ -276,43 +276,43 @@ export function PreusClientCa() {
             de l&apos;ISD, inclòs en tots els plans.
           </p>
 
-          {/* Billing toggle */}
-          <div
-            className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1 reveal"
-            style={{ animationDelay: "300ms" }}
-            role="group"
-            aria-label="Periodicitat de facturació"
-          >
-            <button
-              type="button"
-              onClick={() => setAnnual(false)}
-              aria-pressed={!annual}
-              className={`rounded-full px-5 py-2 text-sm font-medium transition-colors ${
-                !annual ? "bg-white text-night" : "text-white/60 hover:text-white"
-              }`}
-            >
-              Mensual
-            </button>
-            <button
-              type="button"
-              onClick={() => setAnnual(true)}
-              aria-pressed={annual}
-              className={`rounded-full px-5 py-2 text-sm font-medium transition-colors ${
-                annual ? "bg-white text-night" : "text-white/60 hover:text-white"
-              }`}
-            >
-              Anual
-              <span className="ml-2 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
-                –15%
-              </span>
-            </button>
-          </div>
         </div>
       </section>
 
       {/* ═══ TIER CARDS ═══ */}
       <section className="bg-surface py-16 md:py-20 border-b border-slate-200">
         <div className="container">
+          <div className="reveal mb-10 flex justify-center">
+            <div
+              className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white p-1 shadow-sm"
+              role="group"
+              aria-label="Periodicitat de facturació"
+            >
+              <button
+                type="button"
+                onClick={() => setAnnual(false)}
+                aria-pressed={!annual}
+                className={`rounded-full px-5 py-2 text-sm font-medium transition-colors ${
+                  !annual ? "bg-night text-white" : "text-slate-500 hover:text-ink"
+                }`}
+              >
+                Mensual
+              </button>
+              <button
+                type="button"
+                onClick={() => setAnnual(true)}
+                aria-pressed={annual}
+                className={`rounded-full px-5 py-2 text-sm font-medium transition-colors ${
+                  annual ? "bg-night text-white" : "text-slate-500 hover:text-ink"
+                }`}
+              >
+                Anual
+                <span className="ml-2 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
+                  –15%
+                </span>
+              </button>
+            </div>
+          </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {tiers.map((t, i) => {
               const price = annual ? t.annual : t.monthly;
@@ -445,8 +445,7 @@ export function PreusClientCa() {
           </div>
           <p className="reveal mt-4 text-[13px] text-slate-500">
             El consum variable s&apos;acumula durant el mes i es factura per
-            separat de la quota. Avís in-app en arribar al 200% de l&apos;inclòs;
-            límit dur opcional.
+            separat de la quota.
           </p>
         </div>
       </section>
@@ -484,10 +483,6 @@ export function PreusClientCa() {
               </tbody>
             </table>
           </div>
-          <p className="reveal mt-4 text-[13px] text-slate-500">
-            «Pròx.» = al roadmap; s&apos;activa sense cost addicional als plans
-            indicats quan es publiqui. Enterprise: tot a mida.
-          </p>
         </div>
       </section>
 
@@ -550,7 +545,6 @@ export function PreusClientCa() {
               <p className="mt-2 text-sm text-slate-500 leading-relaxed">
                 Funeràries, asseguradores i banca privada: model de revenue
                 share o llicència de plataforma amb paquet Back-Office adaptat.
-                Va per un carril separat dels plans SaaS.
               </p>
               <Link
                 href="/ca/contacte"
