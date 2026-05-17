@@ -14,12 +14,22 @@ function useReveal() {
     const node = ref.current;
     if (!node) return;
 
+    const els = Array.from(node.querySelectorAll<HTMLElement>(".reveal"));
+    const show = (el: Element) => {
+      el.classList.add("animate-fade-in-up");
+      el.classList.remove("opacity-0");
+    };
+
+    if (typeof IntersectionObserver === "undefined") {
+      els.forEach(show);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-in-up");
-            entry.target.classList.remove("opacity-0");
+            show(entry.target);
             observer.unobserve(entry.target);
           }
         });
@@ -27,13 +37,23 @@ function useReveal() {
       { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
     );
 
-    const children = node.querySelectorAll(".reveal");
-    children.forEach((child) => {
-      child.classList.add("opacity-0");
-      observer.observe(child);
+    els.forEach((el) => {
+      el.classList.add("opacity-0");
+      observer.observe(el);
     });
 
-    return () => observer.disconnect();
+    // Safety net: critical pricing content must never stay invisible if
+    // the observer fails to fire (no-JS edge cases, fast scroll, etc.).
+    const fallback = window.setTimeout(() => {
+      els.forEach((el) => {
+        if (el.classList.contains("opacity-0")) show(el);
+      });
+    }, 1500);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(fallback);
+    };
   }, []);
 
   return ref;
